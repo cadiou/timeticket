@@ -1,6 +1,6 @@
 <h1>timeticket</h1>
 <p><i>Ticketing System</i></p>
-<h2>Including files<h2>
+<h2>Including files</h2>
 <ol>
 <li>CONFIG.class.php  CONFIG
 <li>DB.class.php      CONNEXION MYSQL
