@@ -17,7 +17,6 @@ $html->gfx_catalog();
 $html->tools();
 $html->agence_photo();
 $html->module_courtesy();
-$html->rt_videlio();
 $html->mos_stack();
 $html->ticket_panel("Tickets Postprod","datetime >= DATE_SUB(NOW(), INTERVAL 7 DAY) AND LEVEL != 4");
 
