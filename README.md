@@ -1,8 +1,10 @@
 <h1>timeticket</h1>
-Ticketing System
-Including files
-CONFIG.class.php  CONFIG
-DB.class.php      CONNEXION MYSQL
-HTML.class.php    CODAGE DES PAGES
-index.php         PAGE PRINCIPALE
-style.css         STYLE CSS
+<p><i>Ticketing System</i></p>
+<h2>Including files<h2>
+<ol>
+<li>CONFIG.class.php  CONFIG
+<li>DB.class.php      CONNEXION MYSQL
+<li>HTML.class.php    CODAGE DES PAGES
+<li>index.php         PAGE PRINCIPALE
+<li>style.css         STYLE CSS
+  </ol>
