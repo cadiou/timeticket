@@ -96,7 +96,7 @@
 		$this->head.= "<body>";
 		$this->head.= "<h1>";
 		if (($_SERVER['PHP_SELF'] != "/index.php" ) and ($_SERVER['PHP_SELF'] != "" ) ) {
-			$this->head .= "<a href=\"/\">".gethostname()."</a> ";
+			$this->head .= "<a href=\"index.php\">".gethostname()."</a> ";
 		}else{
 			$this->head .= gethostname()." ";
 		}
