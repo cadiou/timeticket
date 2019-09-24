@@ -13,7 +13,7 @@
 	public function __construct($page_titre,$timeout)
 	{	
 		# INCLUDES
-		include_once("CONFIG.class.php");
+		$this->check_config = include_once("../CONFIG.class.php");
 		include_once("DB.class.php");
 		
 		$timegraph = new DB();

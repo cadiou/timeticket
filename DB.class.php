@@ -13,7 +13,7 @@
 	public function __construct()
 	{	
 		# Inclusion des classes
-		include_once("CONFIG.class.php");
+		include_once("../CONFIG.class.php");
 	
 		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$this->mysqli = new mysqli(CONFIG::DB_SERVER,CONFIG::DB_USERNAME, CONFIG::DB_PASSWORD, CONFIG::DB_NAME);
