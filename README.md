@@ -16,16 +16,16 @@
 class Config 
 {
     const 
-      COOKIE_UID   = 'timeticket_uid',
-      COOKIE_CON   = 'timeticket_con',
-      COOKIE_SEC   = 36000,
-    	DB_SERVER    = 'localhost',
-		  DB_NAME      = 'timeticket',
-      DB_USERNAME  = 'timeticket',
-      DB_PASSWORD  = '',
-      DB_CHARSET   = 'UTF8',
-      FILE_MAX_SIZE= 16777215;
-    	ID_GROUP     = 0,                 #int
-    	ID_CHANNEL   = 0,                 #int
+	COOKIE_UID   = 'timeticket_uid',
+	COOKIE_CON   = 'timeticket_con',
+	COOKIE_SEC   = 36000,
+	DB_SERVER    = 'localhost',
+	DB_NAME      = 'timeticket',
+	DB_USERNAME  = 'timeticket',
+	DB_PASSWORD  = '',
+	DB_CHARSET   = 'UTF8',
+	FILE_MAX_SIZE= 16777215;
+	ID_GROUP     = 0,                 #int
+	ID_CHANNEL   = 0,                 #int
 }
 </pre>
