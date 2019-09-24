@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 190923
+ * 190924
  * timegraph / CLASS / HTML
  * bcadiou@videlio-globalservices.com
  *
@@ -251,7 +251,34 @@
 			$this->left .= "<p class=\"level1\">Identifiez-vous SVP</p>";
 		}
 		$this->left .= "Utilisateur :<br><FORM method=\"POST\">";
-		$this->left .= $this->menuselect("user","id","name",$this->uid);
+		
+#		$this->left .= $this->menuselect("user","id","name",$this->uid);
+		
+		
+		$sql = "select `id`,`name` from user where name is not null and active = true group by `name` order by `name` asc";
+		$result = $timegraph->query($sql);
+        
+		$out  = '<SELECT NAME="user_id" onchange="this.form.submit()">';
+        $out .= '<OPTION VALUE="-1">N/A</A>';
+		
+		while ($item = mysqli_fetch_array($result)) {
+			$out .= '<OPTION VALUE="'.$item['id'].'"';
+			if (($this->con == $item['id'])and($this->con != "")) {
+			$out .= " SELECTED";
+			}
+			$out .= '>'.$item['name'].'</OPTION>'."\n";
+		}
+			
+         $out .= '</SELECT>';
+
+			$this->left .= $out;
+			
+			
+			
+			$this->left .= "</FORM>";
+		
+		
+
 		$this->left .= "</FORM>";	
 		if ($this->uid > 0) {
 			$this->left .= "Vacation :<br><FORM method=\"POST\">";
