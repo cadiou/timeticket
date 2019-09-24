@@ -263,7 +263,7 @@
 		
 		while ($item = mysqli_fetch_array($result)) {
 			$out .= '<OPTION VALUE="'.$item['id'].'"';
-			if (($this->con == $item['id'])and($this->con != "")) {
+			if (($this->uid == $item['id'])and($this->uid != "")) {
 			$out .= " SELECTED";
 			}
 			$out .= '>'.$item['name'].'</OPTION>'."\n";
