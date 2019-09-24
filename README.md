@@ -1,5 +1,5 @@
 <h1>timeticket</h1>
-<p><i>Ticketing System</i></p>
+<p><i>Free Workflow tool for TV managers.</i></p>
 <h2>Including files</h2>
 <ol>
 <li>BASE_STRUCTURE.sql
