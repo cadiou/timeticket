@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 190924
+ * 190925
  * timeticket
  * bcadiou@videlio-globalservices.com
  *
@@ -13,7 +13,7 @@ $html = new HTML("timeticket",60);
 $html->module_login();
 $html->vizrt();
 $html->module_ticket();
-$html->gfx_catalog();
+#$html->gfx_catalog();
 #$html->tools();
 #$html->agence_photo();
 #$html->module_courtesy();
