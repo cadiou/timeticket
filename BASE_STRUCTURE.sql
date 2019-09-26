@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  lun. 23 sep. 2019 à 17:29
+-- Généré le :  jeu. 26 sep. 2019 à 15:59
 -- Version du serveur :  10.1.38-MariaDB
 -- Version de PHP :  7.3.2
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `timegraph`
 --
-CREATE DATABASE IF NOT EXISTS `timegraph` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `timegraph`;
 
 -- --------------------------------------------------------
 
@@ -287,7 +285,8 @@ CREATE TABLE `user` (
   `username` varchar(32) NOT NULL,
   `password` varchar(64) NOT NULL,
   `id` int(11) NOT NULL,
-  `name` varchar(32) NOT NULL
+  `name` varchar(32) NOT NULL,
+  `active` tinyint(1) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
