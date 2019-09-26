@@ -245,8 +245,8 @@
 			$query="INSERT INTO `time` SET"
 				." uid = ".$this->uid
 				.", thread = ".$_POST['time_thread']
-				.", group_id = ".CONFIG::GROUP_ID
-				.", station_id = ".CONFIG::STATION_ID
+				.", group_id = ".CONFIG::ID_GROUP
+				.", station_id = ".CONFIG::ID_STATION
 				.", concept_id = ".$this->con;
 			$result = $timegraph->query($query);
 		}
@@ -986,7 +986,7 @@
 		$out .= '<OPTION VALUE="">Tous</A>';
 
 
-		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::STATION_ID." and active = true group by `name` order by `name` asc";
+		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true group by `name` order by `name` asc";
 		$result = $timegraph->query($sql);
 		if (!$result){
 			echo "erreur".$sql;
