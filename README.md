@@ -6,6 +6,7 @@
 <li>DB.class.php      		CONNEXION MYSQL
 <li>HTML.class.php    		CODAGE DES PAGES
 <li>index.php         		PAGE PRINCIPALE
+<li>README.md			THIS FILE	
 <li>style.css         		STYLE CSS
 <li>ticket-chrono-display.php	CHRONO DISPLAY
   </ol>
