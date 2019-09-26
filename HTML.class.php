@@ -1,8 +1,8 @@
 <?php
 
 /*
- * 190924
- * timegraph / CLASS / HTML
+ * 190926
+ * timeticket / CLASS / HTML
  * bcadiou@videlio-globalservices.com
  *
  */
@@ -13,7 +13,12 @@
 	public function __construct($page_titre,$timeout)
 	{	
 		# INCLUDES
-		$this->check_config = include_once("../CONFIG.class.php");
+		if (file_exists("CONFIG.class.php")) {
+			$this->check_config = include_once("CONFIG.class.php");
+		}elseif (file_exists("../CONFIG.class.php")) {
+			$this->check_config = include_once("../CONFIG.class.php");
+		}
+
 		include_once("DB.class.php");
 		
 		$timegraph = new DB();
@@ -195,7 +200,7 @@
 		$this->left .= "<li><a href=\"/catalog/index.php\">Liste des templates</a>";
 		$this->left .= "<li><a href=\"/catalog/template-vizrt.php\">Templates Vizrt</a>	";	
 		$this->left .= "<li><a href=\"/list-concept.php\">Concepts</a>	";			
-		$this->left .= "</ul>".$timegraph->catalog_last_image()."<p />";
+		$this->left .= "</ul>"."<p />";  # .$timegraph->catalog_last_image()
 	}
 
 	# Module RT Videlio
