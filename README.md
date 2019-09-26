@@ -2,11 +2,12 @@
 <p><i>Free Workflow tool for TV managers.</i></p>
 <h2>Including files</h2>
 <ol>
-<li>BASE_STRUCTURE.sql
-<li>DB.class.php      CONNEXION MYSQL
-<li>HTML.class.php    CODAGE DES PAGES
-<li>index.php         PAGE PRINCIPALE
-<li>style.css         STYLE CSS
+<li>BASE_STRUCTURE.sql		STRUCTURE DE LA BASE
+<li>DB.class.php      		CONNEXION MYSQL
+<li>HTML.class.php    		CODAGE DES PAGES
+<li>index.php         		PAGE PRINCIPALE
+<li>style.css         		STYLE CSS
+<li>ticket-chrono-display.php	CHRONO DISPLAY
   </ol>
 <h2>Not included</h2>
 <ol>
