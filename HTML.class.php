@@ -347,6 +347,7 @@
 	public function module_ticket() {
 		$this->left .= "<h2>Tickets</h2>";
 		$this->left .= "<ul>";
+		$this->left .= "<li><a href=\"tickets-help.php\">Aide</a>";
 		$this->left .= "<li><a href=\"tickets.php\">Tableau Général</a>";
 		$this->left .= "<li><a href=\"tickets.php?level=1\">Travaux</a>";
 		$this->left .= "<li><a href=\"tickets.php?level=0\">Informations</a>";
@@ -355,9 +356,9 @@
 		$this->left .= "<h3>Créer un nouveau...</h3>";
 
 		$this->left .= "<ul>";
-		$this->left .= "<li><a href=\"ticket.php?level=1\">Ticket Projet (Job / travail)</a>";
-		$this->left .= "<li><a href=\"ticket.php?level=0\">Ticket Information</a>";
-		$this->left .= "<li><a href=\"ticket.php?level=5\">Ticket Incident</a>";
+		$this->left .= "<li><a href=\"ticket.php?level=1\" class=\"level1\">Ticket Projet (Job / travail)</a>";
+		$this->left .= "<li><a href=\"ticket.php?level=0\" class=\"level0\">Ticket Information</a>";
+		$this->left .= "<li><a href=\"ticket.php?level=5\" class=\"level5\">Ticket Incident</a>";
 		$this->left .= "</ul>";
 
 		$timegraph = new DB();
