@@ -89,7 +89,7 @@
 			$this->head.= "<meta HTTP-EQUIV=\"Refresh\" CONTENT=\"".$timeout."\">";
 		}
 		$this->head.= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-		$this->head.= '<link href="/style.css" rel="stylesheet" media="all" type="text/css" />';
+		$this->head.= '<link href="style.css" rel="stylesheet" media="all" type="text/css" />';
 		
 		$this->head.= '<meta Http-Equiv="Cache-Control" Content="no-cache">';
 		$this->head.= '<meta Http-Equiv="Pragma" Content="no-cache">';

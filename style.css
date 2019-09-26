@@ -1,0 +1,408 @@
+body {
+	color: 	#eba118;
+	background-color: black;
+	font:14px Verdana;
+}
+
+h1 {
+	font-size:150%;
+	color: white;
+	background-color: 11903d;
+	-webkit-print-color-adjust: exact;
+}
+h2 {
+	font-size:125%;
+	color: black;
+	background-color: #eba118;
+	-webkit-print-color-adjust: exact;
+}
+touch {
+	font-size:100%;
+	color: red;
+	background: 000000;
+}
+
+td { 
+  display: table-cell;
+  vertical-align: top;
+  text-align: left;
+  padding: 1px;
+  font:12px Verdana;
+}
+
+a:link {
+    text-decoration: none;
+	color: 4dea38;
+}
+
+a:visited {
+    text-decoration: none;
+	color: 4dea38;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+	color: 4dea38;
+}
+
+.bouton {
+	border-radius:12px 12px 12px 12px;
+	background: #fccc49;
+	border:none;
+	color:#000;
+	font:bold 300% Verdana;
+	padding:6px 6px 6px 6px;
+}
+.bouton_in {
+	border-radius:12px 12px 12px 12px;
+	background: #41b65a;
+	border:none;
+	color:#fff;
+	font:bold 12px Verdana;
+	padding:6px 6px 6px 6px;
+	link: white;
+	visited: white;
+}
+.bouton_out {
+	border-radius:12px 12px 12px 12px;
+	background: #d01e2c;
+	border:none;
+	color:#fff;
+	font:bold 300% Verdana;
+	padding:6px 6px 6px 6px;
+}
+.bouton_cam {
+	border-radius:12px 12px 12px 12px;
+	background: #1a5099;
+	border:none;
+	color:#fff;
+	font:bold 300% Verdana;
+	padding:6px 6px 6px 6px;
+}
+
+.bouton_ME {
+	border-radius:12px 12px 12px 12px;
+	background: #1a5099;
+	border:none;
+	color:#fff;
+	font:bold 100% Verdana;
+	padding:6px 6px 6px 6px;
+}
+
+.bouton_GR {
+	border-radius:12px 12px 12px 12px;
+	background: #808080;
+	border:none;
+	color:#fff;
+	font:bold 100% Verdana;
+	padding:6px 6px 6px 6px;
+}
+
+.bouton_RD {
+	border-radius:12px 12px 12px 12px;
+	background: #d01e2c;
+	border:none;
+	color:#fff;
+	font:bold 100% Verdana;
+	padding:6px 6px 6px 6px;
+}
+
+.status0 {
+  background-color: 703654;
+  color: white;
+  text-align: left;
+}
+
+.status1 {
+  background-color: 43b61d;
+  color: white;
+  text-align: left;
+}
+
+.status2 {
+  background-color: cc7014;
+  color: white;
+  text-align: left;
+}
+
+.status3 {
+  background-color: ebdd0f;
+  color: black;
+  text-align: left;
+}
+
+.onair {
+  background-color: fefefe;
+  color: black;
+  text-align: left;
+  font-weight: bold;
+  
+}
+
+.level0 {
+  padding: 2px;
+  background-color: 703654;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+.level1 {
+  padding: 2px;
+  background-color: eb1010;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact;
+}
+
+.level2 {
+  padding: 2px;
+  background-color: cc7014;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact;
+}
+
+.level3 {
+  padding: 2px;
+  background-color: ebdd0f;
+  color: black;
+  text-align: left;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact;
+}
+
+.level4 {
+  padding: 2px;
+  background-color: 43b61d;
+  color: black;
+  text-align: left;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact;
+}
+
+.level5 {
+  padding: 2px;
+  background-color: 1d4061;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+.THEME {
+  background-color: 2b2b2b;
+  text-align: left;
+}
+
+.THEME .slug {
+  background-color: eb0f0f;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+.DISPLAY {
+  background-color: c0c0c0;
+  text-align: left;
+  font-size: 24px;
+  color: black;
+}
+
+.DISPLAYHOLD {
+  background-color: ebdd0f;
+  color: black;
+  text-align: left;
+  font-size: 36px;
+}
+
+.formulaire {
+  background-color: 703654;
+  font-size: 80%;
+}
+
+.image {
+  border: 1px solid white;
+  background-image: url("eiffel.jpg");
+  font-size: 60%;
+  width: 960px;
+  height : 540px;
+}
+
+.inforow {
+  background-color: 2b2b2b;
+  text-align: center; 
+  color: white;
+  font-weight: bold;
+  font-size:200%;
+}
+
+.action { 
+  background-color: 43b61d;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0px;
+}
+
+.modif { 
+  background-color: 703654;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0px;
+}
+
+.ticket {
+  padding: 4px;
+  width: 100%;
+  border: 1px solid #eba118;
+}
+
+.thread {
+
+}
+
+.slug { 
+  background-color: 000000;
+  display: table-cell;
+  vertical-align: middle;
+  font-size:120%;
+  color: white;
+  }
+
+.slug_droite { 
+  background-color: 000000;
+  display: table-cell;
+  vertical-align: middle;
+  font-size:120%;
+  color: white;
+  text-align: right;
+  }
+
+.chrono {
+	background-color: 000000;
+	text-align: center;
+	color: eb1010;
+	font-size:200%;
+}
+
+@media print {
+	body {
+    margin: 0;
+    color: #000;
+    background-color: #fff;
+	font:10px Verdana;
+	font-weight: normal;
+	}
+	h1 {
+		font-size:200%;
+		color: #fff;
+		background-color: #43b61d;
+	}
+	h2 {
+		font-size:125%;
+		color: #fff;
+		background-color: #cc7014;
+	}
+	a:visited{
+		color: #000;
+	}
+	td {
+	  border-style: dotted;
+      border-width: 0px 0px 0px 0px;
+	}
+	.ticket {
+	  padding: 4px;
+	  width: 100%;
+	  border: 0;
+	}
+	.slug { 
+	  background-color: #FFF;
+	  display: table-cell;
+	  vertical-align: middle;
+	  font-size:120%;
+	  font-weight: bold;
+	  color: black;
+	}
+	.inforow {
+	  background-color: #fff;
+	  text-align: left; 
+	  color: black;
+	  font-weight: bold;
+	  font-size:200%;
+	}
+	.slug_droite { 
+	  background-color: #FFF;
+	  display: table-cell;
+	  vertical-align: middle;
+	  font-size:120%;
+	  color: black;
+	  text-align: right;
+	  }
+	.level0 {
+	  border-style: solid;
+      border-width: 2px 2px 2px 20px;
+	  border-color: 703654;
+	  padding: 10px;
+	  color: #000;
+	  background-color: white;
+	  font-size:70%;
+	  	  font-weight: normal;
+	}
+	.level1 {
+	  border-style: solid;
+      border-width: 2px 2px 2px 20px;
+	  border-color: eb1010;
+	  padding: 10px;
+	  color: #000;
+	  background-color: white;
+	   font-size:70%;
+	   	  font-weight: normal;
+	}
+	.level2 {
+	  border-style: solid;
+      border-width: 2px 2px 2px 20px;
+	  border-color: cc7014;
+	  padding: 10px;
+	  color: #000;
+	  background-color: white;
+	   font-size:70%;
+	   	  font-weight: normal;
+	}
+	.level3 {
+	  border-style: solid;
+      border-width: 2px 2px 2px 20px;
+	  border-color: ebdd0f;
+	  padding: 10px;
+	  color: #000;
+	  background-color: white;
+	   font-size:70%;
+	   	  font-weight: normal;
+	}
+	.level4 {
+	  border-style: solid;
+      border-width: 2px 2px 2px 20px;
+	  border-color: 43b61d;
+	  padding: 10px;
+	  color: #000;
+	  background-color: white;
+	  font-size:70%;
+	  font-weight: normal;
+	}
+	.level5 {
+	  border-style: solid;
+      border-width: 2px 2px 2px 20px;
+	  border-color: 1d4061;
+	  padding: 10px;
+	  color: #000;
+	  background-color: white;
+	  font-size:70%;
+	  font-weight: normal;
+	}
+}
