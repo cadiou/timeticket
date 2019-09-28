@@ -14,9 +14,10 @@
 <li>../CONFIG.class.php
   </ol>
 <pre>
-class Config 
+class Config
 {
-    const 
+    const
+    ANALYTICS  = '',
 	COOKIE_UID   = 'timeticket_uid',
 	COOKIE_CON   = 'timeticket_con',
 	COOKIE_SEC   = 36000,

@@ -2,8 +2,8 @@
 
 /*
  * 190927
- * timeticket | index.php
- * bcadiou@videlio-globalservices.com
+ * timeticket / index.php
+ * Baptiste Cadiou
  *
  */
 

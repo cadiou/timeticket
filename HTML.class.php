@@ -1,9 +1,9 @@
 <?php
 
 /*
- * 190926
+ * 190928
  * timeticket / HTML.class.php
- * bcadiou@videlio-globalservices.com
+ * Baptiste Cadiou
  *
  */
 
@@ -21,16 +21,20 @@
 
     # DATABASE
 
-#		include_once("DB.class.php");
+    $this->mysqli =
+      new mysqli( CONFIG::DB_SERVER,
+                  CONFIG::DB_USERNAME,
+                  CONFIG::DB_PASSWORD,
+                  CONFIG::DB_NAME);
 
-#		$timegraph = new DB();
+		$this->mysqli->set_charset(CONFIG::DB_CHARSET);
 
-    $this->mysqli = new mysqli(CONFIG::DB_SERVER,CONFIG::DB_USERNAME, CONFIG::DB_PASSWORD, CONFIG::DB_NAME);
-		$this->mysqli-> set_charset(CONFIG::DB_CHARSET);
+    #		include_once("DB.class.php");
+    #		$timegraph = new DB();
 
-		# UID SETTING
+		# COOKIE UID SETTING
 
-		if (isset($_POST["user_id"]) and $_POST["user_id"]>0) {
+    if (isset($_POST["user_id"]) and $_POST["user_id"]>0) {
 			$this->uid =  $_POST["user_id"];
 			SetCookie(CONFIG::COOKIE_UID,$this->uid, time()+CONFIG::COOKIE_SEC);
 #			$this->con = 1;
@@ -48,7 +52,7 @@
 			}
 		}
 
-		# CON SETTING
+		# COOKIE CON SETTING
 
 		if (isset($_POST["vacation"]) and $_POST["vacation"]>0) {
 			$this->con =  $_POST["vacation"];
@@ -88,17 +92,19 @@
 		if ($timeout>0) {
 			$this->head.= "<meta HTTP-EQUIV=\"Refresh\" CONTENT=\"".$timeout."\">";
 		}
-		$this->head.= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-		$this->head.= '<link href="style.css" rel="stylesheet" media="all" type="text/css" />';
-		$this->head.= '<meta Http-Equiv="Cache-Control" Content="no-cache">';
-		$this->head.= '<meta Http-Equiv="Pragma" Content="no-cache">';
-		$this->head.= '<meta Http-Equiv="Expires" Content="0">';
-		$this->head.= '<meta Http-Equiv="Pragma-directive: no-cache">';
-		$this->head.= '<meta Http-Equiv="Cache-directive: no-cache">';
-		$this->head.= "</head>";
+		$this->head.=
+      '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'.
+		  '<link href="style.css" rel="stylesheet" media="all" type="text/css" />'.
+		  '<meta Http-Equiv="Cache-Control" Content="no-cache">'.
+		  '<meta Http-Equiv="Pragma" Content="no-cache">'.
+		  '<meta Http-Equiv="Expires" Content="0">'.
+		  '<meta Http-Equiv="Pragma-directive: no-cache">'.
+		  '<meta Http-Equiv="Cache-directive: no-cache">'.
+		  "</head>";
 		$this->head.= "<body>";
 		$this->head.= "<h1>";
-		if (($_SERVER['PHP_SELF'] != "/index.php" ) and ($_SERVER['PHP_SELF'] != "" ) ) {
+		if (($_SERVER['PHP_SELF'] != "/index.php" )
+      and ($_SERVER['PHP_SELF'] != "" ) ) {
 			$this->head .= "<a href=\"index.php\">".gethostname()."</a> ";
 		}else{
 			$this->head .= gethostname()." ";
@@ -148,7 +154,7 @@
 
 	public function vizrt()
 	{
-		$timegraph = new DB();
+#		$timegraph = new DB();
 		$this->left .= "<h2>Vizrt</h2>";
 		$this->left .= "<ul>";
 		$this->left .= "<li><a href=\"cg-playlist-studio.php\">CG Playlist Studio</a>";
@@ -310,7 +316,6 @@
 			}
 			$this->left .= "</FORM>";
 		}
-
 	}
 
   # MODULE TICKET
@@ -516,8 +521,6 @@
 		}else{
 			return "N°".$thread;
 		}
-	#	return "Thread #".$thread; ;
-
 	}
 
 
@@ -776,8 +779,6 @@
 
 			$names_actifs.="</span>";
 		}
-
-
 		return $names_actifs;
 	}
 
@@ -904,7 +905,6 @@
 	}
 
 	public function list_class() {
-
 #		$timegraph = new DB();
 
 		# Query ticket
@@ -916,13 +916,9 @@
 		$result = $timegraph->query($query);
 
 		if (mysqli_num_rows($result)!=0) {
-
 			$out= "<table>";
-
 			$out.= "<tr><td>Nom</td><td>id</td><td>cat</td><td>tic</td></tr>";
-
 			while ($item = mysqli_fetch_array($result)) {
-
 				$out.= "<tr>"
 					."<td>".$item['name']."</td>"
 					."<td><a href=\"http://win10-resilio/catalog/index.php?class_id=".$item['id']."\">".$item['id']."</a></td>"
@@ -932,18 +928,14 @@
 			}
 
 			$out.= "</table>";
-
 			$this->body .= $out;
-
 		}
-
 	}
 
 	public function menuConcept($value) {
 #		$timegraph = new DB();
 		$out  = '<SELECT NAME="concept_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
-
 
 		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true group by `name` order by `name` asc";
 		$result = $timegraph->query($sql);
@@ -960,9 +952,7 @@
 		}
 
 		$out .= '</SELECT>';
-
-	return $out;
-
+	  return $out;
 	}
 
 	public function menuClass($value) {
@@ -970,8 +960,7 @@
 		$out  = '<SELECT NAME="class_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
 
-
-        $sql = 	"SELECT class.id,class.name FROM `template`,`class` WHERE template.class_id = class.id group by class.name order by class.name asc";
+    $sql = 	"SELECT class.id,class.name FROM `template`,`class` WHERE template.class_id = class.id group by class.name order by class.name asc";
 		$result = $timegraph->query($sql);
 		if (!$result){
 			echo "erreur".$sql;
@@ -986,17 +975,16 @@
 		}
 
 		$out .= '</SELECT>';
-
-	return $out;
-
+	  return $out;
 	}
 
-  public function query($query)
+# DATABASE FUNCTIONS
+
+public function query($query)
 	{
 		$result = mysqli_query($this->mysqli,$query) or die(mysqli_error($$this->mysqli));
 		return $result;
 	}
+}
 
-
- }
  ?>

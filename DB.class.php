@@ -3,7 +3,7 @@
 /*
  * 190927
  * timeticket / DB.class.php
- * bcadiou@videlio-globalservices.com
+ * Baptiste Cadiou
  *
  */
 
