@@ -125,7 +125,7 @@ if (isset($_POST["format_id"]) ) {
 	$result =  $html->query($query);
 }
 
-if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";
+# if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";
 
 if ($level==4) {
 

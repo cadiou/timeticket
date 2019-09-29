@@ -132,24 +132,24 @@
 	public function module_ticket() {
 		$this->left .= '
       <table>
-		  <tr><td class="level1" colspan=2>
+      <tr><td class="level" colspan=2>
+      <!--a href="tickets-help.php">Aide</a-->
+		  </td></tr><tr><td class="level1" colspan=2>
 		  <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
       </td></tr><tr><td class="level0" colspan=2>
       <a href="ticket.php?level=0">Nouvelle&nbsp;Info</a>
       </td></tr><tr><td class="level5" colspan=2>
       <a href="ticket.php?level=5">Nouvel&nbsp;Incident</a>
-      </td></tr><tr><td class="level1" colspan=2>
-      <a href="tickets.php?level=1">Afficher Projets</a>
-      </td></tr><tr><td class="level0" colspan=2>
-      <a href="tickets.php?level=0">Afficher Infos</a>
-      </td></tr><tr><td class="level5" colspan=2>
-      <a href="tickets.php?level=5">Afficher&nbsp;Incidents</a>
-      </td></tr><tr><td class="level" colspan=2>
-      <a href="tickets-help.php">Aide</a>
-      </td></tr><tr><td class="level" colspan=2>
-      <a href=\"tickets-slug.php\">Slugs</a>
       </td></tr><tr><td class="level" colspan=2>
       <a href="index.php">Tickets&nbsp;Actifs</a>
+      </td></tr><tr><td class="level1" colspan=2>
+      <a href="tickets.php?level=1">Archives Projets</a>
+      </td></tr><tr><td class="level0" colspan=2>
+      <a href="tickets.php?level=0">Archives Infos</a>
+      </td></tr><tr><td class="level5" colspan=2>
+      <a href="tickets.php?level=5">Archives&nbsp;Incidents</a>
+      </td></tr><tr><td class="level" colspan=2>
+      <!--a href=\"tickets-slug.php\">Slugs</a-->
       </td></tr>
     ';
 
@@ -594,7 +594,7 @@
 				$this->body.= "<tr><td class=\"slug\">";
 				$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>"."</td><td class=\"slug_droite\">".$this->concept($thread);
 				$this->body.= "</td></tr><tr><td colspan=\"2\">";
-				$this->body.= $this->time_tracker($thread);
+				$this->body.= $this->time_tracker_complet($thread);
 				$this->body.= $this->ticket($item['id']);
 				$this->body.= "</td></tr>";
 				$this->body.= "</table>";
