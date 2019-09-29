@@ -866,7 +866,7 @@
 
 public function query($query)
 	{
-		$result = mysqli_query($this->mysqli,$query) or die(mysqli_error($$this->mysqli));
+		$result = mysqli_query($this->mysqli,$query) or die(mysqli_error($this->mysqli));
 		return $result;
 	}
 }
