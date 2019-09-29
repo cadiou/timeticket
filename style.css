@@ -22,7 +22,7 @@ touch {
 	background: 000000;
 }
 
-td { 
+td {
   display: table-cell;
   vertical-align: top;
   text-align: left;
@@ -140,7 +140,15 @@ a:active {
   color: black;
   text-align: left;
   font-weight: bold;
-  
+
+}
+
+.level {
+  padding: 2px;
+  background-color: ff0000;
+  color: white;
+  text-align: left;
+  font-weight: bold;
 }
 
 .level0 {
@@ -236,13 +244,13 @@ a:active {
 
 .inforow {
   background-color: 2b2b2b;
-  text-align: center; 
+  text-align: center;
   color: white;
   font-weight: bold;
   font-size:200%;
 }
 
-.action { 
+.action {
   background-color: 43b61d;
   display: table-cell;
   vertical-align: middle;
@@ -250,7 +258,7 @@ a:active {
   padding: 0px;
 }
 
-.modif { 
+.modif {
   background-color: 703654;
   display: table-cell;
   vertical-align: middle;
@@ -268,7 +276,7 @@ a:active {
 
 }
 
-.slug { 
+.slug {
   background-color: 000000;
   display: table-cell;
   vertical-align: middle;
@@ -276,7 +284,7 @@ a:active {
   color: white;
   }
 
-.slug_droite { 
+.slug_droite {
   background-color: 000000;
   display: table-cell;
   vertical-align: middle;
@@ -322,7 +330,7 @@ a:active {
 	  width: 100%;
 	  border: 0;
 	}
-	.slug { 
+	.slug {
 	  background-color: #FFF;
 	  display: table-cell;
 	  vertical-align: middle;
@@ -332,12 +340,12 @@ a:active {
 	}
 	.inforow {
 	  background-color: #fff;
-	  text-align: left; 
+	  text-align: left;
 	  color: black;
 	  font-weight: bold;
 	  font-size:200%;
 	}
-	.slug_droite { 
+	.slug_droite {
 	  background-color: #FFF;
 	  display: table-cell;
 	  vertical-align: middle;

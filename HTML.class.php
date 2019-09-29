@@ -132,40 +132,38 @@
 	public function module_ticket() {
 		$this->left .= '
       <table>
-		  <tr><td class="level1">
+		  <tr><td class="level1" colspan=2>
 		  <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
-      </td></tr><tr><td class="level0">
+      </td></tr><tr><td class="level0" colspan=2>
       <a href="ticket.php?level=0">Nouvelle&nbsp;Info</a>
-      </td></tr><tr><td class="level5">
-      <a href="ticket.php?level=5">Incident</a>
+      </td></tr><tr><td class="level5" colspan=2>
+      <a href="ticket.php?level=5">Fiche&nbsp;Incident</a>
+      </td></tr><tr><td class="level" colspan=2>
+      <a href="tickets-help.php">Aide</a>
+      </td></tr><tr><td class="level" colspan=2>
+      <a href=\"tickets-slug.php\">Slugs</a>
+      </td></tr><tr><td class="level" colspan=2>
+      <a href="index.php">Work&nbsp;In&nbsp;Progress</a>
       </td></tr>
-		  </table>
     ';
-		$this->left .= "<h2>Afficher</h2>";
-    $this->left .= "<ul>";
-    $this->left .= "<li><a href=\"tickets.php\">Tableau Général</a>";
-    $this->left .= "<li><a href=\"tickets.php?level=1\" class=\"level1\">Projets&nbsp;en&nbsp;cours</a>";
-    $this->left .= "<li><a href=\"tickets.php?level=0\" class=\"level0\">Informations</a>";
-    $this->left .= "<li><a href=\"tickets.php?level=5\" class=\"level5\">Incidents</a>";
-    $this->left .= "<li><a href=\"tickets-help.php\">Aide</a>";
-    $this->left .= "<li><a href=\"tickets-slug.php\">Slugs</a>";
-    $this->left .= "</ul>";
 
 #		$timegraph = new DB();
 
-		$query = "SELECT id,thread".
+		$query = "SELECT id,thread,level".
 						" FROM `ticket`".
 						" WHERE (level=1 or level=2 or level=3) and active=1 ".
 						" ORDER BY datetime DESC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			$this->left .= "<h3>Projets en cours</h3>";
-			$this->left .= "<ol>";
 			while ($item = mysqli_fetch_array($result)) {
-				$this->left .= "<li><a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1]))." ".$this->slug(($item[1]==0?$item[0]:$item[1]))."</a>";
-			}
-			$this->left .= "</ol>";
+	       $this->left .= "<tr><td class=\"level".$item[2]."\">";
+	       $this->left .= "</td><td>";
+         $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1]))."</a>";
+		     $this->left .= "</td></tr>";
+      }
 		}
+
+  $this->left .= '</table>';
 	}
 
 	# Ajoute du texte au corps de page.
@@ -199,22 +197,22 @@
 		if (isset($_POST['STOP'])) {
 			# on verifie que le time ticket n est pas deja stoppé
 			$query="SELECT stop FROM `time` WHERE id=".$_POST['time_id'];
-			$result = $timegraph->query($query);
+			$result = $this->query($query);
 			$item = mysqli_fetch_array($result);
 			if ($item[0] == NULL) {
 				$query="UPDATE `time` SET stop = now() WHERE id=".$_POST['time_id'];
-				$result = $timegraph->query($query);
+				$result = $this->query($query);
 			}
 		}
 		if (isset($_POST['START'])) {
 			# fermeture des sessions precedentes eventuelles
 			$query = "SELECT id FROM time WHERE stop IS NULL and uid=".$this->uid;
-			$result = $timegraph->query($query);
+			$result = $this->query($query);
 
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
 					$query2="UPDATE `time` SET stop = now() WHERE id=".$item[0];
-					$result2 = $timegraph->query($query2);
+					$result2 = $this->query($query2);
 				}
 			}
 			$query="INSERT INTO `time` SET"
@@ -223,7 +221,7 @@
 				.", group_id = ".CONFIG::ID_GROUP
 				.", station_id = ".CONFIG::ID_STATION
 				.", concept_id = ".$this->con;
-			$result = $timegraph->query($query);
+			$result = $this->query($query);
 		}
 		# UTILISATEUR
 #		$this->left .= "<h2>Session</h2>";
@@ -300,12 +298,12 @@
 
 	public function ticket_level($level)
 	{
-		$titre[0]="Pour info";
-		$titre[1]="À faire";
-		$titre[2]="Correx";
-		$titre[3]="En cours";
+		$titre[0]="Info";
+		$titre[1]="Brief de départ";
+		$titre[2]="Ordre intermédiaire";
+		$titre[3]="WIP / Work In Progress / En cours";
 		$titre[4]="Livré et vérifié";
-		$titre[5]="Incident";
+		$titre[5]="Description d'incident";
 		return $titre[$level];
 	}
 
@@ -377,7 +375,7 @@
 				" WHERE id='".$id."' ".
 				" ORDER BY datetime DESC";
 
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 
 		if (mysqli_num_rows($result)!=0) {
 			$out= "<table width=\"100%\">";
@@ -406,7 +404,7 @@
 				" WHERE id='".$id."' or thread='".$id."'".
 				" ORDER BY datetime ASC";
 
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 
 		if (mysqli_num_rows($result)!=0) {
 			$active_ticket=false;
@@ -438,7 +436,7 @@
 		$query = "SELECT name ".
 				" FROM `slug`".
 				" WHERE thread='".$thread."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if ($thread==0) {
 			return;
 		}
@@ -457,12 +455,12 @@
 		$query = "SELECT concept.name ".
 				" FROM `slug`,`concept`".
 				" WHERE concept.id = slug.concept_id and thread='".$thread."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
 				return ($item[0]);
 		}else{
-				return "Lazarus";
+				return;
 		}
 	}
 
@@ -472,12 +470,12 @@
 		$query = "SELECT concept.code ".
 				" FROM `slug`,`concept`".
 				" WHERE concept.id = slug.concept_id and thread='".$thread."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
-				return "[".($item[0])."]";
+				return ($item[0]);
 		}else{
-				return "?";
+				return "N/A";
 		}
 	}
 
@@ -513,7 +511,7 @@
 		$query = "SELECT name ".
 				" FROM `user`".
 				" WHERE id = '".$uid."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
 				return ($item[0]);
@@ -526,7 +524,7 @@
 		$query = "SELECT username ".
 				" FROM `user`".
 				" WHERE id='".$thread."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
 				return ($item[0]);
@@ -538,7 +536,7 @@
 
 #		$timegraph = new DB();
 		$sql = "select `".$value."`,`".$option."` from ".$table." where `".$value."` is not null group by `".$option."` order by `".$option."` asc";
-		$result = $timegraph->query($sql);
+		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
         $out .= '<OPTION VALUE="-1">N/A</A>';
@@ -579,34 +577,30 @@
 	}
 
 	public function ticket_panel($title,$where) {
-
-#		$timegraph = new DB(); ##################################### A CHECKER
+    $out="<h2>".$title."</h2>";
 		$query = "SELECT id,thread".
 						" FROM `ticket`".
-						" WHERE ".$where." and active=1 ".
+						" WHERE ".$where.
 						" ORDER BY datetime DESC";
-
 		$result = $this->query($query);
-
 		if (mysqli_num_rows($result)!=0) {
-			$this->body.= "<h2>".$title."</h2>";
 			while ($item = mysqli_fetch_array($result)) {
 				if ($item['thread']==0) {
 					$thread=$item['id'];
 				}else{
 					$thread=$item['thread'];
 				}
-				$ticket = "<table class=\"ticket\">";
-				$ticket .= "<tr><td class=\"slug\">";
-				$ticket .= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>"."</td><td class=\"slug_droite\">".$this->concept($thread);
-				$ticket .= "</td></tr><tr><td colspan=\"2\">";
-				$ticket .= $this->time_tracker($thread);
-				$ticket .= $this->ticket($item['id']);
-				$ticket .= "</td></tr>";
-				$ticket .= "</table>";
-				$this->body($ticket);
+				$out .= "<table class=\"ticket\">";
+				$out .= "<tr><td class=\"slug\">";
+				$out .= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>"."</td><td class=\"slug_droite\">".$this->concept($thread);
+				$out .= "</td></tr><tr><td colspan=\"2\">";
+				$out .= $this->time_tracker($thread);
+				$out .= $this->ticket($item['id']);
+				$out .= "</td></tr>";
+				$out .= "</table>";
 			}
 		}
+    $this->body.=$out;
 	}
 
 	public function level($thread) {
@@ -642,7 +636,7 @@
 #		$timegraph = new DB();
 		$names_actifs="";
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread;
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$names_actifs.= "<span class=\"onair\">Actif : ";
 			while ($item = mysqli_fetch_array($result)) {
@@ -657,7 +651,7 @@
 #		$timegraph = new DB();
 		$names_actifs="";
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread;
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$names_actifs.= "<span class=\"onair\">Actif : ";
 			while ($item = mysqli_fetch_array($result)) {
@@ -666,14 +660,14 @@
 			$names_actifs.="</span><br>";
 		}
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$names_actifs.= "<span class=\"onair\">Participants : ";
 			while ($item = mysqli_fetch_array($result)) {
 				$names_actifs.=$item[0]." ";
 			}
 			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
-			$result = $timegraph->query($query);
+			$result = $this->query($query);
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
 					$names_actifs.=$item[0]."";
@@ -695,7 +689,7 @@
                 " FROM `ticket`".
 				" WHERE ".$where." and thread!=0".
 				" GROUP BY 1 ORDER BY 1 DESC";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
 				$thread = $this->thread($item[0],$active);
