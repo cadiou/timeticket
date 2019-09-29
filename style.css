@@ -145,7 +145,7 @@ a:active {
 
 .level {
   padding: 2px;
-  background-color: ff0000;
+  background-color: 000000;
   color: white;
   text-align: left;
   font-weight: bold;
@@ -297,7 +297,7 @@ a:active {
 	background-color: 000000;
 	text-align: center;
 	color: eb1010;
-	font-size:200%;
+	font-size:175%;
 }
 
 @media print {

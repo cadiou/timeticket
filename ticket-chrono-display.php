@@ -28,7 +28,7 @@ echo "<html>";
 if ($refresh=="yes") {
 		echo "<meta HTTP-EQUIV=\"Refresh\" CONTENT=\"1\">";
 }
-echo "<link href=\"/style.css\" rel=\"stylesheet\" media=\"all\" type=\"text/css\" />";
+echo "<link href=\"style.css\" rel=\"stylesheet\" media=\"all\" type=\"text/css\" />";
 echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 echo "<div class=\"chrono\">".$chrono."</div>";
 echo "</html>";

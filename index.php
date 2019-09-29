@@ -9,7 +9,7 @@
 
 # CLASSE HTML
 include("HTML.class.php");
-$html = new HTML("timeticket",60);
+$html = new HTML("Tickets Actifs",60);
 
 # MARGE
 $html->module_login();
@@ -25,11 +25,11 @@ $html->body.='
 ';
 $html->ticket_panel($html->ticket_level(0),"LEVEL = 0 and active = 1");
 $html->body.='
-</td></tr><tr><td>
+<p /></td></tr><tr><td>
 ';
 $html->ticket_panel($html->ticket_level(4),"LEVEL = 4 and active = 1");
 $html->body.='
-</td></tr><tr><td>
+<p /></td></tr><tr><td>
 ';
 $html->ticket_panel($html->ticket_level(5),"LEVEL = 5 and active = 1");
 #$html->body.='
