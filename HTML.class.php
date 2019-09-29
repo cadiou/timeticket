@@ -127,63 +127,52 @@
 		}
 	}
 
+  # MODULE TICKET
+
+	public function module_ticket() {
+		$this->left .= '
+      <table>
+		  <tr><td class="level1">
+		  <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
+      </td></tr><tr><td class="level0">
+      <a href="ticket.php?level=0">Nouvelle&nbsp;Info</a>
+      </td></tr><tr><td class="level5">
+      <a href="ticket.php?level=5">Incident</a>
+      </td></tr>
+		  </table>
+    ';
+		$this->left .= "<h2>Afficher</h2>";
+    $this->left .= "<ul>";
+    $this->left .= "<li><a href=\"tickets.php\">Tableau Général</a>";
+    $this->left .= "<li><a href=\"tickets.php?level=1\" class=\"level1\">Projets&nbsp;en&nbsp;cours</a>";
+    $this->left .= "<li><a href=\"tickets.php?level=0\" class=\"level0\">Informations</a>";
+    $this->left .= "<li><a href=\"tickets.php?level=5\" class=\"level5\">Incidents</a>";
+    $this->left .= "<li><a href=\"tickets-help.php\">Aide</a>";
+    $this->left .= "<li><a href=\"tickets-slug.php\">Slugs</a>";
+    $this->left .= "</ul>";
+
+#		$timegraph = new DB();
+
+		$query = "SELECT id,thread".
+						" FROM `ticket`".
+						" WHERE (level=1 or level=2 or level=3) and active=1 ".
+						" ORDER BY datetime DESC";
+		$result = $this->query($query);
+		if (mysqli_num_rows($result)!=0) {
+			$this->left .= "<h3>Projets en cours</h3>";
+			$this->left .= "<ol>";
+			while ($item = mysqli_fetch_array($result)) {
+				$this->left .= "<li><a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1]))." ".$this->slug(($item[1]==0?$item[0]:$item[1]))."</a>";
+			}
+			$this->left .= "</ol>";
+		}
+	}
+
 	# Ajoute du texte au corps de page.
 
 	public function body($text)
 	{
 		$this->body .= "<p>".$text."</p>";
-	}
-
-	# Module Outils
-
-	public function tools()
-	{
-		$this->left .= "<h2>Outils</h2>";
-		$this->left .= "<ul>";
-		if ($this->uid > 0) {
-			$this->left .= "<li><a href=\"expert.php\">Expert</a>";
-		}
-		$this->left .= "<li><a href=\"http://rtdesign.rttv.ru/Account/Login?mode=f\">График съёмок</a>";
-		$this->left .= "<li><a href=\"https://mail.rttv.fr\">mail.rttv</a>";
-		$this->left .= "<li><a href=\"https://login.microsoftonline.com/\">MicrosoftOnLine</a>";
-		$this->left .= "<li><a href=\"http://fr-webspace:9090/WebSpace/\">Webspace Dalet</a>";
-		$this->left .= "</ul>";
-	}
-
-	# Module Vizrt
-
-	public function vizrt()
-	{
-#		$timegraph = new DB();
-		$this->left .= "<h2>Vizrt</h2>";
-		$this->left .= "<ul>";
-		$this->left .= "<li><a href=\"cg-playlist-studio.php\">CG Playlist Studio</a>";
-		$this->left .= "<li><a href=\"dataelements.php\">Dataelements MOS</a>";
-		$this->left .= "<li><a href=\"pile-mos.php\">Pile MOS</a> ".$timegraph->mos_stack_num();
-		$this->left .= "</ul>";
-	}
-
-	# Module courtesy generator
-
-	public function module_courtesy()
-	{
-		$this->left .= "<h2>Courtesy Generator</h2>";
-		$this->left .= "<form action=\"courtesy.php\" method=\"get\">";
-		$this->left .= "<input type=\"text\" name=\"text\" value=\"SOURCE : \" /><input type=\"submit\">";
-		$this->left .= "</form><p />";
-	}
-
-	# Module Agences photo
-
-	public function agence_photo()
-	{
-		$this->left .= "<h2>Agences Photo</h2>";
-		$this->left .= "<ul>";
-		$this->left .= "<li><a href=\"http://www.afpforum.com\">AFP Forum</a>";
-		$this->left .= "<li><a href=\"http://www.apimages.com/\">AP Images</a>";
-		$this->left .= "<li><a href=\"https://www.reutersconnect.com/\">Reuters Connect</a>";
-		$this->left .= "<li><a href=\"http://sputnikimages.com/\">Sputnik Images</a>";
-		$this->left .= "</ul><p />";
 	}
 
 	# Module Catalogue
@@ -199,17 +188,6 @@
 		$this->left .= "<li><a href=\"/catalog/template-vizrt.php\">Templates Vizrt</a>	";
 		$this->left .= "<li><a href=\"/list-concept.php\">Concepts</a>	";
 		$this->left .= "</ul>"."<p />";  # .$timegraph->catalog_last_image()
-	}
-
-	# Module RT Videlio
-
-	public function rt_videlio()
-	{
-		$this->left .= "<h2>Web</h2>";
-		$this->left .= "<center>";
-		$this->left .= "<a href=\"http://rtfrance.tv\"><img src=\"RT_france_color.png\" width=\"70\" height=\"70\"></a>		";
-		$this->left .= "<a href=\"http://videlio.com\"><img src=\"Videlio_Global_Services.png\"></a>";
-		$this->left .= "</center><p />";
 	}
 
 	# Module LOGIN ####################################################################################
@@ -318,55 +296,6 @@
 		}
 	}
 
-  # MODULE TICKET
-
-	public function module_ticket() {
-		$this->left .= "<h2>Créer un nouveau...</h2>";
-		$this->left .= "<ul>";
-		$this->left .= "<li><a href=\"ticket.php?level=1\" class=\"level1\">Ticket&nbsp;Projet&nbsp;/&nbsp;Brief</a>";
-		$this->left .= "<li><a href=\"ticket.php?level=0\" class=\"level0\">Ticket&nbsp;Information</a>";
-		$this->left .= "<li><a href=\"ticket.php?level=5\" class=\"level5\">Ticket Incident</a>";
-		$this->left .= "</ul>";
-		$this->left .= "<h2>Afficher</h2>";
-    $this->left .= "<ul>";
-    $this->left .= "<li><a href=\"tickets.php\">Tableau Général</a>";
-    $this->left .= "<li><a href=\"tickets.php?level=1\" class=\"level1\">Projets&nbsp;en&nbsp;cours</a>";
-    $this->left .= "<li><a href=\"tickets.php?level=0\" class=\"level0\">Informations</a>";
-    $this->left .= "<li><a href=\"tickets.php?level=5\" class=\"level5\">Incidents</a>";
-    $this->left .= "<li><a href=\"tickets-help.php\">Aide</a>";
-    $this->left .= "<li><a href=\"tickets-slug.php\">Slugs</a>";
-    $this->left .= "</ul>";
-
-#		$timegraph = new DB();
-
-		$query = "SELECT id,thread".
-						" FROM `ticket`".
-						" WHERE (level=1 or level=2 or level=3) and active=1 ".
-						" ORDER BY datetime DESC";
-		$result = $this->query($query);
-		if (mysqli_num_rows($result)!=0) {
-			$this->left .= "<h3>Projets en cours</h3>";
-			$this->left .= "<ol>";
-			while ($item = mysqli_fetch_array($result)) {
-				$this->left .= "<li><a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1]))." ".$this->slug(($item[1]==0?$item[0]:$item[1]))."</a>";
-			}
-			$this->left .= "</ol>";
-		}
-	}
-
-	# Fenetre pile MOS
-
-	public function mos_stack()
-	{
-#		$timegraph = new DB();
-
-		if ( $timegraph->mos_stack_table() != "" ) {
-
-			$this->body = "<h2>Pile MOS</h2>";
-			$this->body.= $timegraph->mos_stack_table();
-		}
-	}
-
 	# Retourne le titre de la page
 
 	public function ticket_level($level)
@@ -377,9 +306,7 @@
 		$titre[3]="En cours";
 		$titre[4]="Livré et vérifié";
 		$titre[5]="Incident";
-
 		return $titre[$level];
-
 	}
 
 	# Fenetre Tickets Hebdo
@@ -593,8 +520,6 @@
 		}
 	}
 
-
-
 	public function initials($thread)
 	{
 #		$timegraph = new DB();
@@ -608,8 +533,6 @@
 		}
 
 	}
-
-
 
 	public function menuselect($table,$value,$option,$selected) {
 
@@ -633,9 +556,6 @@
          return $out;
 	}
 
-
-
-
 	# Affiche la page structurée et gere le user
 
 	public function out()
@@ -643,7 +563,6 @@
 		if (isset($this->redirect)) {
 			header("Location: ".$this->redirect);
 		}
-
 		echo $this->head;
 		if ($this->left != "") {
 			echo "<table>";
@@ -655,11 +574,9 @@
 			echo "</table>";
 		}else{
 			echo $this->body;
-
 		}
 		echo $this->foot;
 	}
-
 
 	public function ticket_panel($title,$where) {
 
@@ -694,7 +611,6 @@
 
 	public function level($thread) {
 #		$timegraph = new DB();
-
 		$query = "SELECT ticket.level FROM ticket WHERE ticket.id=".$thread." OR ticket.thread=".$thread." ORDER BY ticket.id DESC LIMIT 1";
 		$result = $timegraph->query($query);
 		if (mysqli_num_rows($result)!=0) {
@@ -702,34 +618,25 @@
 				$level=$item[0]."";
 			}
 		}
-
 		return $level;
 	}
-
 
 	public function time_time($thread) {
 #		$timegraph = new DB();
 		$time= "";
-
-
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
 		$result = $timegraph->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 			$result = $timegraph->query($query);
-
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
 					$time.=$item[0]."";
 				}
 			}
 		}
-
-
-
 		return $time;
 	}
-
 
 	public function time_tracker($thread) {
 #		$timegraph = new DB();
@@ -746,7 +653,6 @@
 		return $names_actifs;
 	}
 
-
 	public function time_tracker_complet($thread) {
 #		$timegraph = new DB();
 		$names_actifs="";
@@ -759,7 +665,6 @@
 			}
 			$names_actifs.="</span><br>";
 		}
-
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
 		$result = $timegraph->query($query);
 		if (mysqli_num_rows($result)!=0) {
@@ -767,16 +672,13 @@
 			while ($item = mysqli_fetch_array($result)) {
 				$names_actifs.=$item[0]." ";
 			}
-
-					$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
+			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 			$result = $timegraph->query($query);
-
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
 					$names_actifs.=$item[0]."";
 				}
 			}
-
 			$names_actifs.="</span>";
 		}
 		return $names_actifs;
@@ -793,15 +695,10 @@
                 " FROM `ticket`".
 				" WHERE ".$where." and thread!=0".
 				" GROUP BY 1 ORDER BY 1 DESC";
-
 		$result = $timegraph->query($query);
-
 		if (mysqli_num_rows($result)!=0) {
-
 			while ($item = mysqli_fetch_array($result)) {
-
 				$thread = $this->thread($item[0],$active);
-
 				if ($thread!="") {
 					$ticket = "<table class=\"ticket\">";
 					$ticket .= "<tr><td class=\"slug\">";
@@ -816,7 +713,6 @@
 			}
 		}
 	}
-
 
 	public function ticket_complet($id) {
 		$thread = $this->thread($id,-1);
@@ -876,17 +772,11 @@
 		$query = "SELECT code,name,id,active,(select count(template.id) from template where template.concept_id=concept.id),(select count(slug.thread) from slug where slug.concept_id=concept.id)".
 				" FROM `concept`".
 				" ORDER BY name ASC";
-
 		$result = $timegraph->query($query);
-
 		if (mysqli_num_rows($result)!=0) {
-
 			$out= "<table>";
-
 			$out.= "<tr><td>Code</td><td>Nom</td><td>id</td><td>cat</td><td>tic</td></tr>";
-
 			while ($item = mysqli_fetch_array($result)) {
-
 				$out.= "<tr class=\"level".($item['active']?"4":"1")."\">"
 					."<td>".$item['code']."</td>"
 					."<td>".$item['name']."</td>"
@@ -895,13 +785,9 @@
 					."<td>".$item[5]."</td>"
 					."</tr>";
 			}
-
 			$out.= "</table>";
-
 			$this->body .= $out;
-
 		}
-
 	}
 
 	public function list_class() {
@@ -926,7 +812,6 @@
 					."<td>".$item[3]."</td>"
 					."</tr>";
 			}
-
 			$out.= "</table>";
 			$this->body .= $out;
 		}
@@ -936,7 +821,6 @@
 #		$timegraph = new DB();
 		$out  = '<SELECT NAME="concept_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
-
 		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true group by `name` order by `name` asc";
 		$result = $timegraph->query($sql);
 		if (!$result){
