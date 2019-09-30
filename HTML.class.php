@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 190929
+ * 190930
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -18,27 +18,22 @@
 		}elseif (file_exists("../CONFIG.class.php")) {
 			$this->check_config = include_once("../CONFIG.class.php");
 		}
+		
+		# DATABASE
 
-    # DATABASE
+		$this->mysqli =
+		  new mysqli( CONFIG::DB_SERVER,
+					  CONFIG::DB_USERNAME,
+					  CONFIG::DB_PASSWORD,
+					  CONFIG::DB_NAME);
 
-    $this->mysqli =
-      new mysqli( CONFIG::DB_SERVER,
-                  CONFIG::DB_USERNAME,
-                  CONFIG::DB_PASSWORD,
-                  CONFIG::DB_NAME);
-
-		$this->mysqli->set_charset(CONFIG::DB_CHARSET);
-
-    #		include_once("DB.class.php");
-    #		$timegraph = new DB();
+			$this->mysqli->set_charset(CONFIG::DB_CHARSET);
 
 		# COOKIE UID SETTING
 
-    if (isset($_POST["user_id"]) and $_POST["user_id"]>0) {
+		if (isset($_POST["user_id"]) and $_POST["user_id"]>0) {
 			$this->uid =  $_POST["user_id"];
 			SetCookie(CONFIG::COOKIE_UID,$this->uid, time()+CONFIG::COOKIE_SEC);
-#			$this->con = 1;
-#			SetCookie(CONFIG::COOKIE_CON,$this->con, time()+CONFIG::COOKIE_SEC);
 		}elseif (isset($_POST["user_id"]) and $_POST["user_id"]=-1) {
 			$this->uid =  $_POST["user_id"];
 			setcookie(CONFIG::COOKIE_UID, null, -1);
@@ -133,7 +128,7 @@
 		$this->left .= '
       <table>
       <tr><td class="level" colspan=2>
-      <!--a href="tickets-help.php">Aide</a-->
+      <a href="tickets-help.php">Aide</a>
 		  </td></tr><tr><td class="level1" colspan=2>
 		  <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
       </td></tr><tr><td class="level0" colspan=2>
@@ -149,7 +144,7 @@
       </td></tr><tr><td class="level5" colspan=2>
       <a href="tickets.php?level=5">Archives&nbsp;Incidents</a>
       </td></tr><tr><td class="level" colspan=2>
-      <!--a href=\"tickets-slug.php\">Slugs</a-->
+      <a href="tickets-slug.php">Slugs</a>
       </td></tr>
     ';
 
@@ -181,7 +176,6 @@
 
 	public function gfx_catalog()
 	{
-		$timegraph = new DB();
 		$this->left .= "<h2>GFX Catalog</h2>";
 		$this->left .= "<ul>";
 		$this->left .= "<li><a href=\"/catalog/print.php?concept_id=3\">Collection NEWS</a>	";
@@ -485,7 +479,7 @@
 		$query = "SELECT class.name ".
 				" FROM `slug`,`class`".
 				" WHERE class.id = slug.class_id and thread='".$thread."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
 				return ($item[0]);
@@ -498,7 +492,7 @@
 		$query = "SELECT system.name ".
 				" FROM `slug`,`system`".
 				" WHERE system.id = slug.system_id and thread='".$thread."'";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
 				return ($item[0]);
@@ -605,7 +599,7 @@
 	public function level($thread) {
 #		$timegraph = new DB();
 		$query = "SELECT ticket.level FROM ticket WHERE ticket.id=".$thread." OR ticket.thread=".$thread." ORDER BY ticket.id DESC LIMIT 1";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
 				$level=$item[0]."";
@@ -618,10 +612,10 @@
 #		$timegraph = new DB();
 		$time= "";
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
-			$result = $timegraph->query($query);
+			$result = $this->query($query);
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
 					$time.=$item[0]."";
@@ -763,7 +757,7 @@
 		$query = "SELECT code,name,id,active,(select count(template.id) from template where template.concept_id=concept.id),(select count(slug.thread) from slug where slug.concept_id=concept.id)".
 				" FROM `concept`".
 				" ORDER BY name ASC";
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$out= "<table>";
 			$out.= "<tr><td>Code</td><td>Nom</td><td>id</td><td>cat</td><td>tic</td></tr>";
@@ -790,7 +784,7 @@
 				" FROM `class`".
 				" ORDER BY name ASC";
 
-		$result = $timegraph->query($query);
+		$result = $this->query($query);
 
 		if (mysqli_num_rows($result)!=0) {
 			$out= "<table>";
@@ -813,7 +807,7 @@
 		$out  = '<SELECT NAME="concept_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
 		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true group by `name` order by `name` asc";
-		$result = $timegraph->query($sql);
+		$result = $this->query($sql);
 		if (!$result){
 			echo "erreur".$sql;
 		}else{
