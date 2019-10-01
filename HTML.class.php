@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 190930
+ * 191001
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -18,7 +18,7 @@
 		}elseif (file_exists("../CONFIG.class.php")) {
 			$this->check_config = include_once("../CONFIG.class.php");
 		}
-		
+
 		# DATABASE
 
 		$this->mysqli =
@@ -96,16 +96,22 @@
 		  '<meta Http-Equiv="Pragma-directive: no-cache">'.
 		  '<meta Http-Equiv="Cache-directive: no-cache">'.
 		  "</head>";
+      $this->head.=
+        "\n".'<!--  timeticket  -->'.
+        "\n".'<!--  Baptiste Cadiou  -->'.
+        "\n".'<!--  https://github.com/cadiou/timeticket/  -->'."\n";
 		$this->head.= "<body>";
 		$this->head.= "<h1>";
-		if (($_SERVER['PHP_SELF'] != "/index.php" )
+    if (($_SERVER['PHP_SELF'] != "/index.php" )
       and ($_SERVER['PHP_SELF'] != "" ) ) {
-			$this->head .= "<a href=\"index.php\">".gethostname()."</a> ";
+			$this->head .= "<a href=\"index.php\">".$this->station(CONFIG::ID_STATION)."</a> ";
 		}else{
-			$this->head .= gethostname()." ";
+			$this->head .= $this->station(CONFIG::ID_STATION)." ";
 		}
 		$this->head.= $page_titre."</h1>";
 		$this->foot = "<hr />";
+    $this->foot .= "Host : ".gethostname();
+
 		$this->foot.= "</body>";
 		$this->foot.= "</html>";
 		$this->left = "";
@@ -128,35 +134,38 @@
 		$this->left .= '
       <table>
       <tr><td class="level" colspan=2>
-      <a href="tickets-help.php">Aide</a>
-		  </td></tr><tr><td class="level1" colspan=2>
+      <a href="tickets-slug.php">Slugs</a>
+      </td></tr><tr><td class="level" colspan=2>
+      <a href="index.php">Tickets&nbsp;Actifs</a>
+		  </td></tr><tr><td class="level" colspan=2>
+      <a href="tickets-help.php">Aide</a><p>
+      </td></tr><tr><td class="level1" colspan=2>
 		  <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
       </td></tr><tr><td class="level0" colspan=2>
       <a href="ticket.php?level=0">Nouvelle&nbsp;Info</a>
       </td></tr><tr><td class="level5" colspan=2>
       <a href="ticket.php?level=5">Nouvel&nbsp;Incident</a>
-      </td></tr><tr><td class="level" colspan=2>
-      <a href="index.php">Tickets&nbsp;Actifs</a>
-      </td></tr><tr><td class="level1" colspan=2>
+
+      </td></tr><tr><td><p></td></tr><tr><td class="level1" colspan=2>
       <a href="tickets.php?level=1">Archives Projets</a>
       </td></tr><tr><td class="level0" colspan=2>
       <a href="tickets.php?level=0">Archives Infos</a>
       </td></tr><tr><td class="level5" colspan=2>
       <a href="tickets.php?level=5">Archives&nbsp;Incidents</a>
-      </td></tr><tr><td class="level" colspan=2>
-      <a href="tickets-slug.php">Slugs</a>
-      </td></tr>
+
+      </td></tr><tr><td><p></td></tr>
     ';
 
 		$query = "SELECT id,thread,level".
 						" FROM `ticket`".
-						" WHERE (level=1 or level=2 or level=3) and active=1 ".
+						" WHERE (level=1 or level=2 or level=3) and active=1".
+            " AND station_id=".CONFIG::ID_STATION.
 						" ORDER BY datetime DESC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
 	       $this->left .= "<tr><td class=\"level".$item[2]."\">";
-	       $this->left .= "</td><td>";
+	       $this->left .= "</td><td class=\"level\">";
          $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
 		     $this->left .= "</td></tr>";
       }
@@ -226,7 +235,7 @@
 		}
 		$this->left .= "Utilisateur :<br><FORM method=\"POST\">";
 
-		$sql = "select `id`,`name` from user where name is not null and active = true group by `name` order by `name` asc";
+		$sql = "select `id`,`name` from user where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="user_id" onchange="this.form.submit()">';
@@ -245,7 +254,7 @@
 		$this->left .= "</FORM>";
 		if ($this->uid > 0) {
   		$this->left .= "Vacation :<br><FORM method=\"POST\">";
-  		$sql = "select `id`,`name` from concept where name is not null and active = true group by `name` order by `name` asc";
+  		$sql = "select `id`,`name` from concept where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
   		$result = $this->query($sql);
   		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
   		while ($item = mysqli_fetch_array($result)) {
@@ -508,7 +517,6 @@
 
 	public function initials($thread)
 	{
-#		$timegraph = new DB();
 		$query = "SELECT username ".
 				" FROM `user`".
 				" WHERE id='".$thread."'";
@@ -517,13 +525,24 @@
 			$item = mysqli_fetch_array($result);
 				return ($item[0]);
 		}
-
 	}
+
+  public function station($station_id)
+  {
+    $query = "SELECT name ".
+        " FROM `station`".
+        " WHERE id='".$station_id."'";
+    $result = $this->query($query);
+    if (mysqli_num_rows($result)>0) {
+      $item = mysqli_fetch_array($result);
+        return ($item[0]);
+    }
+  }
 
 	public function menuselect($table,$value,$option,$selected) {
 
 #		$timegraph = new DB();
-		$sql = "select `".$value."`,`".$option."` from ".$table." where `".$value."` is not null group by `".$option."` order by `".$option."` asc";
+		$sql = "select `".$value."`,`".$option."` from ".$table." where `".$value."` is not null and station_id = ".CONFIG::ID_STATION." group by `".$option."` order by `".$option."` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
@@ -567,7 +586,7 @@
 	public function ticket_panel($title,$where) {
 		$query = "SELECT id,thread".
 						" FROM `ticket`".
-						" WHERE ".$where.
+						" WHERE (".$where.") and station_ID = ".CONFIG::ID_STATION.
 						" ORDER BY datetime DESC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
@@ -668,11 +687,11 @@
 		$this->body.= "<h2>".$title."</h2>";
 		$query = "SELECT id ".
                 " FROM `ticket`".
-				" WHERE ".$where." and thread=0".
+				" WHERE ".$where." and thread=0 and station_ID = ".CONFIG::ID_STATION.
 				" ";
 		$query.= "UNION SELECT thread ".
                 " FROM `ticket`".
-				" WHERE ".$where." and thread!=0".
+				" WHERE ".$where." and thread!=0 and station_ID = ".CONFIG::ID_STATION.
 				" GROUP BY 1 ORDER BY 1 DESC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {

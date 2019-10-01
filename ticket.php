@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 190929
+ * 191001
  * timeticket / ticket.php
  * Baptiste Cadiou
  *
@@ -55,6 +55,7 @@ if (isset($_POST['new'])) {
 				."initials='".($html->uid>0?$html->initials($html->uid):$initials). "', "
 				."uid='".$html->uid. "', "
 				."ip='".$html->terminal. "', "
+				."station_id='".CONFIG::ID_STATION. "', "
 				."body='". addslashes(addslashes($body))."'" ;
 
 	if ( isset($_FILES['fic']) ) {
