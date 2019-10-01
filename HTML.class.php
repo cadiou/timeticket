@@ -134,11 +134,11 @@
 		$this->left .= '
       <table>
       <tr><td class="level" colspan=2>
-      <a href="tickets-slug.php">Slugs</a>
+      <a href="tickets-slug.php">Liste des Slugs</a>
       </td></tr><tr><td class="level" colspan=2>
       <a href="index.php">Tickets&nbsp;Actifs</a>
 		  </td></tr><tr><td class="level" colspan=2>
-      <a href="tickets-help.php">Aide</a><p>
+      <a href="tickets-help.php">Documentation</a><p>
       </td></tr><tr><td class="level1" colspan=2>
 		  <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
       </td></tr><tr><td class="level0" colspan=2>

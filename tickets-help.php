@@ -6,10 +6,10 @@
  * bcadiou@videlio-globalservices.com
  *
  */
- 
+
 include("HTML.class.php");
- 
-$html = new HTML("Tickets Help",0);
+
+$html = new HTML("Documentation",0);
 $html->module_login();
 $html->module_ticket();
 
@@ -104,5 +104,5 @@ $html->body('
 ');
 
 $html->out();
- 
+
 ?>

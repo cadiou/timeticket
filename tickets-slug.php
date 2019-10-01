@@ -21,7 +21,7 @@ if (isset($_GET["class_id"])) {
 	$class_id=(isset($_POST["class_id"])?$_POST["class_id"]:0);
 }
 
-$html = new HTML("Tickets Slugs",60);
+$html = new HTML("Liste des Slugs",60);
 
 $html->module_login();
 $html->module_ticket();
