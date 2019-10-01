@@ -493,6 +493,17 @@ ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
+--
+-- Déchargement des données de la table `group`
+--
+
+INSERT INTO `group` (`id`, `name`) VALUES
+(23, 'Baptiste Cadiou');
+
+INSERT INTO `station` (`id`, `name`, `group_id`) VALUES
+(23, 'PUBLIC DOMAIN', 23),
+(25, 'Family', 23);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

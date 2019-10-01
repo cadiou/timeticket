@@ -3,17 +3,21 @@
 <h2>Including files</h2>
 <ol>
 <li>BASE_STRUCTURE.sql		STRUCTURE DE LA BASE
-<li>DB.class.php      		CONNEXION MYSQL
+<li>DB.class.php      		CONNEXION MYSQL			obsolete
 <li>HTML.class.php    		CODAGE DES PAGES
-<li>index.php         		PAGE PRINCIPALE
-<li>README.md			THIS FILE	
+<li>README.md			THIS	
+<li>index.php         		TICKETS ACTIFS
 <li>style.css         		STYLE CSS
 <li>ticket-chrono-display.php	CHRONO DISPLAY
+<li>ticket-image.php		DISPLAY IMAGE
+<li>ticket.php			DISPLAY TICKET id
+<li>tickets-help.php		DOCUMENTATION
+<li>tickets-slug.php		CLASSE LOCALE
+<li>tickets.php			DISPLAY TICKETS level
   </ol>
 <h2>Not included</h2>
 <ol>
-<li>../CONFIG.class.php
-  </ol>
+<li>../CONFIG.class.php		MANDATORY
 <pre>
 class Config
 {
@@ -32,3 +36,5 @@ class Config
 	ID_CHANNEL   = 0,                 #int
 }
 </pre>
+<li>../LOCAL.class.php		OPTIONAL
+</ol>
