@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191001
+ * 191004
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -135,8 +135,8 @@
 		$this->left .= '
 
       <table>
-      <tr><td class="level" colspan=2>
-      <a href="index.php">Tickets&nbsp;Actifs</a></td></tr>
+      <!--tr><td class="level" colspan=2>
+      <a href="index.php">Tickets&nbsp;Actifs</a></td></tr-->
       <tr><td class="level" colspan=2>
       <a href="tickets.php?level=1" class="level1">PRJ</a>&nbsp;
       <a href="tickets.php?level=0" class="level0">INF</a>&nbsp;
@@ -648,10 +648,39 @@
 					$thread=$item['thread'];
 				}
 				$this->body.= "<table class=\"ticket\">";
+
+
+
+
+
 				$this->body.= "<tr><td class=\"slug\">";
+
 				$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>"."</td><td class=\"slug_droite\">".$this->concept($thread);
-				$this->body.= "</td></tr><tr><td colspan=\"2\">";
+				$this->body.= "</td></tr>";
+        $this->body.= "<tr><td colspan=\"2\">";
 				$this->body.= $this->time_tracker_complet($thread);
+				$this->body.= "</td></tr>";
+        if ($this->uid > 0) {
+				  $this->body.= "<tr><td colspan=\"2\">";
+    			$this->body .= "<FORM method=\"POST\">";
+    			$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
+    			$result2 = $this->query($query2);
+    			if (mysqli_num_rows($result2)!=0) {
+    				$item2 = mysqli_fetch_array($result2);
+    				$time_thread=$item2[1];
+
+  				  if ($thread <> $time_thread) {
+  					       $this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
+  		               #			}else{
+                     #        $this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item2[0].">";
+            }
+    			}else{
+    					$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
+    			}
+    			$this->body .= "</FORM>";
+    	    $this->body.= "</td></tr>";
+    		}
+				$this->body.= "<tr><td colspan=\"2\">";
 				$this->body.= $this->ticket($item['id']);
 				$this->body.= "</td></tr>";
 				$this->body.= "</table>";
@@ -690,7 +719,7 @@
 
 	public function time_tracker($thread) {
 		$names_actifs=" ";
-		$query = "SELECT user.username FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread;
+		$query = "SELECT user.username FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$names_actifs.= "<span class=\"onair\">";
@@ -705,7 +734,7 @@
 	public function time_tracker_complet($thread) {
 #		$timegraph = new DB();
 		$names_actifs="";
-		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread;
+		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$names_actifs.= "<span class=\"onair\">Actif : ";
@@ -914,7 +943,7 @@
 
 public function query($query)
 	{
-		$result = mysqli_query($this->mysqli,$query) or die(mysqli_error($this->mysqli));
+		$result = mysqli_query($this->mysqli,$query) ; #or die(mysqli_error($this->mysqli));
 		return $result;
 	}
 }
