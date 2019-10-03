@@ -11,7 +11,6 @@
 <li>ticket-chrono-display.php	CHRONO DISPLAY
 <li>ticket-image.php		DISPLAY IMAGE
 <li>ticket.php			DISPLAY TICKET id
-<li>tickets-help.php		DOCUMENTATION
 <li>tickets-slug.php		CLASSE LOCALE
 <li>tickets.php			DISPLAY TICKETS level
   </ol>
