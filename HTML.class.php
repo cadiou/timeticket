@@ -110,8 +110,7 @@
 		}
 		$this->head.= $page_titre."</h1>";
 		$this->foot = "<hr />";
-    $this->foot .= "Host : ".gethostname();
-
+    $this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname();
 		$this->foot.= "</body>";
 		$this->foot.= "</html>";
 		$this->left = "";
@@ -582,6 +581,18 @@
     $query = "SELECT name ".
         " FROM `station`".
         " WHERE id='".$station_id."'";
+    $result = $this->query($query);
+    if (mysqli_num_rows($result)>0) {
+      $item = mysqli_fetch_array($result);
+        return ($item[0]);
+    }
+  }
+
+  public function group($group_id)
+  {
+    $query = "SELECT name ".
+        " FROM `group`".
+        " WHERE id='".$group_id."'";
     $result = $this->query($query);
     if (mysqli_num_rows($result)>0) {
       $item = mysqli_fetch_array($result);
