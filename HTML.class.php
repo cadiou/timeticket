@@ -152,7 +152,7 @@
 						" FROM `ticket`".
 						" WHERE (level=1 or level=2 or level=3) and active=1".
             " AND station_id=".CONFIG::ID_STATION.
-						" ORDER BY datetime DESC";
+						" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
@@ -169,7 +169,7 @@
 						" FROM `ticket`".
 						" WHERE (level=0) and active=1".
             " AND station_id=".CONFIG::ID_STATION.
-						" ORDER BY datetime DESC";
+						" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
@@ -184,7 +184,7 @@
             " FROM `ticket`".
             " WHERE (level=4) and active=1".
             " AND station_id=".CONFIG::ID_STATION.
-            " ORDER BY datetime DESC";
+            " ORDER BY datetime ASC";
     $result = $this->query($query);
     if (mysqli_num_rows($result)!=0) {
       while ($item = mysqli_fetch_array($result)) {
@@ -199,7 +199,7 @@
             " FROM `ticket`".
             " WHERE (level=5) and active=1".
             " AND station_id=".CONFIG::ID_STATION.
-            " ORDER BY datetime DESC";
+            " ORDER BY datetime ASC";
     $result = $this->query($query);
     if (mysqli_num_rows($result)!=0) {
       while ($item = mysqli_fetch_array($result)) {
@@ -648,7 +648,7 @@
 		$query = "SELECT id,thread".
 						" FROM `ticket`".
 						" WHERE (".$where.") and station_ID = ".CONFIG::ID_STATION.
-						" ORDER BY datetime DESC";
+						" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 		$this->body.="<h2>".$title."</h2>";
