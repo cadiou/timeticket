@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191004
+ * 191006
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -651,46 +651,44 @@
 						" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-		$this->body.="<h2>".$title."</h2>";
-		while ($item = mysqli_fetch_array($result)) {
-			if ($item['thread']==0) {
-				$thread=$item['id'];
-			}else{
-				$thread=$item['thread'];
-			}
-			$this->body.= "<table class=\"ticket\">";
-			$this->body.= "<tr><td class=\"slug\">";
-			$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>"."</td><td class=\"slug_droite\">".$this->concept($thread);
-			$this->body.= "</td></tr>";
-			$this->body.= "<tr><td><table>";
-			if ($this->uid > 0) {
-					$this->body.= "<td>";
-					$this->body .= "<FORM method=\"POST\">";
-					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
-					$result2 = $this->query($query2);
-					if (mysqli_num_rows($result2)!=0) {
-						$item2 = mysqli_fetch_array($result2);
-						$time_thread=$item2[1];
-
-					  if ($thread <> $time_thread) {
-							   $this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
-						   #			}else{
-						 #        $this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item2[0].">";
-				}
-					}else{
-							$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
-					}
-					$this->body .= "</FORM>";
-				$this->body.= "</td>";
-			}
-			$this->body.= "<td>";
-			$this->body.= $this->time_tracker_complet($thread);
-			$this->body.= "</td>";
-			$this->body.= "</tr></table></td></tr><tr><td colspan=\"2\">";
-			$this->body.= $this->ticket($item['id']);
-			$this->body.= "</td></tr>";
-			$this->body.= "</table>";
-		}
+  		$this->body.="<h2>".$title."</h2>";
+  		while ($item = mysqli_fetch_array($result)) {
+  			if ($item['thread']==0) {
+  				$thread=$item['id'];
+  			}else{
+  				$thread=$item['thread'];
+  			}
+  			$this->body.= "<table class=\"ticket\">";
+  			$this->body.= "<tr><td><table><tr>";
+        if ($this->uid > 0) {
+  					$this->body.= "<td>";
+  					$this->body .= "<FORM method=\"POST\">";
+  					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
+  					$result2 = $this->query($query2);
+  					if (mysqli_num_rows($result2)!=0) {
+  						$item2 = mysqli_fetch_array($result2);
+  						$time_thread=$item2[1];
+  					  if ($thread <> $time_thread) {
+  							   $this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
+  			#			}else{
+  			  #        $this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item2[0].">";
+  				    }
+  					}else{
+  							$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
+  					}
+  					$this->body .= "</FORM>";
+  				  $this->body.= "</td>";
+  			}
+        $this->body.= "<td>";
+  			$this->body.= $this->time_tracker_complet($thread);
+        $this->body.= "</td></tr></table></td><td class=\"slug_droite\">".$this->concept($thread);
+  			$this->body.= "</td>";
+  			$this->body.= "</tr><tr><td colspan=\"2\">";
+        $this->body.= "<p class=\"slug\"><a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a></p>";
+  			$this->body.= $this->ticket($item['id']);
+  			$this->body.= "</td></tr>";
+  			$this->body.= "</table>";
+  		}
     }
 	}
 
