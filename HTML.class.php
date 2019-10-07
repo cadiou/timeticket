@@ -705,8 +705,8 @@
   			$this->body.= $this->time_tracker_complet($thread);
         $this->body.= "</td></tr></table></td><td class=\"slug_droite\">".$this->concept($thread);
   			$this->body.= "</td>";
-  			$this->body.= "</tr><tr><td colspan=\"2\">";
-        $this->body.= "<p class=\"slug\"><a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a></p>";
+  			$this->body.= "</tr><tr><td colspan=\"2\" class=\"slug\">";
+        $this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
   			$this->body.= $this->ticket($item['id']);
   			$this->body.= "</td></tr>";
   			$this->body.= "</table>";
