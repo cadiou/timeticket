@@ -131,118 +131,120 @@
 
 	public function module_ticket() {
 
-    $this->left .= '
-        <table>
-    ';
+		$this->left .= '
+			<table>
+		';
 
-    $this->left .= '
-        <tr><td class="level1" colspan=2>
-        <a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
-        </td></tr><tr><td class="level0" colspan=2>
-        <a href="ticket.php?level=0">Nouvelle&nbsp;Info</a>
-        </td></tr><tr><td class="level5" colspan=2>
-        <a href="ticket.php?level=5">Nouvel&nbsp;Incident</a></td></tr>
+		$this->left .= '
+			<tr><td class="level1" colspan=2>
+			<a href="ticket.php?level=1">Nouveau&nbsp;Projet</a>
+			</td></tr><tr><td class="level0" colspan=2>
+			<a href="ticket.php?level=0">Nouvelle&nbsp;Info</a>
+			</td></tr><tr><td class="level5" colspan=2>
+			<a href="ticket.php?level=5">Nouvel&nbsp;Incident</a></td></tr>
 
-    ';
+		';
 
-    $this->left .= '
-      <tr><td class="level" colspan=2>
-      <a href="tickets-slug.php">Liste des Slugs</a>
-		  </td></tr>
-    ';
+		$this->left .= '
+		  <tr><td class="level" colspan=2>
+		  <a href="tickets-slug.php">Liste des Slugs</a>
+			  </td></tr>
+		';
 
-    $this->left .= '
-      <tr><td class="level" colspan=2>
-      <a href="tickets.php">Tickets Actifs</a>
-		  </td></tr>
-    ';
+		$this->left .= '
+		  <tr><td class="level" colspan=2>
+		  <a href="tickets.php">Tickets Actifs</a>
+			  </td></tr>
+		';
 
-    $query =    "SELECT id,name".
-        		    " FROM `concept`".
-    				    " WHERE active=1".
-                " AND station_id=".CONFIG::ID_STATION.
-    						" ORDER BY name ASC";
-    $result = $this->query($query);
-    		if (mysqli_num_rows($result)!=0) {
-    			while ($item = mysqli_fetch_array($result)) {
-    	       $this->left .= "<tr>";
-    	       $this->left .= "<td class=\"level\">";
-             $this->left .= "<a href=\"tickets.php?concept_id=".$item[0]."\">".$item[1]."</a>";
-    		     $this->left .= "</td></tr>";
-          }
-    		}
+		/*    
+		$query =    "SELECT id,name".
+						" FROM `concept`".
+							" WHERE active=1".
+					" AND station_id=".CONFIG::ID_STATION.
+								" ORDER BY name ASC";
+		$result = $this->query($query);
 
-    $this->left .= "<tr><td><table><tr><td><table>";
+		if (mysqli_num_rows($result)!=0) {
+			while ($item = mysqli_fetch_array($result)) {
+			   $this->left .= "<tr>";
+			   $this->left .= "<td class=\"level\">";
+			   $this->left .= "<a href=\"tickets.php?concept_id=".$item[0]."\">".$item[1]."</a>";
+			   $this->left .= "</td></tr>";
+			}
+		}
+		*/
+		$this->left .= "<tr><td><table><tr><td><table>";
 		$query = "SELECT id,thread,level".
 						" FROM `ticket`".
 						" WHERE (level=1 or level=2 or level=3) and active=1".
-            " AND station_id=".CONFIG::ID_STATION.
+			" AND station_id=".CONFIG::ID_STATION.
 						" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
-	       $this->left .= "<tr><td class=\"level".$item[2]."\">";
-	       $this->left .= "</td><td class=\"level\">";
-         $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
-		     $this->left .= "</td></tr>";
-      }
+				$this->left .= "<tr><td class=\"level".$item[2]."\">";
+				$this->left .= "</td><td class=\"level\">";
+				$this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
+				$this->left .= "</td></tr>";
+			}
 		}
-    $this->left .= "</table></td><td><table>";
-    $query = "SELECT id,thread,level".
+		$this->left .= "</table></td><td><table>";
+		$query = "SELECT id,thread,level".
 						" FROM `ticket`".
 						" WHERE (level=0) and active=1".
-            " AND station_id=".CONFIG::ID_STATION.
+			" AND station_id=".CONFIG::ID_STATION.
 						" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
-	       $this->left .= "<tr><td class=\"level".$item[2]."\">";
-	       $this->left .= "</td><td class=\"level\">";
-         $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
-		     $this->left .= "</td></tr>";
-      }
+				$this->left .= "<tr><td class=\"level".$item[2]."\">";
+				$this->left .= "</td><td class=\"level\">";
+				$this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
+				$this->left .= "</td></tr>";
+			}
 		}
-    $query = "SELECT id,thread,level".
-            " FROM `ticket`".
-            " WHERE (level=4) and active=1".
-            " AND station_id=".CONFIG::ID_STATION.
-            " ORDER BY datetime ASC";
-    $result = $this->query($query);
-    if (mysqli_num_rows($result)!=0) {
-      while ($item = mysqli_fetch_array($result)) {
-         $this->left .= "<tr><td class=\"level".$item[2]."\">";
-         $this->left .= "</td><td class=\"level\">";
-         $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
-         $this->left .= "</td></tr>";
-      }
-    }
+		$query = "SELECT id,thread,level".
+			" FROM `ticket`".
+			" WHERE (level=4) and active=1".
+			" AND station_id=".CONFIG::ID_STATION.
+			" ORDER BY datetime ASC";
+		$result = $this->query($query);
+		if (mysqli_num_rows($result)!=0) {
+			while ($item = mysqli_fetch_array($result)) {
+				$this->left .= "<tr><td class=\"level".$item[2]."\">";
+				$this->left .= "</td><td class=\"level\">";
+				$this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
+				$this->left .= "</td></tr>";
+			}
+		}
 
-    $query = "SELECT id,thread,level".
-            " FROM `ticket`".
-            " WHERE (level=5) and active=1".
-            " AND station_id=".CONFIG::ID_STATION.
-            " ORDER BY datetime ASC";
-    $result = $this->query($query);
-    if (mysqli_num_rows($result)!=0) {
-      while ($item = mysqli_fetch_array($result)) {
-         $this->left .= "<tr><td class=\"level".$item[2]."\">";
-         $this->left .= "</td><td class=\"level\">";
-         $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
-         $this->left .= "</td></tr>";
-      }
-    }
+		$query = "SELECT id,thread,level".
+				" FROM `ticket`".
+				" WHERE (level=5) and active=1".
+				" AND station_id=".CONFIG::ID_STATION.
+				" ORDER BY datetime ASC";
+		$result = $this->query($query);
+		if (mysqli_num_rows($result)!=0) {
+		  while ($item = mysqli_fetch_array($result)) {
+			 $this->left .= "<tr><td class=\"level".$item[2]."\">";
+			 $this->left .= "</td><td class=\"level\">";
+			 $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
+			 $this->left .= "</td></tr>";
+		  }
+		}
 
-    $this->left .= "</table></td></tr></table></td></tr>";
+		$this->left .= "</table></td></tr></table></td></tr>";
 
-    $this->left .= '
-      <tr><td class="level" colspan=2><p>Archives</p>
-      <a href="tickets.php?level=1" class="level1">PRJ</a>&nbsp;
-      <a href="tickets.php?level=0" class="level0">INF</a>&nbsp;
-      <a href="tickets.php?level=5" class="level5">INC</a>
-      </td></tr>
-    ';
+		$this->left .= '
+		  <tr><td class="level" colspan=2><p>Archives</p>
+		  <a href="tickets.php?level=1" class="level1">PRJ</a>&nbsp;
+		  <a href="tickets.php?level=0" class="level0">INF</a>&nbsp;
+		  <a href="tickets.php?level=5" class="level5">INC</a>
+		  </td></tr>
+		';
 
-  $this->left .= '</table>';
+		$this->left .= '</table>';
 	}
 
 	# Ajoute du texte au corps de page.
