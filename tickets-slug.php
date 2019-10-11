@@ -1,9 +1,9 @@
 <?php
 
 /*
- * 191001
- * timeticket SLUG
- * bcadiou@videlio-globalservices.com
+ * 191010
+ * timeticket / tickets-slug.php
+ * Baptiste Cadiou
  *
  */
 
@@ -41,7 +41,11 @@ $sql = "SELECT slug.thread, slug.name, ticket.datetime, slug.concept_id, slug.cl
 $result = $html->query($sql);
 
 while ($item = mysqli_fetch_array($result)) {
-	$out .= '<tr class="THEME"><td>'.$item['datetime'].'</td><td><a href="ticket.php?thread='.$item['thread'].'">'.$item[1].'</a></td><td>'.$html->concept($item[0]).'</td><td>'.$html->myclass($item[0]).'</td><td>'.$html->mysystem($item[0]).'</td><td>'.$html->time_time($item[0]).'</td><td class="level'.$html->level($item[0]).'">'.$html->time_tracker($item[0]).'</td></tr>'."\n";
+	$out .= '<tr class="THEME"><td>'.$item['datetime']
+         .'</td><td><a href="ticket.php?thread='.$item['thread'].'">'.$item[1].'</a></td><td>'
+         .$html->concept($item[0]).'</td><td>'.$html->myclass($item[0]).'</td><td>'.$html->mysystem($item[0]).'</td><td>'
+         .$html->time_time($item[0]).'</td><td class="level'.$html->level($item[0]).'">'.$html->time_tracker($item[0])
+         .'</td></tr>'."\n";
 }
 
 $out.='</table>';
