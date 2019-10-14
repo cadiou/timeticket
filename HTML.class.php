@@ -110,7 +110,7 @@
 		}
 		$this->head.= $page_titre."</h1>";
 		$this->foot = "<hr />";
-    $this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname();
+		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname();
 		$this->foot.= "</body>";
 		$this->foot.= "</html>";
 		$this->left = "";
@@ -285,19 +285,18 @@
 		}
 		if (isset($_POST['START'])) {
 			# fermeture des sessions precedentes eventuelles
-			$query = "SELECT id FROM time WHERE stop IS NULL and uid=".$this->uid;
+			$query = "SELECT id FROM time WHERE stop IS NULL and uid=".$this->uid." and station_ID = ".CONFIG::ID_STATION;
 			$result = $this->query($query);
 
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
-					$query2="UPDATE `time` SET stop = now() WHERE id=".$item[0];
+					$query2="UPDATE `time` SET stop = now() WHERE id=".$item[0]." and station_ID = ".CONFIG::ID_STATION;
 					$result2 = $this->query($query2);
 				}
 			}
 			$query="INSERT INTO `time` SET"
 				." uid = ".$this->uid
 				.", thread = ".$_POST['time_thread']
-				.", group_id = ".CONFIG::ID_GROUP
 				.", station_id = ".CONFIG::ID_STATION
 				.", concept_id = ".$this->con;
 			$result = $this->query($query);
