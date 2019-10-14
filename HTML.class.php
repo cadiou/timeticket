@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191006
+ * 191014
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -524,7 +524,7 @@
 #		$timegraph = new DB();
 		$query = "SELECT concept.name ".
 				" FROM `slug`,`concept`".
-				" WHERE concept.id = slug.concept_id and thread='".$thread."'";
+				" WHERE concept.id = slug.concept_id and thread='".$thread."' AND concept.station_id=".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
