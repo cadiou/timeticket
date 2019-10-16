@@ -34,7 +34,8 @@ $sql = "SELECT slug.thread, slug.name, ticket.datetime, slug.concept_id, slug.cl
 		." FROM slug, ticket"
 		." WHERE ticket.id=slug.thread"
 		.($concept_id>0?' AND concept_id='.$concept_id:'')
-    ." and ticket.station_ID = ".CONFIG::ID_STATION
+        ." and ticket.station_ID = ".CONFIG::ID_STATION
+		." and slug.station_ID = ".CONFIG::ID_STATION
 		." ORDER by slug.thread DESC"
 		." LIMIT 100";
 
