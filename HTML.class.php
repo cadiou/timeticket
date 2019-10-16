@@ -532,10 +532,9 @@
 
 	public function myclass($thread)
 	{
-	#	$timegraph = new DB();
 		$query = "SELECT class.name ".
 				" FROM `slug`,`class`".
-				" WHERE class.id = slug.class_id and thread='".$thread."' and station_id = ".CONFIG::ID_STATION;
+				" WHERE class.id = slug.class_id and thread='".$thread."' and class.station_id = ".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
@@ -547,7 +546,7 @@
 	{
 		$query = "SELECT system.name ".
 				" FROM `slug`,`system`".
-				" WHERE system.id = slug.system_id and thread='".$thread."' and station_id = ".CONFIG::ID_STATION;
+				" WHERE system.id = slug.system_id and thread='".$thread."' and system.station_id = ".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);

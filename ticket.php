@@ -102,7 +102,7 @@ if (isset($_POST['new'])) {
 # MISE A JOUR DU SLUG ########################
 
 if (isset($_POST["slug"]) ) {
-	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::STATION_ID."', name='".addslashes($_POST["slug"])."' ON DUPLICATE KEY UPDATE name='".addslashes($_POST["slug"])."'" ;
+	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', name='".addslashes($_POST["slug"])."' ON DUPLICATE KEY UPDATE name='".addslashes($_POST["slug"])."'" ;
 	$result =  $html->query($query);
 }
 
