@@ -403,8 +403,6 @@
 		}
 	}
 
-
-
 	public function ticket_board($query)
 	{
 		$timegraph = new DB();
@@ -461,13 +459,8 @@
 			$active_ticket=false;
 			$out= "<table width=\"100%\">";
 			while ($item = mysqli_fetch_array($result)) {
-
-				#$out.= "<td class=\"THEME\"><a href=\"ticket-print.php?thread=".($item['thread']==0?$item['id']:$item['thread'])."\">Imprimer</a> / <a href=\"tickets-formulaire.php?level=0&thread=".($item['thread']==0?$item['id']:$item['thread'])."\">Développer</a></td>";
-				#$this->body.= "<tr class=\"slug\"><td>slug</td></tr>";
-
 				$out.= "<tr><td><b>".$item['datetime']." ".($item['uid']!=-1?$this->user($item['uid']):$item['initials'])."</b>";
 				$out.= "<tr><td class=\"level".$item['level']."\">".($item['snapshot']?'<img src="ticket-image.php?id='.$item['id'].'" height="200" align="right"><br>':"").nl2br(stripslashes($item['body']))."</td></tr>";
-
 				if ($item['active']==1) {
 					$active_ticket=true;
 				}
@@ -483,7 +476,6 @@
 
 	public function slug($thread)
 	{
-#		$timegraph = new DB();
 		$query = "SELECT name ".
 				" FROM `slug`".
 				" WHERE thread='".$thread."' and station_id = ".CONFIG::ID_STATION;
@@ -502,7 +494,6 @@
 
 	public function concept($thread)
 	{
-#		$timegraph = new DB();
 		$query = "SELECT concept.name ".
 				" FROM `slug`,`concept`".
 				" WHERE concept.id = slug.concept_id and thread='".$thread."' AND concept.station_id=".CONFIG::ID_STATION;
@@ -517,7 +508,6 @@
 
 	public function concept_abr($thread)
 	{
-#		$timegraph = new DB();
 		$query = "SELECT concept.code ".
 				" FROM `slug`,`concept`".
 				" WHERE concept.id = slug.concept_id and thread='".$thread."' and concept.station_id = ".CONFIG::ID_STATION;
@@ -752,7 +742,7 @@
 			while ($item = mysqli_fetch_array($result)) {
 				$names_actifs.=$item[0]." ";
 			}
-			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
+			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
 			$result = $this->query($query);
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
