@@ -352,6 +352,91 @@
 		}
 	}
 
+  # Module LOGIN ####################################################################################
+
+	public function module_dosamco($cid)
+	{
+		# RECUPERE SAMPLE
+		if (isset($_POST['SAMPLE'])) {
+			/*
+			$query="SELECT stop FROM `time` WHERE id=".$_POST['time_id'];
+			$result = $this->query($query);
+			$item = mysqli_fetch_array($result);
+			if ($item[0] == NULL) {
+				$query="UPDATE `time` SET stop = now() WHERE id=".$_POST['time_id'];
+				$result = $this->query($query);
+			}
+      */
+		}
+
+		# UTILISATEUR
+		if ($this->uid <= 0) {
+			$this->left .= "<p class=\"level1\">Identifiez-vous SVP</p>";
+		}
+		$this->left .= "Utilisateur :<br><FORM method=\"POST\">";
+
+		$sql = "select `id`,`name` from user where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
+		$result = $this->query($sql);
+
+		$out  = '<SELECT NAME="user_id" onchange="this.form.submit()">';
+		$out .= '<OPTION VALUE="-1">N/A</A>';
+
+		while ($item = mysqli_fetch_array($result)) {
+			$out .= '<OPTION VALUE="'.$item['id'].'"';
+			if (($this->uid == $item['id'])and($this->uid != "")) {
+			$out .= " SELECTED";
+			}
+			$out .= '>'.$item['name'].'</OPTION>'."\n";
+		}
+
+		$out .= '</SELECT>';
+		$this->left .= $out;
+		$this->left .= "</FORM>";
+		if ($this->uid > 0) {
+  		$this->left .= "Vacation :<br><FORM method=\"POST\">";
+  		$sql = "select `id`,`name` from concept where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
+  		$result = $this->query($sql);
+  		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
+  		while ($item = mysqli_fetch_array($result)) {
+  			$out .= '<OPTION VALUE="'.$item['id'].'"';
+  			if (($this->con == $item['id'])and($this->con != "")) {
+  			$out .= " SELECTED";
+  			}
+  			$out .= '>'.$item['name'].'</OPTION>'."\n";
+  		}
+		$out .= '</SELECT>';
+  		$this->left .= $out;
+  		$this->left .= "</FORM>";
+		}
+		if ($this->uid > 0) {
+			$this->left .= "<FORM method=\"POST\">";
+			$query = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
+			$result = $this->query($query);
+			if (mysqli_num_rows($result)!=0) {
+				$this->left .= "<p>Projet en cours : ";
+				while ($item = mysqli_fetch_array($result)) {
+					$this->left .= "<span class=\"slug\">".$this->slug($item['thread'])."</span></p>";
+					$this->left .= "<!--p class=\"chrono\">".$item[3]."</p-->";
+					$this->left .= "<iframe id=\"Chrono\"    title=\"Chrono\"    width=\"100%\"   height=\"50\" scrolling=\"no\" frameborder=\"0\"  src=\"ticket-chrono-display.php?id=$item[0]&refresh=yes\">";
+					$this->left .= "</iframe>";
+					$this->left .= "<p align=\"center\"><input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item['id']."></p>";
+					$time_thread=$item[1];
+				}
+				if (isset($_GET['thread'])) {
+					if ($_GET['thread'] <> $time_thread) {
+						$this->left .= "Changer de projet : ";
+						$this->left .= "<p align=\"center\"><input type=\"submit\" name=\"START\" value=\"TOP CHRONO !\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$_GET['thread']."></p>";
+					}
+				}
+			}else{
+				if (isset($_GET['thread'])) {
+					$this->left .= "<p align=\"center\"><input type=\"submit\" name=\"START\" value=\"TOP CHRONO !\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$_GET['thread']."></p>";
+				}
+			}
+			$this->left .= "</FORM>";
+		}
+	}
+
 	# Retourne le titre de la page
 
 	public function ticket_level($level)
@@ -735,7 +820,7 @@
 			}
 			$names_actifs.="</span><br>";
 		}
-		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
+		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." GROUP BY user.name";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$names_actifs.= "<span class=\"onair\">Participants : ";
