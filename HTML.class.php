@@ -357,19 +357,24 @@
 	public function module_dosamco($cid)
 	{
 		# RECUPERE SAMPLE
-		if (isset($_POST['SAMPLE'])) {
-			/*
-			$query="SELECT stop FROM `time` WHERE id=".$_POST['time_id'];
-			$result = $this->query($query);
-			$item = mysqli_fetch_array($result);
-			if ($item[0] == NULL) {
-				$query="UPDATE `time` SET stop = now() WHERE id=".$_POST['time_id'];
-				$result = $this->query($query);
-			}
-			*/
-			$this->left.= "x";
+		if (isset($_POST['SAMPLE']) and isset($_POST['sample_value']) and $_POST['sample_value']>0) {
+
+      $query="INSERT `sample` SET value = '".$_POST['sample_value']."', uid = '".$this->uid."', cid = '".$cid."'";
+      $result = $this->query($query);
 		}
 
+    $sql = "SELECT collection.name, sample.datetime, sample.value, collection.unit, user.username "
+          ." FROM sample, collection, user"
+          ." WHERE sample.cid = ".$cid
+          ." AND sample.cid = collection.cid AND sample.uid = user.id"
+          ." ORDER BY datetime desc LIMIT 1";
+    $result = $this->query($sql);
+    while ($item = mysqli_fetch_array($result)) {
+        $this->left .= "<h2>".$item[0]."</h2>";
+        $this->left .= $item[1]." ".$item[4];
+        $this->left .= "<p class=\"chrono\">".$item[2].$item[3]."</p>";
+
+    }
 
 		if ($this->uid > 0) {
   			# INPUT FORM
@@ -377,35 +382,7 @@
 			$this->left .= '<input type="text" name="sample_value" size="10">' ;
 			$this->left .= "<input type=\"submit\" name=\"SAMPLE\" value=\"ENTER\" class=\"bouton_RD\" >";
 			$this->left .= "</FORM>";
-  		}
-	
-		if ($this->uid > 0) {
-			$this->left .= "<FORM method=\"POST\">";
-			$query = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
-			$result = $this->query($query);
-			if (mysqli_num_rows($result)!=0) {
-				$this->left .= "<p>Projet en cours : ";
-				while ($item = mysqli_fetch_array($result)) {
-					$this->left .= "<span class=\"slug\">".$this->slug($item['thread'])."</span></p>";
-					$this->left .= "<!--p class=\"chrono\">".$item[3]."</p-->";
-					$this->left .= "<iframe id=\"Chrono\"    title=\"Chrono\"    width=\"100%\"   height=\"50\" scrolling=\"no\" frameborder=\"0\"  src=\"ticket-chrono-display.php?id=$item[0]&refresh=yes\">";
-					$this->left .= "</iframe>";
-					$this->left .= "<p align=\"center\"><input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item['id']."></p>";
-					$time_thread=$item[1];
-				}
-				if (isset($_GET['thread'])) {
-					if ($_GET['thread'] <> $time_thread) {
-						$this->left .= "Changer de projet : ";
-						$this->left .= "<p align=\"center\"><input type=\"submit\" name=\"START\" value=\"TOP CHRONO !\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$_GET['thread']."></p>";
-					}
-				}
-			}else{
-				if (isset($_GET['thread'])) {
-					$this->left .= "<p align=\"center\"><input type=\"submit\" name=\"START\" value=\"TOP CHRONO !\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$_GET['thread']."></p>";
-				}
-			}
-			$this->left .= "</FORM>";
-		}
+  	}
 	}
 
 	# Retourne le titre de la page
