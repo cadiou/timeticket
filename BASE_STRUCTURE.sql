@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le :  jeu. 26 sep. 2019 à 15:59
--- Version du serveur :  10.1.38-MariaDB
--- Version de PHP :  7.3.2
+-- Hôte : localhost
+-- Généré le :  lun. 21 oct. 2019 à 08:36
+-- Version du serveur :  10.1.37-MariaDB
+-- Version de PHP :  7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `timegraph`
+-- Base de données :  `timeticket`
 --
 
 -- --------------------------------------------------------
@@ -30,8 +30,22 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `class` (
   `id` int(11) NOT NULL,
-  `name` varchar(32) CHARACTER SET latin1 NOT NULL
+  `name` varchar(32) CHARACTER SET latin1 NOT NULL,
+  `station_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `collection`
+--
+
+CREATE TABLE `collection` (
+  `cid` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `unit` varchar(8) NOT NULL,
+  `name` varchar(80) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -69,7 +83,8 @@ CREATE TABLE `demande` (
 
 CREATE TABLE `format` (
   `id` int(11) NOT NULL,
-  `name` varchar(32) NOT NULL
+  `name` varchar(32) NOT NULL,
+  `station_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -141,13 +156,25 @@ CREATE TABLE `pile_mos` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `sample`
+--
+
+CREATE TABLE `sample` (
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `cid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `value` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `slug`
 --
 
 CREATE TABLE `slug` (
   `thread` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
-  `group_id` int(11) NOT NULL DEFAULT '1',
   `station_id` int(11) NOT NULL DEFAULT '1',
   `concept_id` int(11) NOT NULL DEFAULT '0',
   `class_id` int(11) NOT NULL DEFAULT '0',
@@ -193,7 +220,8 @@ CREATE TABLE `station` (
 
 CREATE TABLE `system` (
   `id` int(11) NOT NULL,
-  `name` varchar(32) NOT NULL
+  `name` varchar(32) NOT NULL,
+  `station_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -255,7 +283,8 @@ CREATE TABLE `ticket` (
   `active` tinyint(1) NOT NULL,
   `type` varchar(25) NOT NULL,
   `snapshot` mediumblob NOT NULL,
-  `uid` int(11) NOT NULL
+  `uid` int(11) NOT NULL,
+  `station_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Ticketing';
 
 -- --------------------------------------------------------
@@ -286,7 +315,8 @@ CREATE TABLE `user` (
   `password` varchar(64) NOT NULL,
   `id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
-  `active` tinyint(1) NOT NULL
+  `active` tinyint(1) NOT NULL,
+  `station_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -311,6 +341,12 @@ CREATE TABLE `watchdog` (
 --
 ALTER TABLE `class`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `collection`
+--
+ALTER TABLE `collection`
+  ADD UNIQUE KEY `cid` (`cid`,`sid`);
 
 --
 -- Index pour la table `concept`
@@ -408,7 +444,7 @@ ALTER TABLE `time`
 -- Index pour la table `user`
 --
 ALTER TABLE `user`
-  ADD UNIQUE KEY `id` (`id`);
+  ADD UNIQUE KEY `id` (`id`,`station_id`) USING BTREE;
 
 --
 -- Index pour la table `watchdog`
@@ -425,6 +461,12 @@ ALTER TABLE `watchdog`
 --
 ALTER TABLE `class`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `collection`
+--
+ALTER TABLE `collection`
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `concept`
@@ -492,17 +534,6 @@ ALTER TABLE `time`
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
-
---
--- Déchargement des données de la table `group`
---
-
-INSERT INTO `group` (`id`, `name`) VALUES
-(23, 'Baptiste Cadiou');
-
-INSERT INTO `station` (`id`, `name`, `group_id`) VALUES
-(23, 'PUBLIC DOMAIN', 23),
-(25, 'Family', 23);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

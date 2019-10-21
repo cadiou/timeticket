@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191016
+ * 191020
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -370,27 +370,8 @@
 		}
 
 		# UTILISATEUR
-		if ($this->uid <= 0) {
-			$this->left .= "<p class=\"level1\">Identifiez-vous SVP</p>";
-		}
-		$this->left .= "Utilisateur :<br><FORM method=\"POST\">";
-
-		$sql = "select `id`,`name` from user where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
-		$result = $this->query($sql);
-
-		$out  = '<SELECT NAME="user_id" onchange="this.form.submit()">';
-		$out .= '<OPTION VALUE="-1">N/A</A>';
-
-		while ($item = mysqli_fetch_array($result)) {
-			$out .= '<OPTION VALUE="'.$item['id'].'"';
-			if (($this->uid == $item['id'])and($this->uid != "")) {
-			$out .= " SELECTED";
-			}
-			$out .= '>'.$item['name'].'</OPTION>'."\n";
-		}
-
-		$out .= '</SELECT>';
-		$this->left .= $out;
+		$this->left .= "<FORM method=\"POST\">";
+		$this->left .= "<input type=\"submit\" name=\"SAMPLE\" value=\"GO\" class=\"bouton_RD\" >";
 		$this->left .= "</FORM>";
 		if ($this->uid > 0) {
   		$this->left .= "Vacation :<br><FORM method=\"POST\">";
