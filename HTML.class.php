@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191020
+ * 191021
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -352,7 +352,7 @@
 		}
 	}
 
-  # Module LOGIN ####################################################################################
+  # Module DOSAMCO ####################################################################################
 
 	public function module_dosamco($cid)
 	{
@@ -366,29 +366,19 @@
 				$query="UPDATE `time` SET stop = now() WHERE id=".$_POST['time_id'];
 				$result = $this->query($query);
 			}
-      */
+			*/
+			$this->left.= "x";
 		}
 
-		# UTILISATEUR
-		$this->left .= "<FORM method=\"POST\">";
-		$this->left .= "<input type=\"submit\" name=\"SAMPLE\" value=\"GO\" class=\"bouton_RD\" >";
-		$this->left .= "</FORM>";
+
 		if ($this->uid > 0) {
-  		$this->left .= "Vacation :<br><FORM method=\"POST\">";
-  		$sql = "select `id`,`name` from concept where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
-  		$result = $this->query($sql);
-  		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
-  		while ($item = mysqli_fetch_array($result)) {
-  			$out .= '<OPTION VALUE="'.$item['id'].'"';
-  			if (($this->con == $item['id'])and($this->con != "")) {
-  			$out .= " SELECTED";
-  			}
-  			$out .= '>'.$item['name'].'</OPTION>'."\n";
+  			# INPUT FORM
+			$this->left .= "<FORM method=\"POST\">";
+			$this->left .= '<input type="text" name="sample_value" size="10">' ;
+			$this->left .= "<input type=\"submit\" name=\"SAMPLE\" value=\"ENTER\" class=\"bouton_RD\" >";
+			$this->left .= "</FORM>";
   		}
-		$out .= '</SELECT>';
-  		$this->left .= $out;
-  		$this->left .= "</FORM>";
-		}
+	
 		if ($this->uid > 0) {
 			$this->left .= "<FORM method=\"POST\">";
 			$query = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
