@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191021
+ * 191023
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -683,8 +683,16 @@
 					$thread=$item['thread'];
 				}
 				$this->body.= "<table class=\"ticket\">";
-				$this->body.= "<tr><td><table><tr>";
-				if ($this->uid > 0) {
+				$this->body.= "<tr><td>"; ###################################### LIGNE 1 SLUG + CONCEPT
+        $this->body.= "<table width=\"100%\">";
+        $this->body.= "<tr><td class=\"slug\">";
+        $this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
+        $this->body.= "</td><td class=\"slug_droite\">";
+        $this->body.= $this->concept($thread);
+        $this->body.= "</td></tr>";
+        $this->body.= "</table>";
+        $this->body.= "<table><tr>";
+        if ($this->uid > 0) {
 					$this->body.= "<td>";
 					$this->body .= "<FORM method=\"POST\">";
 					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
@@ -705,12 +713,15 @@
 				}
 				$this->body.= "<td>";
 				$this->body.= $this->time_tracker_complet($thread);
-				$this->body.= "</td></tr></table></td><td class=\"slug_droite\">".$this->concept($thread);
+				$this->body.= "</td></tr></table>";
+
 				$this->body.= "</td>";
-				$this->body.= "</tr><tr><td colspan=\"2\" class=\"slug\">";
-				$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
-				$this->body.= $this->ticket($item['id']);
-				$this->body.= "</td></tr>";
+				$this->body.= "</tr>";
+        $this->body.= "<tr>";
+        $this->body.= "<td>";
+        $this->body.= $this->ticket($item['id']);
+        $this->body.= "</td>";
+        $this->body.= "</tr>";
 				$this->body.= "</table>";
 			}
 		}
