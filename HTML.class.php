@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191023
+ * 191029
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -309,7 +309,7 @@
 		$this->left .= "</FORM>";
 		if ($this->uid > 0) {
   		$this->left .= "Vacation :<br><FORM method=\"POST\">";
-  		$sql = "select `id`,`name` from concept where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
+  		$sql = "select `id`,`name` from concept where name is not null and active = true and vacation = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
   		$result = $this->query($sql);
   		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
   		while ($item = mysqli_fetch_array($result)) {
