@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191029
+ * 191031
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -770,7 +770,17 @@
 
 	public function time_tracker_complet($thread) {
 		
-		$names_actifs="<table>";
+		$names_actifs = "";
+		
+		# somme
+			
+		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
+		$result = $this->query($query);
+		if (mysqli_num_rows($result)!=0) {
+				while ($item = mysqli_fetch_array($result)) {
+					$names_actifs.='<span class="chrono">'.$item[0].'</span>';
+				}
+		}
 		
 		# actIFS
 		
@@ -778,12 +788,12 @@
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {			
 			while ($item = mysqli_fetch_array($result)) {
-				$names_actifs.='<tr><td class="level1" colspan="2">'.$item[0].'</td></tr>';
+				$names_actifs.=' <span class="onair">'.$item[0].'</span>';
 			}			
 		}
 		
 		# LOG
-		
+	/*	
 		$query = "SELECT user.name,sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))),dayofweek(`start`),date(`start`) FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." AND time.stop is not NULL GROUP BY user.name";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
@@ -803,8 +813,8 @@
 			}
 			$names_actifs.="</span>";
 		}
+		*/
 		
-		$names_actifs.="</table>";
 		return $names_actifs;
 	}
 
