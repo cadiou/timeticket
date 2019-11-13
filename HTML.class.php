@@ -310,7 +310,7 @@
 		if ($this->uid > 0) {
   		$this->left .= "Vacation :<br><FORM method=\"POST\">";
   		$sql = "select `id`,`name` from concept where name is not null and active = true and vacation = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
-  		$result = $this->query($sql);
+  		if ($result = $this->query($sql)) {
   		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
   		while ($item = mysqli_fetch_array($result)) {
   			$out .= '<OPTION VALUE="'.$item['id'].'"';
@@ -319,9 +319,14 @@
   			}
   			$out .= '>'.$item['name'].'</OPTION>'."\n";
   		}
+
 		$out .= '</SELECT>';
   		$this->left .= $out;
-  		$this->left .= "</FORM>";
+}else{
+  $this->left .= "Erreur SQL";
+}
+
+    	$this->left .= "</FORM>";
 		}
 		if ($this->uid > 0) {
 			$this->left .= "<FORM method=\"POST\">";
@@ -769,31 +774,31 @@
 	}
 
 	public function time_tracker_complet($thread) {
-		
+
 		$names_actifs="<table>";
-		
+
 		# actIFS
-		
+
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
-		if (mysqli_num_rows($result)!=0) {			
+		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
 				$names_actifs.='<tr><td class="level1" colspan="2">'.$item[0].'</td></tr>';
-			}			
+			}
 		}
-		
+
 		# LOG
-		
+
 		$query = "SELECT user.name,sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))),dayofweek(`start`),date(`start`) FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." AND time.stop is not NULL GROUP BY user.name";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			
+
 			while ($item = mysqli_fetch_array($result)) {
 				$names_actifs.='<tr><td class="onair">'.$item[2].'</td><td class="onair">'.$item[3].'</td><td class="onair">'.$item[0].'</td><td class="onair">'.$item[1].'</td></tr>';
 			}
-			
+
 			# somme
-			
+
 			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
 			$result = $this->query($query);
 			if (mysqli_num_rows($result)!=0) {
@@ -803,7 +808,7 @@
 			}
 			$names_actifs.="</span>";
 		}
-		
+
 		$names_actifs.="</table>";
 		return $names_actifs;
 	}
