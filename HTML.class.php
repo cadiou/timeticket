@@ -803,7 +803,9 @@
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
-				$names_actifs.='<tr><td class="chrono" colspan="2">Total</td><td class="chrono">'.$item[0].'</td></tr>';
+				if ($item[0]<>"") {
+					$names_actifs.='<tr><td class="chrono" colspan="2">Total</td><td class="chrono">'.$item[0].'</td></tr>';
+				}
 			}
 		}
 
