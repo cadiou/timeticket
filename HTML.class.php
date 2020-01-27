@@ -707,8 +707,6 @@
 						$time_thread=$item2[1];
 						if ($thread <> $time_thread) {
 							$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
-							#			}else{
-							#	        $this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item2[0].">";
 						}
 					}else{
 						$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
@@ -716,8 +714,8 @@
 					$this->body .= "</FORM>";
 					$this->body.= "</td>";
 				}
-				$this->body.= "<td>";
-				$this->body.= $this->time_tracker_complet($thread);
+				$this->body.= "<td class=\"chrono\">";
+				$this->body.= $this->time_time($thread);
 				$this->body.= "</td></tr></table>";
 
 				$this->body.= "</td>";
@@ -773,76 +771,46 @@
 		return $names_actifs;
 	}
 
-	public function time_tracker_complet($thread) {
-    /*
-<<<<<<< HEAD
 
+	public function time_tracker_complet($thread) {
+   
 		$names_actifs="<table>";
 
-=======
+		# LOG
 
-		$names_actifs = "";
-
-		# somme
-
-		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
+		$query = "SELECT user.name,sec_to_time(unix_timestamp(stop)-unix_timestamp(start)),dayofweek(`start`),`start` FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." AND time.stop is not NULL  ORDER by stop";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-				while ($item = mysqli_fetch_array($result)) {
-					$names_actifs.='<span class="chrono">'.$item[0].'</span>';
-				}
-		}
 
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
+			while ($item = mysqli_fetch_array($result)) {
+				$names_actifs.='<tr><td>'.$item[3].'</td><td>'.$item[0].'</td><td>'.$item[1].'</td></tr>';
+			}
+		}
 		# actIFS
 
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
-<<<<<<< HEAD
-				$names_actifs.='<tr><td class="level1" colspan="2">'.$item[0].'</td></tr>';
+
+				$names_actifs.='<tr><td class="onair">Maintenant</td><td class="onair" colspan="2">'.$item[0].'</td></tr>';
 			}
-=======
-				$names_actifs.=' <span class="onair">'.$item[0].'</span>';
-			}
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
 		}
+			
+		# somme
 
-		# LOG
-<<<<<<< HEAD
-
-=======
-	/*
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
-		$query = "SELECT user.name,sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))),dayofweek(`start`),date(`start`) FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." AND time.stop is not NULL GROUP BY user.name";
+		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-
 			while ($item = mysqli_fetch_array($result)) {
-				$names_actifs.='<tr><td class="onair">'.$item[2].'</td><td class="onair">'.$item[3].'</td><td class="onair">'.$item[0].'</td><td class="onair">'.$item[1].'</td></tr>';
+				$names_actifs.='<tr><td class="chrono" colspan="2">Total</td><td class="chrono">'.$item[0].'</td></tr>';
 			}
-
-			# somme
-
-			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
-			$result = $this->query($query);
-			if (mysqli_num_rows($result)!=0) {
-				while ($item = mysqli_fetch_array($result)) {
-					$names_actifs.='<tr><td class="level1">&nbsp;</td><td class="level1">'.$item[0].'</td></tr>';
-				}
-			}
-			$names_actifs.="</span>";
 		}
-<<<<<<< HEAD
 
 		$names_actifs.="</table>";
-=======
-		* /
 
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
 		return $names_actifs;
-    */
+    
 	}
 
 	public function ticket_threads($title,$where,$active) {
