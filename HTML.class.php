@@ -898,7 +898,7 @@
 		# Query ticket
 
 		$query = "SELECT code,name,id,active,(select count(template.id) from template where template.concept_id=concept.id),(select count(slug.thread) from slug where slug.concept_id=concept.id)".
-				" FROM `concept`".
+				" FROM `concept` WHERE active = true".
 				" ORDER BY name ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
