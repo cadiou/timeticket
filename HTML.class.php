@@ -746,7 +746,7 @@
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
+			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 			$result = $this->query($query);
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
