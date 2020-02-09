@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191010
+ * 200209
  * timeticket / tickets-slug.php
  * Baptiste Cadiou
  *
@@ -33,7 +33,7 @@ $out.='<tr><td></td><td></td><td>'.$html->menuConcept($concept_id).'</td><td></t
 $sql = "SELECT slug.thread, slug.name, ticket.datetime, slug.concept_id, slug.class_id, slug.system_id"
 		." FROM slug, ticket"
 		." WHERE ticket.id=slug.thread"
-		.($concept_id>0?' AND concept_id='.$concept_id:'')
+		.($concept_id>0?' AND slug.concept_id='.$concept_id:'')
         ." and ticket.station_ID = ".CONFIG::ID_STATION
 		." and slug.station_ID = ".CONFIG::ID_STATION
 		." ORDER by slug.thread DESC"

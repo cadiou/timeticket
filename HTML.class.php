@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191031
+ * 200209
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -113,7 +113,7 @@
 		}
 		$this->head.= $page_titre."</h1>";
 		$this->foot = "<hr />";
-		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname();
+		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname()." / <a href=\"http://baptiste-cadiou.pro.dns-orange.fr\">baptiste-cadiou.pro.dns-orange.fr</a>";
 		$this->foot.= "</body>";
 		$this->foot.= "</html>";
 		$this->left = "";
@@ -537,7 +537,7 @@
 	{
 		$query = "SELECT concept.name ".
 				" FROM `slug`,`concept`".
-				" WHERE concept.id = slug.concept_id and thread='".$thread."' AND concept.station_id=".CONFIG::ID_STATION;
+				" WHERE concept.id = slug.concept_id and thread='".$thread."' AND slug.station_id=".CONFIG::ID_STATION." AND concept.station_id=".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
@@ -776,7 +776,7 @@
 
 
 	public function time_tracker_complet($thread) {
-   
+
 		$names_actifs="<table>";
 
 		# LOG
@@ -799,10 +799,10 @@
 				$names_actifs.='<tr><td class="onair">Maintenant</td><td class="onair" colspan="2">'.$item[0].'</td></tr>';
 			}
 		}
-			
+
 		# somme
 
-		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  
+		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
@@ -815,7 +815,7 @@
 		$names_actifs.="</table>";
 
 		return $names_actifs;
-    
+
 	}
 
 	public function ticket_threads($title,$where,$active) {
