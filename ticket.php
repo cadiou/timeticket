@@ -189,8 +189,6 @@ if (($level == -1) and ($thread == 0)) {
 		$html->body.= "</table>";
 	}
 
-	$html->body .= $html->time_tracker_complet($thread);
-
 	if ($html->last_level==0) {
 		$html->body.="<table><tr><td class=\"level0\">&nbsp;</td><td><a href=\"".$_SERVER['PHP_SELF']."?thread=".$thread."&level=0\" class=\"slug\">Ajouter des informations à ce ticket</a></td></tr></table>";
 	}elseif ($html->last_level==1) {
@@ -208,6 +206,9 @@ if (($level == -1) and ($thread == 0)) {
 	}elseif ($html->last_level==5) {
 		$html->body.="<table><tr><td class=\"level5\">&nbsp;</td><td><a href=\"".$_SERVER['PHP_SELF']."?thread=".$thread."&level=5\" class=\"slug\">Compléter les informations sur cet incident</a></td></tr></table>";
 	}
+	
+	$html->body .= $html->time_tracker_complet($thread);
+	
 }elseif (($level != -1) and ($thread > 0)) {
 	$html->ticket_complet($thread);
 	$html->h2($html->ticket_level($level));
