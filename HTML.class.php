@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 200217
+ * 200220
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -515,6 +515,23 @@
 	}
 
 
+	public function deadline($thread)
+	{
+		$query = "SELECT deadline ".
+				" FROM `slug`".
+				" WHERE thread='".$thread."' and station_id = ".CONFIG::ID_STATION;
+		$result = $this->query($query);
+		if ($thread==0) {
+			return;
+		}
+		elseif(mysqli_num_rows($result)>0) {
+			$item = mysqli_fetch_array($result);
+			return ($item[0]=="0000-00-00 00:00:00"?"":$item[0]);
+		}else{
+			return "0000-00-00 00:00:00";
+		}
+	}
+	
 	public function slug($thread)
 	{
 		$query = "SELECT name ".
@@ -677,10 +694,11 @@
 	}
 
 	public function ticket_panel($title,$where) {
-		$query = "SELECT id,thread".
-						" FROM `ticket`".
-						" WHERE (".$where.") and station_ID = ".CONFIG::ID_STATION.
-						" ORDER BY datetime ASC";
+		$query = "SELECT ticket.id,ticket.thread, IF((slug.deadline = 0), \"9999\", slug.deadline) as slug_deadline".
+						" FROM `ticket`,`slug`".
+						" WHERE (".$where.") and ( ( ticket.id = slug.thread and ticket.thread = 0 ) or ( ticket.thread = slug.thread ) ) and slug.thread != 0 and ticket.station_ID = ".CONFIG::ID_STATION.
+						" ORDER BY slug_deadline ASC,ticket.datetime ASC";
+
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$this->body.="<h2>".$title."</h2>";
@@ -699,9 +717,10 @@
         $this->body.= $this->concept($thread);
         $this->body.= "</td></tr>";
         $this->body.= "</table>";
+		
         $this->body.= "<table><tr>";
         if ($this->uid > 0) {
-					$this->body.= "<td>";
+					$this->body.= "<td width=\"70\">";
 					$this->body .= "<FORM method=\"POST\">";
 					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
 					$result2 = $this->query($query2);
@@ -710,6 +729,8 @@
 						$time_thread=$item2[1];
 						if ($thread <> $time_thread) {
 							$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
+						}else{
+							$this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
 						}
 					}else{
 						$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
@@ -717,18 +738,22 @@
 					$this->body .= "</FORM>";
 					$this->body.= "</td>";
 				}
-				$this->body.= "<td class=\"chrono\">";
-				$this->body.= $this->time_time($thread);
-				$this->body.= "</td></tr></table>";
+		$this->body.= "<td width=\"120\">";
+		$this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
+		$this->body.= "</td>";
+		$this->body.= "<td>";
+		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
+		$this->body.= "</td>";
+		$this->body.= "</tr></table>";
 
-				$this->body.= "</td>";
-				$this->body.= "</tr>";
+		$this->body.= "</td>";
+		$this->body.= "</tr>";
         $this->body.= "<tr>";
         $this->body.= "<td>";
         $this->body.= $this->ticket($item['id']);
         $this->body.= "</td>";
         $this->body.= "</tr>";
-				$this->body.= "</table>";
+		$this->body.= "</table>";
 			}
 		}
 	}
@@ -760,6 +785,7 @@
 		return $time;
 	}
 
+	
 	public function time_tracker($thread) {
 		$names_actifs=" ";
 		$query = "SELECT user.username FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
@@ -885,6 +911,7 @@
 		$this->body .= '<form enctype="multipart/form-data" method="post">';
 		$this->body .= '<input type="hidden" name="new" value="1">';
 		$this->body .= '<td>Slug</td><td colspan=2><input SIZE="80" TYPE="text" NAME="slug" VALUE="'.$this->slug($thread).'" ></td></tr>';
+		$this->body .= '<tr><td>Deadline&nbsp;:</td><td><input SIZE="30" TYPE="text" NAME="deadline" VALUE="'.$this->deadline($thread).'" ></td></tr>';
 		$this->body .= '<input type="hidden" name="level" value="'.$level.'">';
 		$this->body .= '<input type="hidden" name="thread" value='.$thread.'>';
 		$this->body .= '<tr><td>Ticket</td><td colspan=2><textarea rows = "8" cols = "80" name = "body">'.$payload.'</textarea></td></tr><tr><td>Image</td><td><input type="hidden" name="MAX_FILE_SIZE" value="'.CONFIG::FILE_MAX_SIZE.'" /><input type="file" name="fic" size=50 /></td><td align="right">';

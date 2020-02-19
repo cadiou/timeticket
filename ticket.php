@@ -24,6 +24,7 @@ $post_level = (isset($_POST['level'])?$_POST['level']:0);
 $uid =(isset($_POST['uid'])?$_POST['uid']:"-1");
 $body = (isset($_POST['body'])?$_POST['body']:"Vide.");
 $initials = (isset($_POST['initials'])?$_POST['initials']:"??");
+$deadline = (isset($_POST['deadline'])?$_POST['deadline']:"0000-00-00 00:00:00");
 
 if (isset($_POST['ARCHIVE'])) {
 	$query = "UPDATE ticket SET "
@@ -126,6 +127,11 @@ if (isset($_POST["format_id"]) ) {
 	$result =  $html->query($query);
 }
 
+if (isset($_POST["deadline"]) ) {
+	$query = "INSERT INTO `slug` SET thread='".$thread."', deadline='".$_POST["deadline"]."' ON DUPLICATE KEY UPDATE deadline='".$_POST["deadline"]."'" ;
+	$result =  $html->query($query);
+}
+
 # if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";
 
 if ($level==4) {
@@ -175,6 +181,7 @@ if (($level == -1) and ($thread == 0)) {
 		$html->body.= "<table width=\"100%\">";
 		$html->body.= "<form method=\"POST\">";
 		$html->body.= '<tr><td>Slug&nbsp;:</td><td><input SIZE="60" TYPE="text" NAME="slug" VALUE="'.$html->slug($thread).'" ></td><td rowspan="5"><input class="bouton_in" type="submit" />';
+
 		if ($html->uid == 1) {
 			$html->body.="<p><input type=\"submit\" name=\"ARCHIVE\" value=\"ARCHIVE\" class=\"bouton_RD\" ></p>";
 		}
@@ -185,6 +192,7 @@ if (($level == -1) and ($thread == 0)) {
 		$html->body.= '<tr><td>Classe&nbsp;:</td><td>'.$html->menuselect("class","id"  ,"name",$class_id).'</td></tr>';
 		$html->body.= '<tr><td>Système&nbsp;:</td><td>'.$html->menuselect("system","id" ,"name",$system_id).'</td></tr>';
 		$html->body.= '<tr><td>Format&nbsp;:</td><td>'.$html->menuselect("format","id" ,"name",$format_id).'</td></tr>';
+		$html->body.= '<tr><td>Deadline&nbsp;:</td><td><input SIZE="60" TYPE="text" NAME="deadline" VALUE="'.$html->deadline($thread).'" ></td></tr>';
 		$html->body.= "</form>";
 		$html->body.= "</table>";
 	}
