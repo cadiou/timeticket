@@ -113,7 +113,7 @@
 		}
 		$this->head.= $page_titre."</h1>";
 		$this->foot = "<hr />";
-		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname()." / <a href=\"http://baptiste-cadiou.pro.dns-orange.fr\">baptiste-cadiou.pro.dns-orange.fr</a>";
+		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname();
 		$this->foot.= "</body>";
 		$this->foot.= "</html>";
 		$this->left = "";
@@ -525,10 +525,13 @@
 			return;
 		}
 		elseif(mysqli_num_rows($result)>0) {
+			
 			$item = mysqli_fetch_array($result);
-			return ($item[0]=="0000-00-00 00:00:00"?"":$item[0]);
-		}else{
-			return "0000-00-00 00:00:00";
+			if ($item[0]>1) {
+				return ($item[0]=="0000-00-00 00:00:00"?"":$item[0]);
+			}else{
+				return;
+			}
 		}
 	}
 	
@@ -742,7 +745,19 @@
 		$this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
 		$this->body.= "</td>";
 		$this->body.= "<td>";
-		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
+
+		$deadline = $this->deadline($thread);
+		$ddl = new dateTime($deadline);
+		$now = new DateTime("now");
+
+		if (($now>$ddl) and ($title=="Projets en cours")) {
+					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline dépassée ".$deadline."</span>");
+				}else{
+					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$deadline."</span>");
+				}
+		
+#		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
+
 		$this->body.= "</td>";
 		$this->body.= "</tr></table>";
 
