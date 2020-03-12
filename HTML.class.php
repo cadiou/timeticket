@@ -802,13 +802,23 @@
 
 	
 	public function time_tracker($thread) {
-		$names_actifs=" ";
+		$query = "SELECT ticket.initials FROM ticket WHERE ticket.id=".$thread;
+		$result = $this->query($query);
+		if (mysqli_num_rows($result)!=0) {
+		#  	$names_actifs.= "<span class=\"onair\">";
+			while ($item = mysqli_fetch_array($result)) {
+				$names_actifs=" *".$item[0];
+			}
+		#  	$names_actifs.="</span>";
+		}else{
+				$names_actifs=" ";
+		}
 		$query = "SELECT user.username FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			$names_actifs.= "<span class=\"onair\">";
+			$names_actifs.= " <span class=\"onair\">";
 			while ($item = mysqli_fetch_array($result)) {
-				$names_actifs.=$item[0]." ";
+				$names_actifs.=$item[0];
 			}
 			$names_actifs.="</span>";
 		}
