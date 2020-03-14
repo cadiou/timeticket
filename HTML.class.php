@@ -525,7 +525,7 @@
 			return;
 		}
 		elseif(mysqli_num_rows($result)>0) {
-			
+
 			$item = mysqli_fetch_array($result);
 			if ($item[0]>1) {
 				return ($item[0]=="0000-00-00 00:00:00"?"":$item[0]);
@@ -534,7 +534,7 @@
 			}
 		}
 	}
-	
+
 	public function slug($thread)
 	{
 		$query = "SELECT name ".
@@ -701,7 +701,6 @@
 						" FROM `ticket`,`slug`".
 						" WHERE (".$where.") and ( ( ticket.id = slug.thread and ticket.thread = 0 ) or ( ticket.thread = slug.thread ) ) and slug.thread != 0 and ticket.station_ID = ".CONFIG::ID_STATION.
 						" ORDER BY slug_deadline ASC,ticket.datetime ASC";
-
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$this->body.="<h2>".$title."</h2>";
@@ -720,7 +719,7 @@
         $this->body.= $this->concept($thread);
         $this->body.= "</td></tr>";
         $this->body.= "</table>";
-		
+
         $this->body.= "<table><tr>";
         if ($this->uid > 0) {
 					$this->body.= "<td width=\"70\">";
@@ -755,7 +754,7 @@
 				}else{
 					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$deadline."</span>");
 				}
-		
+
 #		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
 
 		$this->body.= "</td>";
@@ -800,7 +799,7 @@
 		return $time;
 	}
 
-	
+
 	public function time_tracker($thread) {
 		$query = "SELECT ticket.initials FROM ticket WHERE ticket.id=".$thread;
 		$result = $this->query($query);
