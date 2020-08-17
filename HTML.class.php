@@ -655,7 +655,13 @@
 
 	public function menuselect($table,$value,$option,$selected) {
 
-		$sql = "select `".$value."`,`".$option."` from ".$table." where `".$value."` is not null and station_id = ".CONFIG::ID_STATION." group by `".$option."` order by `".$option."` asc";
+		if ($table=="concept") {
+			$inactivity = " AND active = 1";
+		}else{
+			$inactivity = "";
+		}
+		
+		$sql = "select `".$value."`,`".$option."` from ".$table." where `".$value."` is not null and station_id = ".CONFIG::ID_STATION.$inactivity." group by `".$option."` order by `".$option."` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
