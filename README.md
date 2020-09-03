@@ -5,7 +5,7 @@
 <li>BASE_STRUCTURE.sql		STRUCTURE DE LA BASE
 <li>DB.class.php      		CONNEXION MYSQL			obsolete
 <li>HTML.class.php    		CODAGE DES PAGES
-<li>README.md			THIS	
+<li>README.md			THIS
 <li>index.php         		TICKETS ACTIFS
 <li>style.css         		STYLE CSS
 <li>ticket-chrono-display.php	CHRONO DISPLAY
@@ -33,6 +33,7 @@ class Config
 	FILE_MAX_SIZE= 16777215;
 	ID_GROUP     = 0,                 #int
 	ID_CHANNEL   = 0,                 #int
+  HTML_HEADER = NULL
 }
 </pre>
 <li>../LOCAL.class.php		OPTIONAL
