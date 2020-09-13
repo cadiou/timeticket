@@ -2,10 +2,10 @@
 -- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:3306
--- Généré le : jeu. 10 sep. 2020 à 14:48
--- Version du serveur :  8.0.21-0ubuntu0.20.04.4
--- Version de PHP : 7.4.3
+-- Host: localhost:3306
+-- Generation Time: Sep 13, 2020 at 09:34 PM
+-- Server version: 8.0.21-0ubuntu0.20.04.4
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `timeticket`
+-- Database: `timeticket`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `app`
+-- Table structure for table `app`
 --
 
 CREATE TABLE `app` (
@@ -37,7 +37,7 @@ CREATE TABLE `app` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `avatar`
+-- Table structure for table `avatar`
 --
 
 CREATE TABLE `avatar` (
@@ -49,7 +49,7 @@ CREATE TABLE `avatar` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `class`
+-- Table structure for table `class`
 --
 
 CREATE TABLE `class` (
@@ -58,10 +58,17 @@ CREATE TABLE `class` (
   `station_id` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ROW_FORMAT=DYNAMIC;
 
+--
+-- Dumping data for table `class`
+--
+
+INSERT INTO `class` (`id`, `name`, `station_id`) VALUES
+(1, 'OBJECT', 23);
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `collection`
+-- Table structure for table `collection`
 --
 
 CREATE TABLE `collection` (
@@ -71,10 +78,17 @@ CREATE TABLE `collection` (
   `name` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `collection`
+--
+
+INSERT INTO `collection` (`cid`, `sid`, `unit`, `name`) VALUES
+(1, 23, 'Gb', 'Free');
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `concept`
+-- Table structure for table `concept`
 --
 
 CREATE TABLE `concept` (
@@ -86,10 +100,17 @@ CREATE TABLE `concept` (
   `vacation` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `concept`
+--
+
+INSERT INTO `concept` (`id`, `name`, `station_id`, `code`, `active`, `vacation`) VALUES
+(1, 'SERVICE', 23, 'SERV', 1, 1);
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `demande`
+-- Table structure for table `demande`
 --
 
 CREATE TABLE `demande` (
@@ -103,7 +124,7 @@ CREATE TABLE `demande` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `format`
+-- Table structure for table `format`
 --
 
 CREATE TABLE `format` (
@@ -112,10 +133,17 @@ CREATE TABLE `format` (
   `station_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `format`
+--
+
+INSERT INTO `format` (`id`, `name`, `station_id`) VALUES
+(1, 'natif', 23);
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `group`
+-- Table structure for table `group`
 --
 
 CREATE TABLE `group` (
@@ -123,10 +151,18 @@ CREATE TABLE `group` (
   `name` varchar(40) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `group`
+--
+
+INSERT INTO `group` (`id`, `name`) VALUES
+(0, 'Lazarus'),
+(23, 'Baptiste Cadiou');
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `livraison`
+-- Table structure for table `livraison`
 --
 
 CREATE TABLE `livraison` (
@@ -138,7 +174,7 @@ CREATE TABLE `livraison` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `log_mos`
+-- Table structure for table `log_mos`
 --
 
 CREATE TABLE `log_mos` (
@@ -154,7 +190,7 @@ CREATE TABLE `log_mos` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `memory`
+-- Table structure for table `memory`
 --
 
 CREATE TABLE `memory` (
@@ -166,7 +202,7 @@ CREATE TABLE `memory` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `phototheque`
+-- Table structure for table `phototheque`
 --
 
 CREATE TABLE `phototheque` (
@@ -180,7 +216,7 @@ CREATE TABLE `phototheque` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `pile_mos`
+-- Table structure for table `pile_mos`
 --
 
 CREATE TABLE `pile_mos` (
@@ -195,7 +231,7 @@ CREATE TABLE `pile_mos` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `sample`
+-- Table structure for table `sample`
 --
 
 CREATE TABLE `sample` (
@@ -208,7 +244,7 @@ CREATE TABLE `sample` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `slug`
+-- Table structure for table `slug`
 --
 
 CREATE TABLE `slug` (
@@ -228,7 +264,7 @@ CREATE TABLE `slug` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `snapshot`
+-- Table structure for table `snapshot`
 --
 
 CREATE TABLE `snapshot` (
@@ -244,7 +280,7 @@ CREATE TABLE `snapshot` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `station`
+-- Table structure for table `station`
 --
 
 CREATE TABLE `station` (
@@ -256,7 +292,7 @@ CREATE TABLE `station` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `system`
+-- Table structure for table `system`
 --
 
 CREATE TABLE `system` (
@@ -265,10 +301,17 @@ CREATE TABLE `system` (
   `station_id` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `system`
+--
+
+INSERT INTO `system` (`id`, `name`, `station_id`) VALUES
+(1, 'LINUX', 23);
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `systemmap`
+-- Table structure for table `systemmap`
 --
 
 CREATE TABLE `systemmap` (
@@ -281,7 +324,7 @@ CREATE TABLE `systemmap` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `tag`
+-- Table structure for table `tag`
 --
 
 CREATE TABLE `tag` (
@@ -292,7 +335,7 @@ CREATE TABLE `tag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `template`
+-- Table structure for table `template`
 --
 
 CREATE TABLE `template` (
@@ -323,19 +366,19 @@ CREATE TABLE `template` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `ticket`
+-- Table structure for table `ticket`
 --
 
 CREATE TABLE `ticket` (
   `id` int NOT NULL,
   `thread` int NOT NULL,
   `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ip` varchar(15) NOT NULL,
+  `ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `level` int NOT NULL,
-  `initials` varchar(3) NOT NULL,
-  `body` text NOT NULL,
+  `initials` varchar(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `body` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `type` varchar(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `type` varchar(25) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `snapshot` mediumblob,
   `uid` int NOT NULL,
   `station_id` int NOT NULL
@@ -344,7 +387,7 @@ CREATE TABLE `ticket` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `time`
+-- Table structure for table `time`
 --
 
 CREATE TABLE `time` (
@@ -360,11 +403,11 @@ CREATE TABLE `time` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
-  `username` varchar(32) NOT NULL,
+  `username` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `password` varchar(64) NOT NULL,
   `id` int NOT NULL,
   `name` varchar(32) NOT NULL,
@@ -372,10 +415,17 @@ CREATE TABLE `user` (
   `station_id` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`username`, `password`, `id`, `name`, `active`, `station_id`) VALUES
+('adm', '', 1, 'Administrateur', 1, 23);
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `vizcommunicationmap`
+-- Table structure for table `vizcommunicationmap`
 --
 
 CREATE TABLE `vizcommunicationmap` (
@@ -388,7 +438,7 @@ CREATE TABLE `vizcommunicationmap` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `watchdog`
+-- Table structure for table `watchdog`
 --
 
 CREATE TABLE `watchdog` (
@@ -399,237 +449,237 @@ CREATE TABLE `watchdog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `app`
+-- Indexes for table `app`
 --
 ALTER TABLE `app`
   ADD UNIQUE KEY `station_id` (`station_id`,`button`);
 
 --
--- Index pour la table `avatar`
+-- Indexes for table `avatar`
 --
 ALTER TABLE `avatar`
   ADD PRIMARY KEY (`user_screen_name`);
 
 --
--- Index pour la table `class`
+-- Indexes for table `class`
 --
 ALTER TABLE `class`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `collection`
+-- Indexes for table `collection`
 --
 ALTER TABLE `collection`
   ADD UNIQUE KEY `cid` (`cid`,`sid`);
 
 --
--- Index pour la table `concept`
+-- Indexes for table `concept`
 --
 ALTER TABLE `concept`
   ADD PRIMARY KEY (`id`,`station_id`);
 
 --
--- Index pour la table `demande`
+-- Indexes for table `demande`
 --
 ALTER TABLE `demande`
   ADD PRIMARY KEY (`datetime`),
   ADD KEY `datetime` (`datetime`);
 
 --
--- Index pour la table `format`
+-- Indexes for table `format`
 --
 ALTER TABLE `format`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `group`
+-- Indexes for table `group`
 --
 ALTER TABLE `group`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `livraison`
+-- Indexes for table `livraison`
 --
 ALTER TABLE `livraison`
   ADD PRIMARY KEY (`datetime`),
   ADD KEY `datetime` (`datetime`);
 
 --
--- Index pour la table `log_mos`
+-- Indexes for table `log_mos`
 --
 ALTER TABLE `log_mos`
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `phototheque`
+-- Indexes for table `phototheque`
 --
 ALTER TABLE `phototheque`
   ADD PRIMARY KEY (`path`),
   ADD KEY `index` (`id`);
 
 --
--- Index pour la table `pile_mos`
+-- Indexes for table `pile_mos`
 --
 ALTER TABLE `pile_mos`
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `slug`
+-- Indexes for table `slug`
 --
 ALTER TABLE `slug`
-  ADD UNIQUE KEY `thread` (`thread`);
+  ADD UNIQUE KEY `thread` (`thread`,`station_id`) USING BTREE;
 
 --
--- Index pour la table `snapshot`
+-- Indexes for table `snapshot`
 --
 ALTER TABLE `snapshot`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `station`
+-- Indexes for table `station`
 --
 ALTER TABLE `station`
   ADD PRIMARY KEY (`id`,`group_id`);
 
 --
--- Index pour la table `system`
+-- Indexes for table `system`
 --
 ALTER TABLE `system`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `tag`
+-- Indexes for table `tag`
 --
 ALTER TABLE `tag`
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `template`
+-- Indexes for table `template`
 --
 ALTER TABLE `template`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `ticket`
+-- Indexes for table `ticket`
 --
 ALTER TABLE `ticket`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`,`station_id`) USING BTREE;
 
 --
--- Index pour la table `time`
+-- Indexes for table `time`
 --
 ALTER TABLE `time`
   ADD PRIMARY KEY (`id`,`station_id`) USING BTREE;
 
 --
--- Index pour la table `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `vizcommunicationmap`
+-- Indexes for table `vizcommunicationmap`
 --
 ALTER TABLE `vizcommunicationmap`
   ADD UNIQUE KEY `mapKey` (`mapKey`,`station_id`) USING BTREE;
 
 --
--- Index pour la table `watchdog`
+-- Indexes for table `watchdog`
 --
 ALTER TABLE `watchdog`
   ADD UNIQUE KEY `template_id` (`template_id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `class`
+-- AUTO_INCREMENT for table `class`
 --
 ALTER TABLE `class`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `collection`
+-- AUTO_INCREMENT for table `collection`
 --
 ALTER TABLE `collection`
-  MODIFY `cid` int NOT NULL AUTO_INCREMENT;
+  MODIFY `cid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `concept`
+-- AUTO_INCREMENT for table `concept`
 --
 ALTER TABLE `concept`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `format`
+-- AUTO_INCREMENT for table `format`
 --
 ALTER TABLE `format`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `group`
+-- AUTO_INCREMENT for table `group`
 --
 ALTER TABLE `group`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT pour la table `phototheque`
+-- AUTO_INCREMENT for table `phototheque`
 --
 ALTER TABLE `phototheque`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `snapshot`
+-- AUTO_INCREMENT for table `snapshot`
 --
 ALTER TABLE `snapshot`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `station`
+-- AUTO_INCREMENT for table `station`
 --
 ALTER TABLE `station`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `system`
+-- AUTO_INCREMENT for table `system`
 --
 ALTER TABLE `system`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `tag`
+-- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `template`
+-- AUTO_INCREMENT for table `template`
 --
 ALTER TABLE `template`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `ticket`
+-- AUTO_INCREMENT for table `ticket`
 --
 ALTER TABLE `ticket`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `time`
+-- AUTO_INCREMENT for table `time`
 --
 ALTER TABLE `time`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
