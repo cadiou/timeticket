@@ -23,7 +23,7 @@ $thread_post =(isset($_POST['thread'])?$_POST['thread']:0);
 $post_level = (isset($_POST['level'])?$_POST['level']:0);
 $uid =(isset($_POST['uid'])?$_POST['uid']:"-1");
 $body = (isset($_POST['body'])?$_POST['body']:"Vide.");
-$initials = (isset($_POST['initials'])?$_POST['initials']:"??");
+$initials = (isset($_POST['initials'])?substr($_POST['initials'],0,3):"??");
 $deadline = (isset($_POST['deadline'])?$_POST['deadline']:"0000-00-00 00:00:00");
 
 if (isset($_POST['ARCHIVE'])) {
