@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 200909
+ * 200913
  * timeticket / ticket.php
  * Baptiste Cadiou
  *
@@ -156,13 +156,12 @@ if ($thread==0) $thread=$id;
 
 $html->module_login();
 $html->module_ticket();
-#$html->ticket_complet($thread);
 
 if (($level == -1) and ($thread == 0)) {
 	$html->body("nouveau ticket");
 }elseif (($level == -1) and ($thread > 0)) {
   $html->ticket_complet($thread);
-	$query = "SELECT concept_id,class_id,system_id,format_id FROM slug WHERE thread=".$thread;
+	$query = "SELECT concept_id,class_id,system_id,format_id FROM slug WHERE thread=".$thread." and station_id=".CONFIG::ID_STATION;
 	$result =  $html->query($query);
 	if (mysqli_num_rows($result)!=0) {
 		$item = mysqli_fetch_array($result);
