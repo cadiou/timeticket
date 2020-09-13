@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191016
+ * 200909
  * timeticket / ticket.php
  * Baptiste Cadiou
  *
@@ -35,11 +35,10 @@ if (isset($_POST['ARCHIVE'])) {
 }
 
 
-
 if (isset($_POST['new'])) {
-
+	echo " new" ;
 	$thread = $thread_post;
-
+	echo $thread;
 	if ($thread_post!=0) {
 
 		$query = "UPDATE ticket SET "
@@ -58,7 +57,6 @@ if (isset($_POST['new'])) {
 				."ip='".$html->terminal. "', "
 				."station_id='".CONFIG::ID_STATION. "', "
 				."body='". addslashes(addslashes($body))."'" ;
-
 	if ( isset($_FILES['fic']) ) {
 
 		$ret        = false;
@@ -90,7 +88,6 @@ if (isset($_POST['new'])) {
 	}
 
 	$result =  $html->query($query);
-
 	if ($_POST['new']=="1") {
 		$thread=mysqli_insert_id($html->mysqli);
 	}
@@ -127,9 +124,12 @@ if (isset($_POST["format_id"]) ) {
 	$result =  $html->query($query);
 }
 
-if (isset($_POST["deadline"]) ) {
+if (!empty($_POST["deadline"]) ) {
 	$query = "INSERT INTO `slug` SET thread='".$thread."', deadline='".$_POST["deadline"]."' ON DUPLICATE KEY UPDATE deadline='".$_POST["deadline"]."'" ;
 	$result =  $html->query($query);
+}else{
+        $query = "INSERT INTO `slug` SET thread='".$thread."', deadline=NULL ON DUPLICATE KEY UPDATE deadline=NULL" ;
+        $result =  $html->query($query);
 }
 
 # if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";
