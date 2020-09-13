@@ -105,31 +105,31 @@ if (isset($_POST["slug"]) ) {
 }
 
 if (isset($_POST["concept_id"])) {
-	$query = "INSERT INTO `slug` SET thread='".$thread."', concept_id='".$_POST["concept_id"]."' ON DUPLICATE KEY UPDATE concept_id='".$_POST["concept_id"]."'" ;
+	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', concept_id='".$_POST["concept_id"]."' ON DUPLICATE KEY UPDATE concept_id='".$_POST["concept_id"]."'" ;
 	$result =  $html->query($query);
 }
 
 if (isset($_POST["class_id"]) ) {
-	$query = "INSERT INTO `slug` SET thread='".$thread."', class_id='".$_POST["class_id"]."' ON DUPLICATE KEY UPDATE class_id='".$_POST["class_id"]."'" ;
+	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', class_id='".$_POST["class_id"]."' ON DUPLICATE KEY UPDATE class_id='".$_POST["class_id"]."'" ;
 	$result =  $html->query($query);
 }
 
 if (isset($_POST["system_id"]) ) {
-	$query = "INSERT INTO `slug` SET thread='".$thread."', system_id='".$_POST["system_id"]."' ON DUPLICATE KEY UPDATE system_id='".$_POST["system_id"]."'" ;
+	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', system_id='".$_POST["system_id"]."' ON DUPLICATE KEY UPDATE system_id='".$_POST["system_id"]."'" ;
 	$result =  $html->query($query);
 }
 
 if (isset($_POST["format_id"]) ) {
-	$query = "INSERT INTO `slug` SET thread='".$thread."', format_id='".$_POST["format_id"]."' ON DUPLICATE KEY UPDATE format_id='".$_POST["format_id"]."'" ;
+	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', format_id='".$_POST["format_id"]."' ON DUPLICATE KEY UPDATE format_id='".$_POST["format_id"]."'" ;
 	$result =  $html->query($query);
 }
 
 if (!empty($_POST["deadline"]) ) {
-	$query = "INSERT INTO `slug` SET thread='".$thread."', deadline='".$_POST["deadline"]."' ON DUPLICATE KEY UPDATE deadline='".$_POST["deadline"]."'" ;
+	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline='".$_POST["deadline"]."' ON DUPLICATE KEY UPDATE deadline='".$_POST["deadline"]."'" ;
 	$result =  $html->query($query);
 }else{
-        $query = "INSERT INTO `slug` SET thread='".$thread."', deadline=NULL ON DUPLICATE KEY UPDATE deadline=NULL" ;
-        $result =  $html->query($query);
+#        $query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline=NULL ON DUPLICATE KEY UPDATE deadline=NULL" ;
+#        $result =  $html->query($query);
 }
 
 # if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";

@@ -1,18 +1,16 @@
 <?php
 
 /*
- * 200220
+ * 200913
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
  */
 
- class HTML
- {
-	public function __construct($page_titre,$timeout)
-	{
-		# CONFIG
+class HTML {
+	public function __construct($page_titre,$timeout) {
 
+		# CONFIG
 		if (file_exists("CONFIG.class.php")) {
 			$this->check_config = include_once("CONFIG.class.php");
 		}elseif (file_exists("../CONFIG.class.php")) {
@@ -20,17 +18,15 @@
 		}
 
 		# DATABASE
-
 		$this->mysqli =
-		  new mysqli( CONFIG::DB_SERVER,
-					  CONFIG::DB_USERNAME,
-					  CONFIG::DB_PASSWORD,
-					  CONFIG::DB_NAME);
+			new mysqli( CONFIG::DB_SERVER,
+				CONFIG::DB_USERNAME,
+				CONFIG::DB_PASSWORD,
+				CONFIG::DB_NAME);
 
 			$this->mysqli->set_charset(CONFIG::DB_CHARSET);
 
 		# COOKIE UID SETTING
-
 		if (isset($_POST["user_id"]) and $_POST["user_id"]>0) {
 			$this->uid =  $_POST["user_id"];
 			SetCookie(CONFIG::COOKIE_UID,$this->uid, time()+CONFIG::COOKIE_SEC);
@@ -48,7 +44,6 @@
 		}
 
 		# COOKIE CON SETTING
-
 		if (isset($_POST["vacation"]) and $_POST["vacation"]>0) {
 			$this->con =  $_POST["vacation"];
 			if ($this->con == -1) {
@@ -83,9 +78,9 @@
 
 		$this->head = "<html>";
 		$this->head.= "<head>";
-    if (null !== CONFIG::HTML_HEADER) {
-      $this->head.= CONFIG::HTML_HEADER;
-    }
+    		if (null !== CONFIG::HTML_HEADER) {
+      			$this->head.= CONFIG::HTML_HEADER;
+    		}
 		$this->head.= "<title>".$page_titre."</title>";
 		if ($timeout>0) {
 			$this->head.= "<meta HTTP-EQUIV=\"Refresh\" CONTENT=\"".$timeout."\">";
@@ -99,14 +94,13 @@
 		  '<meta Http-Equiv="Pragma-directive: no-cache">'.
 		  '<meta Http-Equiv="Cache-directive: no-cache">'.
 		  "</head>";
-      $this->head.=
-        "\n".'<!--  timeticket  -->'.
-        "\n".'<!--  Baptiste Cadiou  -->'.
-        "\n".'<!--  https://github.com/cadiou/timeticket/  -->'."\n";
+      		$this->head.=
+        		"\n".'<!--  timeticket  -->'.
+        		"\n".'<!--  Baptiste Cadiou  -->'.
+        		"\n".'<!--  https://github.com/cadiou/timeticket/  -->'."\n";
 		$this->head.= "<body>";
 		$this->head.= "<h1>";
-    if (($_SERVER['PHP_SELF'] != "/index.php" )
-      and ($_SERVER['PHP_SELF'] != "" ) ) {
+    		if (($_SERVER['PHP_SELF'] != "/index.php" ) and ($_SERVER['PHP_SELF'] != "" ) ) {
 			$this->head .= "<a href=\"index.php\">".$this->station(CONFIG::ID_STATION)."</a> ";
 		}else{
 			$this->head .= $this->station(CONFIG::ID_STATION)." ";
@@ -120,7 +114,6 @@
 		$this->body = "";
 
 		# VERIFICATION TIMEOUT LOOP
-
 		$query = "SELECT last_time FROM `memory` WHERE time_to_sec(timediff(now(),last_time)) > 60";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
@@ -130,8 +123,7 @@
 		}
 	}
 
-  # MODULE TICKET
-
+  	# MODULE TICKET
 	public function module_ticket() {
 
 		$this->left .= '
@@ -212,38 +204,33 @@
 				" ORDER BY datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-		  while ($item = mysqli_fetch_array($result)) {
-			 $this->left .= "<tr><td class=\"level".$item[2]."\">";
-			 $this->left .= "</td><td class=\"level\">";
-			 $this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
-			 $this->left .= "</td></tr>";
-		  }
+			while ($item = mysqli_fetch_array($result)) {
+				$this->left .= "<tr><td class=\"level".$item[2]."\">";
+			 	$this->left .= "</td><td class=\"level\">";
+			 	$this->left .= "<a href=\"ticket.php?thread=".($item[1]==0?$item[0]:$item[1])."\">".$this->concept_abr(($item[1]==0?$item[0]:$item[1])).$this->time_tracker(($item[1]==0?$item[0]:$item[1]));"</a>";
+			 	$this->left .= "</td></tr>";
+			}
 		}
 
 		$this->left .= "</table></td></tr></table></td></tr>";
-
 		$this->left .= '
-		  <tr><td class="level" colspan=2><p>Archives</p>
-		  <a href="tickets.php?level=1" class="level1">PRJ</a>&nbsp;
-		  <a href="tickets.php?level=0" class="level0">INF</a>&nbsp;
-		  <a href="tickets.php?level=5" class="level5">INC</a>
-		  </td></tr>
-		';
+		  	<tr><td class="level" colspan=2><p>Archives</p>
+		  	<a href="tickets.php?level=1" class="level1">PRJ</a>&nbsp;
+		  	<a href="tickets.php?level=0" class="level0">INF</a>&nbsp;
+		  	<a href="tickets.php?level=5" class="level5">INC</a>
+		  	</td></tr>
+			';
 
 		$this->left .= '</table>';
 	}
 
 	# Ajoute du texte au corps de page.
-
-	public function body($text)
-	{
+	public function body($text) {
 		$this->body .= "<p>".$text."</p>";
 	}
 
 	# Module Catalogue
-
-	public function gfx_catalog()
-	{
+	public function gfx_catalog() {
 		$this->left .= "<h2>GFX Catalog</h2>";
 		$this->left .= "<ul>";
 		$this->left .= "<li><a href=\"/catalog/print.php?concept_id=3\">Collection NEWS</a>	";
@@ -255,9 +242,7 @@
 	}
 
 	# Module LOGIN ####################################################################################
-
-	public function module_login()
-	{
+	public function module_login() {
 		# CHRONOMETRE ACTIONS
 		if (isset($_POST['STOP'])) {
 			# on verifie que le time ticket n est pas deja stoppé
@@ -325,11 +310,11 @@
 
 		$out .= '</SELECT>';
   		$this->left .= $out;
-}else{
-  $this->left .= "Erreur SQL";
-}
+		}else{
+  			$this->left .= "Erreur SQL";
+		}
 
-    	$this->left .= "</FORM>";
+    		$this->left .= "</FORM>";
 		}
 		if ($this->uid > 0) {
 			$this->left .= "<FORM method=\"POST\">";
@@ -360,29 +345,26 @@
 		}
 	}
 
-  # Module DOSAMCO ####################################################################################
+  	# Module DOSAMCO ####################################################################################
+	public function module_dosamco($cid) {
 
-	public function module_dosamco($cid)
-	{
 		# RECUPERE SAMPLE
 		if (isset($_POST['SAMPLE']) and isset($_POST['sample_value']) and $_POST['sample_value']>0) {
-
-      $query="INSERT `sample` SET value = '".$_POST['sample_value']."', uid = '".$this->uid."', cid = '".$cid."'";
-      $result = $this->query($query);
+      			$query="INSERT `sample` SET value = '".$_POST['sample_value']."', uid = '".$this->uid."', cid = '".$cid."'";
+      			$result = $this->query($query);
 		}
 
-    $sql = "SELECT collection.name, sample.datetime, sample.value, collection.unit, user.username "
-          ." FROM sample, collection, user"
-          ." WHERE sample.cid = ".$cid
-          ." AND sample.cid = collection.cid AND sample.uid = user.id"
-          ." ORDER BY datetime desc LIMIT 1";
-    $result = $this->query($sql);
-    while ($item = mysqli_fetch_array($result)) {
-        $this->left .= "<h2>".$item[0]."</h2>";
-        $this->left .= $item[1]." ".$item[4];
-        $this->left .= "<p class=\"chrono\">".$item[2].$item[3]."</p>";
-
-    }
+    		$sql = "SELECT collection.name, sample.datetime, sample.value, collection.unit, user.username "
+          		." FROM sample, collection, user"
+          		." WHERE sample.cid = ".$cid
+          		." AND sample.cid = collection.cid AND sample.uid = user.id"
+          		." ORDER BY datetime desc LIMIT 1";
+    		$result = $this->query($sql);
+    		while ($item = mysqli_fetch_array($result)) {
+        		$this->left .= "<h2>".$item[0]."</h2>";
+        		$this->left .= $item[1]." ".$item[4];
+        		$this->left .= "<p class=\"chrono\">".$item[2].$item[3]."</p>";
+    		}
 
 		if ($this->uid > 0) {
   			# INPUT FORM
@@ -390,11 +372,10 @@
 			$this->left .= '<input type="text" name="sample_value" size="10">' ;
 			$this->left .= "<input type=\"submit\" name=\"SAMPLE\" value=\"ENTER\" class=\"bouton_RD\" >";
 			$this->left .= "</FORM>";
-  	}
+  		}
 	}
 
 	# Retourne le titre de la page
-
 	public function ticket_level($level)
 	{
 		$titre[0]="Info";
@@ -407,7 +388,6 @@
 	}
 
 	# Fenetre Tickets Hebdo
-
 	public function ticket_board_this_week()
 	{
 		$timegraph = new DB();
@@ -629,43 +609,43 @@
 		}
 	}
 
-  public function station($station_id)
-  {
-    $query = "SELECT name ".
-        " FROM `station`".
-        " WHERE id='".$station_id."'";
-    $result = $this->query($query);
-    if (mysqli_num_rows($result)>0) {
-      $item = mysqli_fetch_array($result);
-        return ($item[0]);
-    }
-  }
+  	public function station($station_id)
+  	{
+    		$query = "SELECT name ".
+        		" FROM `station`".
+        		" WHERE id='".$station_id."'";
+    		$result = $this->query($query);
+    		if (mysqli_num_rows($result)>0) {
+      			$item = mysqli_fetch_array($result);
+        		return ($item[0]);
+    		}
+  	}
 
-  public function group($group_id)
-  {
-    $query = "SELECT name ".
-        " FROM `group`".
-        " WHERE id='".$group_id."'";
-    $result = $this->query($query);
-    if (mysqli_num_rows($result)>0) {
-      $item = mysqli_fetch_array($result);
-        return ($item[0]);
-    }
-  }
+  	public function group($group_id)
+  	{
+    		$query = "SELECT name ".
+        		" FROM `group`".
+        		" WHERE id='".$group_id."'";
+    		$result = $this->query($query);
+    		if (mysqli_num_rows($result)>0) {
+      			$item = mysqli_fetch_array($result);
+        		return ($item[0]);
+    		}
+  	}
 
-public function menuselect($table,$value,$option,$selected) {
+	public function menuselect($table,$value,$option,$selected) {
 
 		if ($table=="concept") {
 			$inactivity = " AND active = 1";
 		}else{
 			$inactivity = "";
 		}
-		
+
 		$sql = "select `".$value."`,`".$option."` from `".$table."` where `".$value."` is not null and station_id = ".CONFIG::ID_STATION.$inactivity." group by `".$option."` order by `".$option."` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
-        $out .= '<OPTION VALUE="-1">N/A</A>';
+        	$out .= '<OPTION VALUE="-1">N/A</A>';
 
 		while ($item = mysqli_fetch_array($result)) {
 			$out .= '<OPTION VALUE="'.$item[$value].'"';
@@ -675,13 +655,12 @@ public function menuselect($table,$value,$option,$selected) {
 			$out .= '>'.$item[$option].'</OPTION>'."\n";
 		}
 
-         $out .= '</SELECT>';
+         	$out .= '</SELECT>';
 
-         return $out;
+         	return $out;
 	}
 
 	# Affiche la page structurée et gere le user
-
 	public function out()
 	{
 		if (isset($this->redirect)) {
@@ -718,16 +697,16 @@ public function menuselect($table,$value,$option,$selected) {
 				}
 				$this->body.= "<table class=\"ticket\">";
 				$this->body.= "<tr><td>"; ###################################### LIGNE 1 SLUG + CONCEPT
-        $this->body.= "<table width=\"100%\">";
-        $this->body.= "<tr><td class=\"slug\">";
-        $this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
-        $this->body.= "</td><td class=\"slug_droite\">";
-        $this->body.= $this->concept($thread);
-        $this->body.= "</td></tr>";
-        $this->body.= "</table>";
+        			$this->body.= "<table width=\"100%\">";
+        			$this->body.= "<tr><td class=\"slug\">";
+        			$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
+        			$this->body.= "</td><td class=\"slug_droite\">";
+        			$this->body.= $this->concept($thread);
+        			$this->body.= "</td></tr>";
+        			$this->body.= "</table>";
 
-        $this->body.= "<table><tr>";
-        if ($this->uid > 0) {
+        			$this->body.= "<table><tr>";
+        			if ($this->uid > 0) {
 					$this->body.= "<td width=\"70\">";
 					$this->body .= "<FORM method=\"POST\">";
 					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
@@ -746,16 +725,16 @@ public function menuselect($table,$value,$option,$selected) {
 					$this->body .= "</FORM>";
 					$this->body.= "</td>";
 				}
-		$this->body.= "<td width=\"120\">";
-		$this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
-		$this->body.= "</td>";
-		$this->body.= "<td>";
+				$this->body.= "<td width=\"120\">";
+				$this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
+				$this->body.= "</td>";
+				$this->body.= "<td>";
 
-		$deadline = $this->deadline($thread);
-		$ddl = new dateTime($deadline);
-		$now = new DateTime("now");
+				$deadline = $this->deadline($thread);
+				$ddl = new dateTime($deadline);
+				$now = new DateTime("now");
 
-		if (($now>$ddl) and ($title=="Projets en cours")) {
+				if (($now>$ddl) and ($title=="Projets en cours")) {
 					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline dépassée ".$deadline."</span>");
 				}else{
 					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$deadline."</span>");
@@ -763,17 +742,17 @@ public function menuselect($table,$value,$option,$selected) {
 
 #		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
 
-		$this->body.= "</td>";
-		$this->body.= "</tr></table>";
+				$this->body.= "</td>";
+				$this->body.= "</tr></table>";
 
-		$this->body.= "</td>";
-		$this->body.= "</tr>";
-        $this->body.= "<tr>";
-        $this->body.= "<td>";
-        $this->body.= $this->ticket($item['id']);
-        $this->body.= "</td>";
-        $this->body.= "</tr>";
-		$this->body.= "</table>";
+				$this->body.= "</td>";
+				$this->body.= "</tr>";
+        			$this->body.= "<tr>";
+        			$this->body.= "<td>";
+        			$this->body.= $this->ticket($item['id']);
+        			$this->body.= "</td>";
+        			$this->body.= "</tr>";
+				$this->body.= "</table>";
 			}
 		}
 	}
@@ -1005,7 +984,6 @@ public function menuselect($table,$value,$option,$selected) {
 	}
 
 	public function menuConcept($value) {
-#		$timegraph = new DB();
 		$out  = '<SELECT NAME="concept_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
 		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true group by `name` order by `name` asc";
@@ -1027,7 +1005,6 @@ public function menuselect($table,$value,$option,$selected) {
 	}
 
 	public function menuClass($value) {
-#		$timegraph = new DB();
 		$out  = '<SELECT NAME="class_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
 
@@ -1053,9 +1030,9 @@ public function menuselect($table,$value,$option,$selected) {
 
 	public function query($query)
 	{
-		$result = mysqli_query($this->mysqli,$query) or die(mysqli_error($this->mysqli));
+		$result = mysqli_query($this->mysqli,$query) or die($query." : ".mysqli_error($this->mysqli));
 		return $result;
 	}
 }
 
- ?>
+?>
