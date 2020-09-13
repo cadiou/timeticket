@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 191031
+ * 200220
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -515,6 +515,26 @@
 	}
 
 
+	public function deadline($thread)
+	{
+		$query = "SELECT deadline ".
+				" FROM `slug`".
+				" WHERE thread='".$thread."' and station_id = ".CONFIG::ID_STATION;
+		$result = $this->query($query);
+		if ($thread==0) {
+			return;
+		}
+		elseif(mysqli_num_rows($result)>0) {
+
+			$item = mysqli_fetch_array($result);
+			if ($item[0]>1) {
+				return ($item[0]=="0000-00-00 00:00:00"?"":$item[0]);
+			}else{
+				return;
+			}
+		}
+	}
+
 	public function slug($thread)
 	{
 		$query = "SELECT name ".
@@ -537,7 +557,7 @@
 	{
 		$query = "SELECT concept.name ".
 				" FROM `slug`,`concept`".
-				" WHERE concept.id = slug.concept_id and thread='".$thread."' AND concept.station_id=".CONFIG::ID_STATION;
+				" WHERE concept.id = slug.concept_id and thread='".$thread."' AND slug.station_id=".CONFIG::ID_STATION." AND concept.station_id=".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)>0) {
 			$item = mysqli_fetch_array($result);
@@ -633,9 +653,15 @@
     }
   }
 
-	public function menuselect($table,$value,$option,$selected) {
+public function menuselect($table,$value,$option,$selected) {
 
-		$sql = "select `".$value."`,`".$option."` from ".$table." where `".$value."` is not null and station_id = ".CONFIG::ID_STATION." group by `".$option."` order by `".$option."` asc";
+		if ($table=="concept") {
+			$inactivity = " AND active = 1";
+		}else{
+			$inactivity = "";
+		}
+		
+		$sql = "select `".$value."`,`".$option."` from `".$table."` where `".$value."` is not null and station_id = ".CONFIG::ID_STATION.$inactivity." group by `".$option."` order by `".$option."` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
@@ -677,10 +703,10 @@
 	}
 
 	public function ticket_panel($title,$where) {
-		$query = "SELECT id,thread".
-						" FROM `ticket`".
-						" WHERE (".$where.") and station_ID = ".CONFIG::ID_STATION.
-						" ORDER BY datetime ASC";
+		$query = "SELECT ticket.id,ticket.thread, IF((slug.deadline = 0), \"9999\", slug.deadline) as slug_deadline".
+						" FROM `ticket`,`slug`".
+						" WHERE (".$where.") and ( ( ticket.id = slug.thread and ticket.thread = 0 ) or ( ticket.thread = slug.thread ) ) and slug.thread != 0 and ticket.station_ID = ".CONFIG::ID_STATION.
+						" ORDER BY slug_deadline ASC,ticket.datetime ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			$this->body.="<h2>".$title."</h2>";
@@ -699,9 +725,10 @@
         $this->body.= $this->concept($thread);
         $this->body.= "</td></tr>";
         $this->body.= "</table>";
+
         $this->body.= "<table><tr>";
         if ($this->uid > 0) {
-					$this->body.= "<td>";
+					$this->body.= "<td width=\"70\">";
 					$this->body .= "<FORM method=\"POST\">";
 					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
 					$result2 = $this->query($query2);
@@ -710,8 +737,8 @@
 						$time_thread=$item2[1];
 						if ($thread <> $time_thread) {
 							$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
-							#			}else{
-							#	        $this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_id\" value=".$item2[0].">";
+						}else{
+							$this->body .= "<input type=\"submit\" name=\"STOP\" value=\"STOP\" class=\"bouton_RD\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
 						}
 					}else{
 						$this->body .= "<input type=\"submit\" name=\"START\" value=\"START\" class=\"bouton_in\" ><input type=\"hidden\" name=\"time_thread\" value=".$thread.">";
@@ -719,18 +746,34 @@
 					$this->body .= "</FORM>";
 					$this->body.= "</td>";
 				}
-				$this->body.= "<td>";
-				$this->body.= $this->time_tracker_complet($thread);
-				$this->body.= "</td></tr></table>";
+		$this->body.= "<td width=\"120\">";
+		$this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
+		$this->body.= "</td>";
+		$this->body.= "<td>";
 
-				$this->body.= "</td>";
-				$this->body.= "</tr>";
+		$deadline = $this->deadline($thread);
+		$ddl = new dateTime($deadline);
+		$now = new DateTime("now");
+
+		if (($now>$ddl) and ($title=="Projets en cours")) {
+					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline dépassée ".$deadline."</span>");
+				}else{
+					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$deadline."</span>");
+				}
+
+#		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
+
+		$this->body.= "</td>";
+		$this->body.= "</tr></table>";
+
+		$this->body.= "</td>";
+		$this->body.= "</tr>";
         $this->body.= "<tr>";
         $this->body.= "<td>";
         $this->body.= $this->ticket($item['id']);
         $this->body.= "</td>";
         $this->body.= "</tr>";
-				$this->body.= "</table>";
+		$this->body.= "</table>";
 			}
 		}
 	}
@@ -751,7 +794,7 @@
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			$query = "SELECT sec_to_time(sum(time_to_sec(stop)-time_to_sec(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
+			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 			$result = $this->query($query);
 			if (mysqli_num_rows($result)!=0) {
 				while ($item = mysqli_fetch_array($result)) {
@@ -762,90 +805,73 @@
 		return $time;
 	}
 
+
 	public function time_tracker($thread) {
-		$names_actifs=" ";
+		$query = "SELECT ticket.initials FROM ticket WHERE ticket.id=".$thread;
+		$result = $this->query($query);
+		if (mysqli_num_rows($result)!=0) {
+		#  	$names_actifs.= "<span class=\"onair\">";
+			while ($item = mysqli_fetch_array($result)) {
+				$names_actifs=" *".$item[0];
+			}
+		#  	$names_actifs.="</span>";
+		}else{
+				$names_actifs=" ";
+		}
 		$query = "SELECT user.username FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			$names_actifs.= "<span class=\"onair\">";
+			$names_actifs.= " <span class=\"onair\">";
 			while ($item = mysqli_fetch_array($result)) {
-				$names_actifs.=$item[0]." ";
+				$names_actifs.=$item[0];
 			}
 			$names_actifs.="</span>";
 		}
 		return $names_actifs;
 	}
 
+
 	public function time_tracker_complet($thread) {
-    /*
-<<<<<<< HEAD
 
 		$names_actifs="<table>";
 
-=======
+		# LOG
 
-		$names_actifs = "";
-
-		# somme
-
-		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
+		$query = "SELECT user.name,sec_to_time(unix_timestamp(stop)-unix_timestamp(start)),dayofweek(`start`),`start` FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." AND time.stop is not NULL  ORDER by stop";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-				while ($item = mysqli_fetch_array($result)) {
-					$names_actifs.='<span class="chrono">'.$item[0].'</span>';
-				}
-		}
 
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
+			while ($item = mysqli_fetch_array($result)) {
+				$names_actifs.='<tr><td>'.$item[3].'</td><td>'.$item[0].'</td><td>'.$item[1].'</td></tr>';
+			}
+		}
 		# actIFS
 
 		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid AND time.stop is NULL and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
-<<<<<<< HEAD
-				$names_actifs.='<tr><td class="level1" colspan="2">'.$item[0].'</td></tr>';
+
+				$names_actifs.='<tr><td class="onair">Maintenant</td><td class="onair" colspan="2">'.$item[0].'</td></tr>';
 			}
-=======
-				$names_actifs.=' <span class="onair">'.$item[0].'</span>';
-			}
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
 		}
 
-		# LOG
-<<<<<<< HEAD
+		# somme
 
-=======
-	/*
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
-		$query = "SELECT user.name,sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))),dayofweek(`start`),date(`start`) FROM user,time WHERE user.id=time.uid and time.thread=".$thread." and user.station_id =".CONFIG::ID_STATION." AND time.stop is not NULL GROUP BY user.name";
+		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-
 			while ($item = mysqli_fetch_array($result)) {
-				$names_actifs.='<tr><td class="onair">'.$item[2].'</td><td class="onair">'.$item[3].'</td><td class="onair">'.$item[0].'</td><td class="onair">'.$item[1].'</td></tr>';
-			}
-
-			# somme
-
-			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;  # time_to_sec(stop)-time_to_sec(start)
-			$result = $this->query($query);
-			if (mysqli_num_rows($result)!=0) {
-				while ($item = mysqli_fetch_array($result)) {
-					$names_actifs.='<tr><td class="level1">&nbsp;</td><td class="level1">'.$item[0].'</td></tr>';
+				if ($item[0]<>"") {
+					$names_actifs.='<tr><td class="chrono" colspan="2">Total</td><td class="chrono">'.$item[0].'</td></tr>';
 				}
 			}
-			$names_actifs.="</span>";
 		}
-<<<<<<< HEAD
 
 		$names_actifs.="</table>";
-=======
-		* /
 
->>>>>>> 87071027a2805655a1b7e01fe9e11a32344b6e40
 		return $names_actifs;
-    */
+
 	}
 
 	public function ticket_threads($title,$where,$active) {
@@ -897,7 +923,7 @@
 
 	public function ticket_formulaire($level,$thread,$payload) {
 		$this->body .= "<table class=\"level".$level."\"><tr><td colspan=\"2\">";
-		$this->body .= '<form method="post">';  #  enctype="multipart/form-data"
+		$this->body .= '<form enctype="multipart/form-data" method="post">';
 		$this->body .= '<input type="hidden" name="new" value="0">';
 		$this->body .= '<input type="hidden" name="level" value="'.$level.'">';
 		$this->body .= '<input type="hidden" name="thread" value='.$thread.'>';
@@ -912,9 +938,10 @@
 
 	public function ticket_formulaire_slug($level,$thread,$payload) {
 		$this->body .= "<table class=\"level".$level."\"><tr>";
-		$this->body .= '<form method="post">';
+		$this->body .= '<form enctype="multipart/form-data" method="post">';
 		$this->body .= '<input type="hidden" name="new" value="1">';
 		$this->body .= '<td>Slug</td><td colspan=2><input SIZE="80" TYPE="text" NAME="slug" VALUE="'.$this->slug($thread).'" ></td></tr>';
+		$this->body .= '<tr><td>Deadline&nbsp;:</td><td><input SIZE="30" TYPE="text" NAME="deadline" VALUE="'.$this->deadline($thread).'" ></td></tr>';
 		$this->body .= '<input type="hidden" name="level" value="'.$level.'">';
 		$this->body .= '<input type="hidden" name="thread" value='.$thread.'>';
 		$this->body .= '<tr><td>Ticket</td><td colspan=2><textarea rows = "8" cols = "80" name = "body">'.$payload.'</textarea></td></tr><tr><td>Image</td><td><input type="hidden" name="MAX_FILE_SIZE" value="'.CONFIG::FILE_MAX_SIZE.'" /><input type="file" name="fic" size=50 /></td><td align="right">';
@@ -931,7 +958,7 @@
 		# Query ticket
 
 		$query = "SELECT code,name,id,active,(select count(template.id) from template where template.concept_id=concept.id),(select count(slug.thread) from slug where slug.concept_id=concept.id)".
-				" FROM `concept`".
+				" FROM `concept` WHERE active = true".
 				" ORDER BY name ASC";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
@@ -1026,7 +1053,7 @@
 
 	public function query($query)
 	{
-		$result = mysqli_query($this->mysqli,$query) ; #or die(mysqli_error($this->mysqli));
+		$result = mysqli_query($this->mysqli,$query) or die(mysqli_error($this->mysqli));
 		return $result;
 	}
 }
