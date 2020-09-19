@@ -107,7 +107,7 @@ class HTML {
 		}
 		$this->head.= $page_titre."</h1>";
 		$this->foot = "<hr />";
-		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".gethostname();
+		$this->foot .= $this->group(CONFIG::ID_GROUP)." / ".CONFIG::DB_NAME." / ".gethostname();
 		$this->foot.= "</body>";
 		$this->foot.= "</html>";
 		$this->left = "";
