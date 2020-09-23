@@ -241,6 +241,16 @@ class HTML {
 		$this->left .= "</ul>"."<p />";  # .$timegraph->catalog_last_image()
 	}
 
+        public function module_calendar() {
+                $this->left .= "<h2>Calendrier</h2>";
+                $this->left .= "<ul>";
+                $this->left .= "<li><a href=\"calendar.php?n=1\">Semaine</a>";
+ 		$this->left .= "<li><a href=\"calendar.php?n=4\">Mois</a>";
+		$this->left .= "<li><a href=\"calendar.php?n=12\">Trimestre</a>";
+                $this->left .= "</ul>"."<p />";
+        }
+
+
 	# Module LOGIN ####################################################################################
 	public function module_login() {
 		# CHRONOMETRE ACTIONS
