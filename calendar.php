@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 200921
+ * 200928
  * timeticket / calendar
  * bcadiou@videlio-globalservices.com
  *
@@ -16,7 +16,7 @@ $n = ((isset($_GET['n'])?$_GET['n']:6)-1);
 $date1 = date( "Y-m-d 00:00:00", strtotime($year."W".$week."1") ); // First day of week
 $date2 = date( "Y-m-d 23:59:59", strtotime($year."W".$week."7+".$n."week") ); // Last day of week
 
-$html = new HTML(substr($date1,0,10)." &rarr; ".substr($date2,0,10),5);
+$html = new HTML(substr($date1,0,10)." &rarr; ".substr($date2,0,10),30);
 
 $html->module_calendar();
 
@@ -24,7 +24,13 @@ $html->module_calendar();
 
 $table = "<table>";
 
-$table.= "<td>SEMAINE</td><td>LUNDI</td><td>MARDI</td><td>MERCREDI</td><td>JEUDI</td><td>VENDREDI</td><td>SAMEDI</td><td>DIMANCHE</td>";
+$table.= '<tr><td colspan=4 class=slug><a href="calendar.php?n='.($n+1).'&year='.date("Y",strtotime($year."W".$week."7-".($n+1)."week")).'&week='.
+		date("W",strtotime($year."W".$week."7-".($n+1)."week")).
+		'">&larr;</a></td><td colspan=4 class=slug_droite><a href="calendar.php?n='.($n+1).'&year='.date("Y",strtotime($year."W".$week."7+".($n+1)."week")).'&week='.
+                date("W",strtotime($year."W".$week."7+".($n+1)."week")).
+                '">&rarr;</a></td></tr>';
+
+$table.= "<tr><td>SEMAINE</td><td>LUNDI</td><td>MARDI</td><td>MERCREDI</td><td>JEUDI</td><td>VENDREDI</td><td>SAMEDI</td><td>DIMANCHE</td></tr>";
 
 for ($i = 0; $i <= $n; $i++) {
 
@@ -46,7 +52,7 @@ for ($i = 0; $i <= $n; $i++) {
 	# BARRE DE DATES DE LA SEMAINE
 
 	$table.="<tr>";
-	
+
 	$table.="<td><h2>".date("W",strtotime($year."W".$week."7+".$i."week"))."</h2></td>";
 
 	for ($j = 0;$j < 7;$j++) {
