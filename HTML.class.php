@@ -148,7 +148,7 @@ class HTML {
 
 		$this->left .= '
 		  <tr><td class="level" colspan=2>
-		  <a href="tickets.php">Tickets Actifs</a>
+		  <a href="tickets.php">Tickets J-30</a>
 			  </td></tr>
 		';
 

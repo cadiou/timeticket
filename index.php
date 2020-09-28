@@ -14,6 +14,7 @@ $html = new HTML("Tickets Actifs",60);
 # MARGE
 $html->module_login();
 $html->module_ticket();
+$html->module_calendar();
 $html->module_dosamco(1);
 
 # BODY

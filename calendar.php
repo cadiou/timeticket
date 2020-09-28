@@ -24,90 +24,132 @@ $html->module_calendar();
 
 $table = "<table>";
 
-$table.= "<td></td><td>LUN</td><td>MAR</td><td>MER</td><td>JEU</td><td>VEN</td><td>SAM</td><td>DIM</td>";
+$table.= "<td>SEMAINE</td><td>LUNDI</td><td>MARDI</td><td>MERCREDI</td><td>JEUDI</td><td>VENDREDI</td><td>SAMEDI</td><td>DIMANCHE</td>";
 
 for ($i = 0; $i <= $n; $i++) {
 
+	# CLASSES DE LA SEMAINE
+
+	$unixdate=strtotime($year."W".$week."+".$i."week");
+
+	$query = "SELECT class_id".
+                                 " FROM event WHERE station_id = ".CONFIG::ID_STATION.
+                                 " AND not(unix_timestamp(start)-(86400*7) > ".$unixdate.
+                                 " AND unix_timestamp(stop)-(86400*7) > ".$unixdate.")".
+                                 " AND not(unix_timestamp(start) < ".$unixdate.
+                                 " AND unix_timestamp(stop) < ".$unixdate.")".
+                                 " GROUP by class_id ORDER by class_id";
+
+        $result_class =  $html->query($query);
+
+
+	# BARRE DE DATES DE LA SEMAINE
+
 	$table.="<tr>";
 	
-	$table.="<td>".date("W",strtotime($year."W".$week."7+".$i."week"))."</td>";
-	
+	$table.="<td><h2>".date("W",strtotime($year."W".$week."7+".$i."week"))."</h2></td>";
+
 	for ($j = 0;$j < 7;$j++) {
-	
+
 		$table.="<td>";
-		
+
 		$unixdate=strtotime($year."W".$week."+".(($i*7)+$j)."day");
-		
+
 		$table.="<h2>".date( "d M", $unixdate)."</h2>";
-	
-		$query = "SELECT id,name,class_id,format_id,start,stop,client,vendeur,reference,level".
-				 " FROM event WHERE station_id = ".CONFIG::ID_STATION.
+
+		$table.="</td>";
+	}
+
+	$table.="</tr>";
+
+	# UNE LIGNE PAR CLASSE
+
+	if (mysqli_num_rows($result_class)!=0) {
+
+		while ($item_class = mysqli_fetch_array($result_class)) {
+
+			$table.="<tr>";
+
+			# AFFICAGE DE LA CLASSE
+
+                        if ($item_class[0]>0) {
+                        	$query = "SELECT class.name ".
+                                	" FROM `class`".
+                                        " WHERE class.id = ".$item_class[0]." and class.station_id = ".CONFIG::ID_STATION;
+                                $result_classtext = $html->query($query);
+                                if (mysqli_num_rows($result_classtext)>0) {
+                                	$item_classtext = mysqli_fetch_array($result_classtext);
+                                        $class = ($item_classtext[0]);
+                                 }
+                        }else{
+                           	$class = "Lazarus";
+                        }
+
+			$table.= "<td>".$class."</td>";
+
+
+			# JOURS PAR CLASSE
+
+        		for ($j = 0;$j < 7;$j++) {
+
+				$unixdate=strtotime($year."W".$week."+".(($i*7)+$j)."day");
+
+              			$table.="<td>";
+
+
+
+				$query = "SELECT id,name,class_id,format_id,start,stop,client,vendeur,reference,level".
+				 " FROM event WHERE station_id = ".CONFIG::ID_STATION." and class_id = ".$item_class[0].
 				 " AND not(unix_timestamp(start)-86400 > ".$unixdate.
 				 " AND unix_timestamp(stop)-86400 > ".$unixdate.")".
 				 " AND not(unix_timestamp(start) < ".$unixdate.
                                  " AND unix_timestamp(stop) < ".$unixdate.")".
 				 " ORDER by class_id DESC,start,level";
-	
-		$result =  $html->query($query);
-		
 
-		if (mysqli_num_rows($result)!=0) {
+				$result =  $html->query($query);
 
-			$last_class = "";
 
-        		while ($item = mysqli_fetch_array($result)) {
-				if (date( "d M",strtotime($item[4]))==date( "d M",$unixdate)) {
-					$time = date( "H:i",strtotime($item[4]));
-				}else{
-					$time="...";
-				}
-				
-				$time.=" - ";
+				if (mysqli_num_rows($result)!=0) {
 
- 				if (date( "d M",strtotime($item[5]))==date( "d M",$unixdate)) {
-                                        $time.= date( "H:i",strtotime($item[5]));
-                                }else{
-                                        $time.="...";
-                                }
-
-				$time.="<br>";
-
-				if ($item[2]>0) {
-					$query = "SELECT class.name ".
-					" FROM `class`".
-					" WHERE class.id = ".$item[2]." and class.station_id = ".CONFIG::ID_STATION;
-					$result2 = $html->query($query);
-					if (mysqli_num_rows($result2)>0) {
-						$item_class = mysqli_fetch_array($result2);
-						if ($item_class[0]<>$last_class) {
-							$last_class=$class;
-							$class = ($item_class[0])."<br>";
+        				while ($item = mysqli_fetch_array($result)) {
+						if (date( "d M",strtotime($item[4]))==date( "d M",$unixdate)) {
+							$time = date( "H:i",strtotime($item[4]));
 						}else{
-							$class = "";
+							$time="...";
 						}
-					}
-				}else{
-					$class = "";
+
+						$time.=" - ";
+
+		 				if (date( "d M",strtotime($item[5]))==date( "d M",$unixdate)) {
+                		                        $time.= date( "H:i",strtotime($item[5]));
+               		                 	}else{
+                                        		$time.="...";
+                                		}
+
+						$time.="<br>";
+
+						$table.= "<a href=\"calendar.php?id=".$item[0]."\"><h4 class=\"level".$item[9]."\">";
+						$table.= $time;
+						$table.= stripslashes(($item[1]!=""?$item[1]:"Lazarus"));
+						$table.= "</h4></a>";
+       				 	}
+
 				}
 
-				$last_class=$item_class[0];
+				$table.="</td>";
 
-				
-				$table.= "<h3>".$class."</h3>";
-				$table.= "<a href=\"calendar.php?id=".$item[0]."\"><h4 class=\"level".$item[9]."\">";
-				$table.= $time;
-				$table.= stripslashes(($item[1]!=""?$item[1]:"Lazarus"));
-				$table.= "</h4></a>";
-       		 	}
-			 
+			}
+
+
+
+			$table.="</tr>";
+
 		}
-	
-		$table.="</td>";
-	
+
 	}
-	
-	$table.="</tr><tr><td colspan=8><hr></td></tr>";
-	
+
+	$table.="<tr><td colspan=8><hr></td></tr>";
+
 }
 
 $table.= "</table>";
