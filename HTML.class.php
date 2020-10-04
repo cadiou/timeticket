@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 200913
+ * 201004
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -288,7 +288,7 @@ class HTML {
 		}
 		$this->left .= "Utilisateur :<br><FORM method=\"POST\">";
 
-		$sql = "select `id`,`name` from user where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
+		$sql = "select `id`,`name` from user where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." order by `name` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="user_id" onchange="this.form.submit()">';
@@ -307,7 +307,7 @@ class HTML {
 		$this->left .= "</FORM>";
 		if ($this->uid > 0) {
   		$this->left .= "Vacation :<br><FORM method=\"POST\">";
-  		$sql = "select `id`,`name` from concept where name is not null and active = true and vacation = true and station_ID = ".CONFIG::ID_STATION." group by `name` order by `name` asc";
+  		$sql = "select `id`,`name` from concept where name is not null and active = true and vacation = true and station_ID = ".CONFIG::ID_STATION." order by `name` asc";
   		if ($result = $this->query($sql)) {
   		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
   		while ($item = mysqli_fetch_array($result)) {
@@ -651,7 +651,7 @@ class HTML {
 			$inactivity = "";
 		}
 
-		$sql = "select `".$value."`,`".$option."` from `".$table."` where `".$value."` is not null and station_id = ".CONFIG::ID_STATION.$inactivity." group by `".$option."` order by `".$option."` asc";
+		$sql = "select `".$value."`,`".$option."` from `".$table."` where `".$value."` is not null and station_id = ".CONFIG::ID_STATION.$inactivity." order by `".$option."` asc";
 		$result = $this->query($sql);
 
 		$out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
