@@ -996,7 +996,7 @@ class HTML {
 	public function menuConcept($value) {
 		$out  = '<SELECT NAME="concept_id" onchange="this.form.submit()">';
 		$out .= '<OPTION VALUE="">Tous</A>';
-		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true group by `name` order by `name` asc";
+		$sql = "select `name`,`id` from `concept` where `name` is not null and `station_id`=".CONFIG::ID_STATION." and active = true order by `name` asc";
 		$result = $this->query($sql);
 		if (!$result){
 			echo "erreur".$sql;
