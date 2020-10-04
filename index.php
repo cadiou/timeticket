@@ -16,7 +16,7 @@ $html->module_login();
 $html->module_ticket();
 $html->module_calendar();
 $html->module_dosamco(1);
-
+$html->module_dosamco(2);
 # BODY
 $html->body.='
 <table><tr><td rowspan="3">

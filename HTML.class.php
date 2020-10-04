@@ -81,7 +81,7 @@ class HTML {
     		if (null !== CONFIG::HTML_HEADER) {
       			$this->head.= CONFIG::HTML_HEADER;
     		}
-		$this->head.= "<title>".$page_titre."</title>";
+		$this->head.= "<title>".$this->station(CONFIG::ID_STATION)." ".$page_titre."</title>";
 		if ($timeout>0) {
 			$this->head.= "<meta HTTP-EQUIV=\"Refresh\" CONTENT=\"".$timeout."\">";
 		}
