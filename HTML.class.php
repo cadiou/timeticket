@@ -360,7 +360,7 @@ class HTML {
 
 		# RECUPERE SAMPLE
 		if (isset($_POST['SAMPLE']) and isset($_POST['sample_value']) and $_POST['sample_value']>0) {
-      			$query="INSERT `sample` SET value = '".$_POST['sample_value']."', uid = '".$this->uid."', cid = '".$cid."'";
+      			$query="INSERT `sample` SET value = '".$_POST['sample_value']."', uid = '".$this->uid."', cid = '".$_POST['cid']."'";
       			$result = $this->query($query);
 		}
 
@@ -379,7 +379,8 @@ class HTML {
 		if ($this->uid > 0) {
   			# INPUT FORM
 			$this->left .= "<FORM method=\"POST\">";
-			$this->left .= '<input type="text" name="sample_value" size="10">' ;
+			$this->left .= "<input type=\"hidden\" name=\"cid\" value=".$cid.">";
+			$this->left .= '<input type="text" name="sample_value" size="10">';
 			$this->left .= "<input type=\"submit\" name=\"SAMPLE\" value=\"ENTER\" class=\"bouton_RD\" >";
 			$this->left .= "</FORM>";
   		}
