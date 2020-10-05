@@ -30,7 +30,23 @@ $table.= '<tr><td colspan=4 class=slug><a href="calendar.php?n='.($n+1).'&year='
                 date("W",strtotime($year."W".$week."7+".($n+1)."week")).
                 '">&rarr;</a></td></tr>';
 
-$table.= "<tr><td>SEMAINE</td><td>LUNDI</td><td>MARDI</td><td>MERCREDI</td><td>JEUDI</td><td>VENDREDI</td><td>SAMEDI</td><td>DIMANCHE</td></tr>";
+#$table.= "<tr><td>SEMAINE</td><td>LUNDI</td><td>MARDI</td><td>MERCREDI</td><td>JEUDI</td><td>VENDREDI</td><td>SAMEDI</td><td>DIMANCHE</td></tr>";
+
+$table.="<tr><td>Week</td>";
+
+for ($i = 0; $i <7 ; $i++) {
+	$table.= "<td>";
+	if (date("L")==($i+1)) {
+		$table .= "<h2>";
+	}
+	$table.= strftime("%A", ($i+4)*24*3600);
+	if (date("L")==($i+1)) {
+                $table .= "</h2>";
+        }
+	$table.= "</td>";
+}
+
+$table.="</tr>";
 
 for ($i = 0; $i <= $n; $i++) {
 
