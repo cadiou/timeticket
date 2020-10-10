@@ -36,11 +36,11 @@ $table.="<tr><td>Week</td>";
 
 for ($i = 0; $i <7 ; $i++) {
 	$table.= "<td>";
-	if (date("L")==($i+1)) {
+	if ((date("w")==($i+1)) or (date("w")==0 and $i==6)) {
 		$table .= "<h2>";
 	}
 	$table.= strftime("%A", ($i+4)*24*3600);
-	if (date("L")==($i+1)) {
+	if ((date("w")==($i+1))or (date("w")==0 and $i==6)) {
                 $table .= "</h2>";
         }
 	$table.= "</td>";

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 201004
+ * 201010
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -717,6 +717,7 @@ class HTML {
         			$this->body.= "</table>";
 
         			$this->body.= "<table><tr>";
+
         			if ($this->uid > 0) {
 					$this->body.= "<td width=\"70\">";
 					$this->body .= "<FORM method=\"POST\">";
@@ -736,26 +737,24 @@ class HTML {
 					$this->body .= "</FORM>";
 					$this->body.= "</td>";
 				}
-				$this->body.= "<td width=\"120\">";
-				$this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
-				$this->body.= "</td>";
-				$this->body.= "<td>";
 
-				$deadline = $this->deadline($thread);
-				$ddl = new dateTime($deadline);
-				$now = new DateTime("now");
+                                $this->body.= "<td>";
+                                $deadline = $this->deadline($thread);
+                                $ddl = new dateTime($deadline);
+                                $now = new DateTime("now");
+                                if (($now>$ddl)) {
+                                        $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline d&eacute;pass&eacute;e<br />".$deadline."</span>");
+                                }else{
+                                        $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level\">Deadline<br />".$deadline."</span>");
+                                }
+                                $this->body.= "</td>";
 
-				if (($now>$ddl) and ($title=="Projets en cours")) {
-					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline dépassée ".$deadline."</span>");
-				}else{
-					$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$deadline."</span>");
-				}
 
-#		$this->body.= ($this->deadline($thread)==""?"":"<span  class=\"chrono\">Deadline : ".$this->deadline($thread)."</span>");
+                            	$this->body.= "<td>";
+                                $this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
+                                $this->body.= "</td>";
 
-				$this->body.= "</td>";
 				$this->body.= "</tr></table>";
-
 				$this->body.= "</td>";
 				$this->body.= "</tr>";
         			$this->body.= "<tr>";
