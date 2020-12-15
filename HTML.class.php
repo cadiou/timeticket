@@ -241,12 +241,12 @@ class HTML {
 		$this->left .= "</ul>"."<p />";  # .$timegraph->catalog_last_image()
 	}
 
-        public function module_calendar() {
+        public function module_calendar($year,$week) {
                 $this->left .= "<h2>Calendrier</h2>";
                 $this->left .= "<ul>";
-                $this->left .= "<li><a href=\"calendar.php?n=1\">Semaine</a>";
- 		$this->left .= "<li><a href=\"calendar.php?n=4\">Mois</a>";
-		$this->left .= "<li><a href=\"calendar.php?n=12\">Trimestre</a>";
+                $this->left .= "<li><a href=\"calendar.php?n=1"."&year=".$year."&week=".$week."\">Semaine</a>";
+ 		$this->left .= "<li><a href=\"calendar.php?n=4"."&year=".$year."&week=".$week."\">Mois</a>";
+		$this->left .= "<li><a href=\"calendar.php?n=12"."&year=".$year."&week=".$week."\">Trimestre</a>";
                 $this->left .= "</ul>"."<p />";
         }
 
@@ -742,7 +742,7 @@ class HTML {
                                 $deadline = $this->deadline($thread);
                                 $ddl = new dateTime($deadline);
                                 $now = new DateTime("now");
-                                if (($now>$ddl)) {
+                                if (($now>$ddl) and ($title<>"Livré et vérifié"	)) {
                                         $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline d&eacute;pass&eacute;e<br />".$deadline."</span>");
                                 }else{
                                         $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level\">Deadline<br />".$deadline."</span>");

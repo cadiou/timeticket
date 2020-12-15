@@ -18,7 +18,9 @@ $date2 = date( "Y-m-d 23:59:59", strtotime($year."W".$week."7+".$n."week") ); //
 
 $html = new HTML(substr($date1,0,10)." &rarr; ".substr($date2,0,10),30);
 
-$html->module_calendar();
+$html->module_calendar($year,$week);
+
+# CALENDRIER
 
 $table = "<table>";
 $table.= '<tr><td colspan=4 class=slug><a href="calendar.php?n='.($n+1).'&year='.date("Y",strtotime($year."W".$week."7-".($n+1)."week")).'&week='.
@@ -107,7 +109,7 @@ for ($i = 0; $i <= $n; $i++) {
                                 		}
 
 						$time.="<br>";
-						$table.= "<a href=\"calendar.php?id=".$item[0]."\"><h4 class=\"level".$item[9]."\">";
+						$table.= "<a href=\"calendar.php?id=".$item[0]."&n=".($n+1)."&year=".$year."&week=".$week."\"><h4 class=\"level".$item[9]."\">";
 						$table.= $time;
 						$table.= stripslashes(($item[1]!=""?$item[1]:"Lazarus"));
 						$table.= "</h4></a>";
@@ -123,6 +125,11 @@ for ($i = 0; $i <= $n; $i++) {
 $table.= "</table>";
 
 $html->body($table);
+
+
+#
+
+
 
 # affichage
 
