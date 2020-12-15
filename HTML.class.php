@@ -282,10 +282,9 @@ class HTML {
 				.", concept_id = ".$this->con;
 			$result = $this->query($query);
 		}
+
 		# UTILISATEUR
-		if ($this->uid <= 0) {
-			$this->left .= "<p class=\"level1\">Identifiez-vous SVP</p>";
-		}
+
 		$this->left .= "Utilisateur :<br><FORM method=\"POST\">";
 
 		$sql = "select `id`,`name` from user where name is not null and active = true and station_ID = ".CONFIG::ID_STATION." order by `name` asc";
@@ -305,27 +304,31 @@ class HTML {
 		$out .= '</SELECT>';
 		$this->left .= $out;
 		$this->left .= "</FORM>";
-		if ($this->uid > 0) {
-  		$this->left .= "Vacation :<br><FORM method=\"POST\">";
-  		$sql = "select `id`,`name` from concept where name is not null and active = true and vacation = true and station_ID = ".CONFIG::ID_STATION." order by `name` asc";
-  		if ($result = $this->query($sql)) {
-  		$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
-  		while ($item = mysqli_fetch_array($result)) {
-  			$out .= '<OPTION VALUE="'.$item['id'].'"';
-  			if (($this->con == $item['id'])and($this->con != "")) {
-  			$out .= " SELECTED";
-  			}
-  			$out .= '>'.$item['name'].'</OPTION>'."\n";
-  		}
 
-		$out .= '</SELECT>';
-  		$this->left .= $out;
-		}else{
-  			$this->left .= "Erreur SQL";
+		# VACATION DESACTIVEE
+
+		if (($this->uid > 0) and false) {
+  			$this->left .= "Vacation :<br><FORM method=\"POST\">";
+  			$sql = "select `id`,`name` from concept where name is not null and active = true and vacation = true and station_ID = ".CONFIG::ID_STATION." order by `name` asc";
+  			if ($result = $this->query($sql)) {
+  				$out  = '<SELECT NAME="vacation" onchange="this.form.submit()">';
+  				while ($item = mysqli_fetch_array($result)) {
+  					$out .= '<OPTION VALUE="'.$item['id'].'"';
+  					if (($this->con == $item['id'])and($this->con != "")) {
+  						$out .= " SELECTED";
+  					}
+  					$out .= '>'.$item['name'].'</OPTION>'."\n";
+  				}
+
+				$out .= '</SELECT>';
+  				$this->left .= $out;
+			}else{
+  				$this->left .= "Erreur SQL";
+			}
+
+    			$this->left .= "</FORM>";
 		}
 
-    		$this->left .= "</FORM>";
-		}
 		if ($this->uid > 0) {
 			$this->left .= "<FORM method=\"POST\">";
 			$query = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
@@ -352,6 +355,8 @@ class HTML {
 				}
 			}
 			$this->left .= "</FORM>";
+		}else{
+                        $this->left .= "<p class=\"level1\">Identifiez-vous SVP</p>";
 		}
 	}
 
