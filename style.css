@@ -8,19 +8,14 @@ body {
 h1 {
 	font-size:150%;
 	color: white;
-	background-color: 11903d;
+	background-color: #eb1010;
 	-webkit-print-color-adjust: exact;
 }
 h2 {
-	font-size:125%;
-	color: black;
-	background-color: #eba118;
-	-webkit-print-color-adjust: exact;
-}
-touch {
-	font-size:100%;
-	color: red;
-	background: 000000;
+        font-size:125%;
+        color: white;
+        background-color: #eb1010;
+        -webkit-print-color-adjust: exact;
 }
 
 td {
@@ -33,12 +28,12 @@ td {
 
 a:link {
     text-decoration: none;
-	color: 4dea38;
+    color: ffffff;
 }
 
 a:visited {
     text-decoration: none;
-	color: 4dea38;
+    color: ffffff;
 }
 
 a:hover {
@@ -47,7 +42,6 @@ a:hover {
 
 a:active {
     text-decoration: underline;
-	color: 4dea38;
 }
 
 .bouton {
