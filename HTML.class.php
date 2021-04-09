@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 201010
+ * 210404
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -24,7 +24,7 @@ class HTML {
 				CONFIG::DB_PASSWORD,
 				CONFIG::DB_NAME);
 
-			$this->mysqli->set_charset(CONFIG::DB_CHARSET);
+		$this->mysqli->set_charset(CONFIG::DB_CHARSET);
 
 		# COOKIE UID SETTING
 		if (isset($_POST["user_id"]) and $_POST["user_id"]>0) {
@@ -1040,6 +1040,42 @@ class HTML {
 
 		$out .= '</SELECT>';
 	  return $out;
+	}
+
+	public function audio_pad($concept) {
+
+		$path=$base_folder.$concept."/";
+		$files = array();
+/*		$it = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
+		$recursiveIterator = new RecursiveIteratorIterator($it);
+		$allowed=array("MP3","mp3");
+		foreach($recursiveIterator as $file) {
+        		if(in_array(substr($file, strrpos($file, '.') + 1),$allowed)) {
+                		$files[]                = $file;
+        		}
+		}
+		natcasesort($files);
+		$this->h2(strtoupper($concept));
+		$this->body.= "<table>"."\n";
+		$i=0;
+		foreach($files as $file) {
+        		$name = str_replace("_"," ",strtoupper(substr(str_replace($path,"",$file),0,-4)));
+        		if ($i==0) {
+                		$this->body.= "<tr height=160>"."\n";
+        		}
+        		$this->body.="<td>";
+        		$this->body.='<span class="chrono">'.$name.'</span><br>';
+        		$this->body.='<audio controls><source src="'.$base_url.$file.'" type="audio/mp3"></audio>';
+        		$this->body.='</td>';
+        		if ($i==1) {
+                		$this->body.='</tr>'."\n";
+                		$i=0;
+        		}else{
+                		$i++;
+        		}
+		}
+*/		$this->body.="</table>";
+
 	}
 
 	# DATABASE FUNCTIONS
