@@ -368,7 +368,7 @@ class HTML {
 	public function module_dosamco($cid) {
 
 		# RECUPERE SAMPLE
-		if (isset($_POST['SAMPLE']) and isset($_POST['sample_value']) and $_POST['sample_value']>0) {
+		if (isset($_POST['SAMPLE']) and isset($_POST['sample_value']) and $_POST['sample_value']>0 and $_POST['cid']==$cid) {
       			$query="INSERT `sample` SET value = '".$_POST['sample_value']."', uid = '".$this->uid."', cid = '".$_POST['cid']."'";
       			$result = $this->query($query);
 		}
@@ -1040,6 +1040,21 @@ class HTML {
 		$out .= '</SELECT>';
 	  return $out;
 	}
+
+	public function menuswitch($table,$value,$option,$selected) {
+		$sql = "select `".$value."`,`".$option."` from `".$table."` where `".$value."` is not null and station_id = ".CONFIG::ID_STATION." order by `".$option."` asc";
+        $result = $this->query($sql);
+        $out  = '<SELECT NAME="'.$table."_".$value.'" onchange="this.form.submit()">';
+        while ($item = mysqli_fetch_array($result)) {
+            $out .= '<OPTION VALUE="'.$item[$value].'"';
+            if (($selected == $item[$value])and($selected != "")) {
+                $out .= " SELECTED";
+            }
+            $out .= '>'.$item[$option].'</OPTION>';
+        }
+        $out .= '</SELECT>';
+        return $out;
+    }
 
 	public function audio_pad($concept) {
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 200913
+ * 210904
  * timeticket / ticket.php
  * Baptiste Cadiou
  *
@@ -96,7 +96,6 @@ if (isset($_POST['new'])) {
 }
 
 
-
 # MISE A JOUR DU SLUG ########################
 
 if (isset($_POST["slug"]) ) {
@@ -124,6 +123,25 @@ if (isset($_POST["format_id"]) ) {
 	$result =  $html->query($query);
 }
 
+# Determination de la date
+
+if (isset($_POST['only_date_start'])) {
+
+	if ($_POST['only_date_start']<>"-1") {
+		$deadline = 	date('Y-m-d H:i:s',intval($_POST['only_time_start'])+intval($_POST['only_date_start']));
+		$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline='".$deadline."' ON DUPLICATE KEY UPDATE deadline='".$deadline."'" ;
+		$result =  $html->query($query);
+	}else{
+		$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline=NULL ON DUPLICATE KEY UPDATE deadline=NULL" ;
+        $result =  $html->query($query);
+	}
+
+}
+
+/*
+$date_start=	(isset($_POST['only_time_start'])?	date('Y-m-d H:i:s',intval($_POST['only_time_start'])+intval($_POST['only_date_start'])):	"2021-02-02 12:00:00");
+
+
 if (!empty($_POST["deadline"]) ) {
 	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline='".$_POST["deadline"]."' ON DUPLICATE KEY UPDATE deadline='".$_POST["deadline"]."'" ;
 	$result =  $html->query($query);
@@ -131,6 +149,8 @@ if (!empty($_POST["deadline"]) ) {
 #        $query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline=NULL ON DUPLICATE KEY UPDATE deadline=NULL" ;
 #        $result =  $html->query($query);
 }
+
+*/
 
 # if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";
 
@@ -156,6 +176,7 @@ if ($thread==0) $thread=$id;
 
 $html->module_login();
 $html->module_ticket();
+$html->module_calendar(date('Y'),date('W'));
 
 if (($level == -1) and ($thread == 0)) {
 	$html->body("nouveau ticket");
@@ -191,7 +212,57 @@ if (($level == -1) and ($thread == 0)) {
 		$html->body.= '<tr><td>Classe&nbsp;:</td><td>'.$html->menuselect("class","id"  ,"name",$class_id).'</td></tr>';
 		$html->body.= '<tr><td>Système&nbsp;:</td><td>'.$html->menuselect("system","id" ,"name",$system_id).'</td></tr>';
 		$html->body.= '<tr><td>Format&nbsp;:</td><td>'.$html->menuselect("format","id" ,"name",$format_id).'</td></tr>';
-		$html->body.= '<tr><td>Deadline&nbsp;:</td><td><input SIZE="60" TYPE="text" NAME="deadline" VALUE="'.$html->deadline($thread).'" ></td></tr>';
+		$html->body.= '<tr><td>Deadline&nbsp;:</td><td>';
+		
+		# TEST
+		#$html->body.= '<input SIZE="60" TYPE="text" NAME="deadline" VALUE="'.$html->deadline($thread).'" >';
+
+		# DATES		
+		$html->body.= '<SELECT NAME="only_date_start" onchange="this.form.submit()">';
+		$unixtimestart= intval( strtotime($html->deadline($thread)) );
+		if (($unixtimestart>0 ) and ($unixtimestart<mktime())){
+			$html->body.= '<OPTION VALUE="'.$unixtimestart.'" SELECTED>'.strftime("%A %e %b %Y", $unixtimestart).'</OPTION>';
+		}
+		$html->body.= '<OPTION VALUE="-1" '.($html->deadline($thread)==""?'SELECTED':'').'>N/A</OPTION>';
+		for ($i = 0; $i <= 900; $i++) {
+			$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
+			$html->body.= '<OPTION VALUE="'.$unixtime.'" '.
+				(
+					(
+						(
+							intval($unixtime)          <= $unixtimestart
+						)
+						and
+						(
+							intval($unixtime)+24*60*60 >  $unixtimestart
+						)
+					) ? " SELECTED":""
+				)
+				.'>'.
+				strftime("%A %e %b %Y", $unixtime).'</OPTION>';
+		} 
+		$html->body.= '</SELECT>';
+
+		#HEURES
+		$secondes = intval( substr($html->deadline($thread),-8,2) )*60*60 + intval( substr($html->deadline($thread),-5,2) )*60;
+		$html->body.= '<SELECT NAME="only_time_start" onchange="this.form.submit()">';
+		if ($secondes>0) {
+			for ($i = 0; $i < 48; $i++) {
+				$html->body.= '<OPTION VALUE="'.strval(($i)*30*60).'" '.(($i*60*30<=$secondes and ($i+1)*60*30>$secondes)?" SELECTED":"").'>'.
+					date('H:i', mktime(0, 30*$i, 0, 1, 1, 1)
+					).'</OPTION>';
+			}
+		}else{
+			$secondes = date("H")*3600+date("i")*60; 
+			for ($i = 0; $i < 48; $i++) {
+				$html->body.= '<OPTION VALUE="'.strval(($i)*30*60).'" '.(($i*60*30<=$secondes and ($i+1)*60*30>$secondes)?" SELECTED":"").'>'.
+					date('H:i', mktime(0, 30*$i, 0, 1, 1, 1)
+					).'</OPTION>';
+			}
+		}
+		$formulaire .= '</SELECT>';
+
+		$html->body.= '</td></tr>';
 		$html->body.= "</form>";
 		$html->body.= "</table>";
 	}
