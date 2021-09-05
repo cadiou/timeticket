@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 210404
+ * 210904
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -126,7 +126,7 @@ class HTML {
 
   	# MODULE TICKET
 	public function module_ticket() {
-
+		$this->left .= "<h2>Ticket</h2>";
 		$this->left .= '
 			<table>
 		';
@@ -143,9 +143,11 @@ class HTML {
 
 		$this->left .= '
 		  <tr><td class="level" colspan=2>
-		  <a href="tickets-slug.php">Liste des Slugs</a>
+		  <a href="tickets-slug.php">Ouvrir...</a>
 			  </td></tr>
 		';
+
+/*
 
 		$this->left .= '
 		  <tr><td class="level" colspan=2>
@@ -221,8 +223,9 @@ class HTML {
 		  	<a href="tickets.php?level=5" class="level5">INC</a>
 		  	</td></tr>
 			';
-
+*/
 		$this->left .= '</table>';
+	
 	}
 
 	# Ajoute du texte au corps de page.
@@ -242,14 +245,14 @@ class HTML {
 		$this->left .= "</ul>"."<p />";  # .$timegraph->catalog_last_image()
 	}
 
-        public function module_calendar($year,$week) {
-                $this->left .= "<h2>Calendrier</h2>";
-                $this->left .= "<ul>";
-                $this->left .= "<li><a href=\"calendar.php?n=1"."&year=".$year."&week=".$week."\">Semaine</a>";
+    public function module_calendar($year,$week) {
+        $this->left .= "<h2>Calendrier</h2>";
+        $this->left .= "<ul>";
+        $this->left .= "<li><a href=\"calendar.php?n=1"."&year=".$year."&week=".$week."\">Semaine</a>";
  		$this->left .= "<li><a href=\"calendar.php?n=4"."&year=".$year."&week=".$week."\">Mois</a>";
 		$this->left .= "<li><a href=\"calendar.php?n=12"."&year=".$year."&week=".$week."\">Trimestre</a>";
-                $this->left .= "</ul>"."<p />";
-        }
+        $this->left .= "</ul>"."<p />";
+    }
 
 
 	# Module LOGIN ####################################################################################
@@ -378,8 +381,8 @@ class HTML {
     		$result = $this->query($sql);
     		while ($item = mysqli_fetch_array($result)) {
         		$this->left .= "<h2>".$item[0]."</h2>";
-        		$this->left .= $item[1]." ".$item[4];
         		$this->left .= "<p class=\"chrono\">".$item[2].$item[3]."</p>";
+				$this->left .= $item[1]." ".$item[4];
     		}
 
 		if ($this->uid > 0) {
@@ -714,17 +717,29 @@ class HTML {
 				}
 				$this->body.= "<table class=\"ticket\">";
 				$this->body.= "<tr><td>"; ###################################### LIGNE 1 SLUG + CONCEPT
-        			$this->body.= "<table width=\"100%\">";
-        			$this->body.= "<tr><td class=\"slug\">";
-        			$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
-        			$this->body.= "</td><td class=\"slug_droite\">";
-        			$this->body.= $this->concept($thread);
-        			$this->body.= "</td></tr>";
-        			$this->body.= "</table>";
+        		$this->body.= "<table width=\"100%\">";
+        		$this->body.= "<tr><td class=\"slug\">";
+        		$this->body.= "<a href=\"ticket.php?thread=".$thread."\">".$this->slug($thread)."</a>";
+        		$this->body.= "</td><td class=\"slug_droite\">";
+        		$this->body.= $this->concept($thread);
+        		$this->body.= "</td></tr>";
+        		$this->body.= "</table>";
 
-        			$this->body.= "<table><tr>";
+        		$this->body.= "<table width=\"100%\"><tr>";
 
-        			if ($this->uid > 0) {
+                $this->body.= "<td>";
+                $deadline = $this->deadline($thread);
+                $ddl = new dateTime($deadline);
+                $now = new DateTime("now");
+                if (($now>$ddl) and ($title<>"Livré et vérifié"	)) {
+                                        $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline d&eacute;pass&eacute;e<br />".$deadline."</span>");
+                }else{
+                                        $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level\">Deadline<br />".$deadline."</span>");
+                }
+				$this->body.= $this->time_tracker($thread);
+                $this->body.= "</td>";
+
+        		if ($this->uid > 0) {
 					$this->body.= "<td width=\"70\">";
 					$this->body .= "<FORM method=\"POST\">";
 					$query2 = "SELECT id,thread,start,timediff(now(),(start))  FROM time WHERE stop IS NULL and uid=".$this->uid;
@@ -744,30 +759,18 @@ class HTML {
 					$this->body.= "</td>";
 				}
 
-                                $this->body.= "<td>";
-                                $deadline = $this->deadline($thread);
-                                $ddl = new dateTime($deadline);
-                                $now = new DateTime("now");
-                                if (($now>$ddl) and ($title<>"Livré et vérifié"	)) {
-                                        $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level1\">Deadline d&eacute;pass&eacute;e<br />".$deadline."</span>");
-                                }else{
-                                        $this->body.= ($this->deadline($thread)==""?"":"<span  class=\"level\">Deadline<br />".$deadline."</span>");
-                                }
-                                $this->body.= "</td>";
-
-
-                            	$this->body.= "<td>";
-                                $this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
-                                $this->body.= "</td>";
+                $this->body.= "<td width=\"100\">";
+                $this->body.= "<span  class=\"chrono\">".$this->time_time($thread)."</span>";
+                $this->body.= "</td>";
 
 				$this->body.= "</tr></table>";
-				$this->body.= "</td>";
-				$this->body.= "</tr>";
-        			$this->body.= "<tr>";
-        			$this->body.= "<td>";
-        			$this->body.= $this->ticket($item['id']);
-        			$this->body.= "</td>";
-        			$this->body.= "</tr>";
+#				$this->body.= "</td>";
+#				$this->body.= "</tr>";
+#        		$this->body.= "<tr>";
+#        		$this->body.= "<td>";
+        		$this->body.= $this->ticket($item['id']);
+        		$this->body.= "</td>";
+        		$this->body.= "</tr>";
 				$this->body.= "</table>";
 			}
 		}
@@ -786,16 +789,12 @@ class HTML {
 
 	public function time_time($thread) {
 		$time= "";
-		$query = "SELECT user.name FROM user,time WHERE user.id=time.uid and time.thread=".$thread." GROUP BY user.name";
+		$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
-			$query = "SELECT sec_to_time(sum(unix_timestamp(stop)-unix_timestamp(start))) as duree FROM `time` WHERE stop IS NOT NULL and time.thread=".$thread;
-			$result = $this->query($query);
-			if (mysqli_num_rows($result)!=0) {
-				while ($item = mysqli_fetch_array($result)) {
-					$time.=$item[0]."";
-				}
-			}
+			$item = mysqli_fetch_array($result);
+			$time.=$item[0]."";
+				
 		}
 		return $time;
 	}
