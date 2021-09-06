@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 210904
+ * 210905
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -114,7 +114,7 @@ class HTML {
 		$this->body = "";
 
 		# VERIFICATION TIMEOUT LOOP
-		$query = "SELECT last_time FROM `memory` WHERE time_to_sec(timediff(now(),last_time)) > 60";
+		$query = "SELECT last_time FROM `memory` WHERE time_to_sec(timediff(now(),last_time)) > 120";
 		$result = $this->query($query);
 		if (mysqli_num_rows($result)!=0) {
 			while ($item = mysqli_fetch_array($result)) {
