@@ -52,7 +52,7 @@ if (isset($_GET['unixdate'])) {
 				) ? " SELECTED":""
 			)
 			.'>'.
-			strftime("%A %e %b %Y", $unixtime).'</OPTION>';
+			utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 	}
 	$formulaire .= '</SELECT>';
 	$formulaire .= '</td>';
@@ -72,23 +72,23 @@ if (isset($_GET['unixdate'])) {
 	# STOP   DATE ####################################################################
 	$formulaire.= "<tr><td>Retour&nbsp;:</td><td>";
 	$formulaire.= '<SELECT NAME="new_date_stop">'; //  onchange="this.form.submit()"
-	for ($i = -90; $i <= 90; $i++) {
+	for ($i = -90; $i <= 900; $i++) {
 		$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
 		if ($unixtime+24*60*60>$unixtimestart) {
 			$formulaire.= '<OPTION VALUE="'.$unixtime.'" '.
 				(
 					(
 						(
-							intval($unixtime)          <= intval( strtotime($item[3]) )
+							intval($unixtime)          <= $unixtimestart
 						)
 						and
 						(
-							intval($unixtime)+24*60*60 >  intval( strtotime($item[3]) )
+							intval($unixtime)+24*60*60 >  $unixtimestart
 						)
 					) ? " SELECTED":""
 				)
 				.'>'.
-				strftime("%A %e %b %Y", $unixtime).'</OPTION>';
+				utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 		}
 	}
 	$formulaire .= '</SELECT>';
@@ -111,7 +111,7 @@ if (isset($_GET['unixdate'])) {
 	$formulaire.= "</tr>";
 
 	# CLASSE      #####################################################################
-	$formulaire.= '<tr><td>Classe&nbsp;:</td><td>'.$html->menuselect("class","id"  ,"name",$class_id).'</td></tr>';
+	$formulaire.= '<tr><td>Classe&nbsp;:</td><td>'.$html->menuselect("class","id"  ,"name",-1).'</td></tr>';
 	$formulaire.= "</table></form>";
 
 	$html->body.= $formulaire;
@@ -201,7 +201,7 @@ if ($id > 0) {
 					) ? " SELECTED":""
 				)
 				.'>'.
-				strftime("%A %e %b %Y", $unixtime).'</OPTION>';
+				utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 		}
 		$formulaire .= '</SELECT>';
 		$formulaire .= '</td>';
@@ -222,7 +222,7 @@ if ($id > 0) {
 	#	$unixtimestart=intval( strtotime($start) );
 		$formulaire.= "<tr><td>Fin&nbsp;:</td><td>";
 		$formulaire.= '<SELECT NAME="date_stop" onchange="this.form.submit()">'; 
-		for ($i = -90; $i <= 90; $i++) {
+		for ($i = -90; $i <= 900; $i++) {
 			$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
 			if ($unixtime+24*60*60>$unixtimestart) {
 				$formulaire.= '<OPTION VALUE="'.$unixtime.'" '.
@@ -238,7 +238,7 @@ if ($id > 0) {
 						) ? " SELECTED":""
 					)
 					.'>'.
-					strftime("%A %e %b %Y", $unixtime).'</OPTION>';
+					utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 			}
 		}
 		$formulaire .= '</SELECT>';
@@ -321,7 +321,7 @@ for ($i = 0; $i <7 ; $i++) {
 	if ((date("w")==($i+1)) or (date("w")==0 and $i==6)) {
 		$table .= "<h2>";
 	}
-	$table.= strftime("%A", ($i+4)*24*3600);
+	$table.= utf8_encode(strftime("%A", ($i+4)*24*3600));
 	if ((date("w")==($i+1))or (date("w")==0 and $i==6)) {
                 $table .= "</h2>";
         }
@@ -356,7 +356,7 @@ for ($i = 0; $i <= $n; $i++) {
 	for ($j = 0;$j < 7;$j++) {
 		$table.="<td width=\"12.5%\">";
 		$unixdate=strtotime($year."W".$week."+".(($i*7)+$j)."day");
-		$table.="<h2><a href=\"?n=".($n+1).'&year='.date("Y",strtotime($year."W".$week."7-".($n+1)."week")).'&week='.$week.'&unixdate='.$unixdate."\">".strftime("%e %b", $unixdate)."</a></h2>";
+		$table.="<h2><a href=\"?n=".($n+1).'&year='.date("Y",strtotime($year."W".$week."7-".($n+1)."week")).'&week='.$week.'&unixdate='.$unixdate."\">".utf8_encode(strftime("%e %b", $unixdate))."</a></h2>";
 		$table.="</td>";
 	}
 	$table.="</tr>";
