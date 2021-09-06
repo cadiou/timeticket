@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 210904
+ * 210905
  * timeticket / ticket.php
  * Baptiste Cadiou
  *
@@ -260,7 +260,7 @@ if (($level == -1) and ($thread == 0)) {
 					).'</OPTION>';
 			}
 		}
-		$formulaire .= '</SELECT>';
+		$html->body .= '</SELECT>';
 
 		$html->body.= '</td></tr>';
 		$html->body.= "</form>";

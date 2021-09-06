@@ -1,9 +1,9 @@
 <?php
 
 /*
- * 201011
+ * 210905
  * timeticket / calendar
- * bcadiou@videlio-globalservices.com
+ * bc@mangrove.tv
  *
  */
 
@@ -21,6 +21,8 @@ $html = new HTML(substr($date1,0,10)." &rarr; ".substr($date2,0,10),((isset($_GE
 $html->module_login();
 $html->module_ticket();
 $html->module_calendar($year,$week);
+
+$id = 0;
 
 # NOUVEL EVENEMENT
 if (isset($_GET['unixdate'])) {
