@@ -35,9 +35,10 @@ if (isset($_GET['unixdate'])) {
 #	$formulaire .= '<input type="hidden" name="id" value="'.$id.'">';
 	# START DATE ####################################################################
 	$unixtimestart= intval($_GET['unixdate'] );
+	$anticipation = min( intval( ($unixtimestart-mktime())/24/60/60) , -90 );
 	$formulaire.= '<tr><td>Début&nbsp;:</td><td>';
 	$formulaire.= '<SELECT NAME="new_date_start">';  //  onchange="this.form.submit()"
-	for ($i = -90; $i <= 900; $i++) {
+	for ($i = $anticipation; $i <= 900; $i++) {
 		$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
 		$formulaire.= '<OPTION VALUE="'.$unixtime.'" '.
 			(
@@ -72,7 +73,8 @@ if (isset($_GET['unixdate'])) {
 	# STOP   DATE ####################################################################
 	$formulaire.= "<tr><td>Retour&nbsp;:</td><td>";
 	$formulaire.= '<SELECT NAME="new_date_stop">'; //  onchange="this.form.submit()"
-	for ($i = -90; $i <= 900; $i++) {
+	$anticipation = min( intval( ($unixtimestart-mktime())/24/60/60) , -90 );
+	for ($i = $anticipation; $i <= 900; $i++) {
 		$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
 		if ($unixtime+24*60*60>$unixtimestart) {
 			$formulaire.= '<OPTION VALUE="'.$unixtime.'" '.
@@ -184,9 +186,10 @@ if ($id > 0) {
 		$formulaire.= '<input type="hidden" name="id" value="'.$id.'">';
 		# START DATE ####################################################################
 		$unixtimestart= intval( strtotime($start) );
+		$anticipation = min( intval( ($unixtimestart-mktime())/24/60/60)-1 , -90 );
 		$formulaire.= '<tr><td>Début&nbsp;:</td><td>';
 		$formulaire.= '<SELECT NAME="date_start" onchange="this.form.submit()">';   
-		for ($i = -90; $i <= 900; $i++) {
+		for ($i = $anticipation; $i <= 900; $i++) {
 			$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
 			$formulaire.= '<OPTION VALUE="'.$unixtime.'" '.
 				(
@@ -222,7 +225,7 @@ if ($id > 0) {
 	#	$unixtimestart=intval( strtotime($start) );
 		$formulaire.= "<tr><td>Fin&nbsp;:</td><td>";
 		$formulaire.= '<SELECT NAME="date_stop" onchange="this.form.submit()">'; 
-		for ($i = -90; $i <= 900; $i++) {
+		for ($i = $anticipation; $i <= 900; $i++) {
 			$unixtime=mktime(0, 0, 0, date("m"), date("d")+$i, date("Y"));
 			if ($unixtime+24*60*60>$unixtimestart) {
 				$formulaire.= '<OPTION VALUE="'.$unixtime.'" '.
