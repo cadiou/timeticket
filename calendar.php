@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 210905
+ * 210907
  * timeticket / calendar
  * bc@mangrove.tv
  *
@@ -52,7 +52,7 @@ if (isset($_GET['unixdate'])) {
 				) ? " SELECTED":""
 			)
 			.'>'.
-			utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
+			htmlentities(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 	}
 	$formulaire .= '</SELECT>';
 	$formulaire .= '</td>';
@@ -88,7 +88,7 @@ if (isset($_GET['unixdate'])) {
 					) ? " SELECTED":""
 				)
 				.'>'.
-				utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
+				htmlentities(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 		}
 	}
 	$formulaire .= '</SELECT>';
@@ -201,7 +201,7 @@ if ($id > 0) {
 					) ? " SELECTED":""
 				)
 				.'>'.
-				utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
+				htmlentities(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 		}
 		$formulaire .= '</SELECT>';
 		$formulaire .= '</td>';
@@ -238,7 +238,7 @@ if ($id > 0) {
 						) ? " SELECTED":""
 					)
 					.'>'.
-					utf8_encode(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
+					htmlentities(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 			}
 		}
 		$formulaire .= '</SELECT>';
@@ -321,7 +321,7 @@ for ($i = 0; $i <7 ; $i++) {
 	if ((date("w")==($i+1)) or (date("w")==0 and $i==6)) {
 		$table .= "<h2>";
 	}
-	$table.= utf8_encode(strftime("%A", ($i+4)*24*3600));
+	$table.= htmlentities(strftime("%A", ($i+4)*24*3600));
 	if ((date("w")==($i+1))or (date("w")==0 and $i==6)) {
                 $table .= "</h2>";
         }
@@ -356,7 +356,7 @@ for ($i = 0; $i <= $n; $i++) {
 	for ($j = 0;$j < 7;$j++) {
 		$table.="<td width=\"12.5%\">";
 		$unixdate=strtotime($year."W".$week."+".(($i*7)+$j)."day");
-		$table.="<h2><a href=\"?n=".($n+1).'&year='.date("Y",strtotime($year."W".$week."7-".($n+1)."week")).'&week='.$week.'&unixdate='.$unixdate."\">".utf8_encode(strftime("%e %b", $unixdate))."</a></h2>";
+		$table.="<h2><a href=\"?n=".($n+1).'&year='.date("Y",strtotime($year."W".$week."7-".($n+1)."week")).'&week='.$week.'&unixdate='.$unixdate."\">".htmlentities(strftime("%e %b", $unixdate))."</a></h2>";
 		$table.="</td>";
 	}
 	$table.="</tr>";
