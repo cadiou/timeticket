@@ -1,10 +1,9 @@
 <?php
 
 /*
- * 210905
+ * 210912
  * timeticket / ticket.php
  * Baptiste Cadiou
- *
  */
 
 include("HTML.class.php");
@@ -140,7 +139,7 @@ if (isset($_POST['only_date_start'])) {
 
 /*
 $date_start=	(isset($_POST['only_time_start'])?	date('Y-m-d H:i:s',intval($_POST['only_time_start'])+intval($_POST['only_date_start'])):	"2021-02-02 12:00:00");
-
+*/
 
 if (!empty($_POST["deadline"]) ) {
 	$query = "INSERT INTO `slug` SET thread='".$thread."', station_id='".CONFIG::ID_STATION."', deadline='".$_POST["deadline"]."' ON DUPLICATE KEY UPDATE deadline='".$_POST["deadline"]."'" ;
@@ -150,7 +149,7 @@ if (!empty($_POST["deadline"]) ) {
 #        $result =  $html->query($query);
 }
 
-*/
+
 
 # if (($thread==0) and ($level==1)) $payload="RÉPERTOIRE DE TRAVAIL : \nCONTACT DEMANDEUR : \nDESCRIPTION : ";
 
