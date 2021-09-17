@@ -430,13 +430,12 @@ for ($i = 0; $i <= $n; $i++) {
 				$query = "SELECT thread,name,deadline,NULL,NULL".
 				 " FROM slug WHERE station_id = ".CONFIG::ID_STATION." and class_id = ".$item_class[0].
 				  " AND unix_timestamp(deadline) >= ".$unixdate.
-				 " AND unix_timestamp(deadline)-86400 < ".$unixdate.
-				 " UNION ";
-				$query.= "SELECT slug.thread,slug.name,time.start as deadline,time.start,time.stop FROM `time`,slug WHERE ".
+				 " AND unix_timestamp(deadline)-86400 < ".$unixdate;
+				$query.= " UNION SELECT slug.thread,slug.name,time.start as deadline,time.start,time.stop FROM `time`,slug WHERE ".
 				 " slug.thread=time.thread AND slug.class_id=".$item_class[0].
 				 " AND unix_timestamp(start) >= ".$unixdate.
 				 " AND unix_timestamp(start)-86400 < ".$unixdate.
-				 " ORDER by deadline";
+				 " ORDER by thread,deadline";
 
 				$result =  $html->query($query);
 				$last_thread=-1;
@@ -454,13 +453,15 @@ for ($i = 0; $i <= $n; $i++) {
 								$time.=" - ".date( "H:i",strtotime($item[4]));
 							}else{
 								$time = "<span class=level3>".date( "H:i",strtotime($item[3]))." en cours</span>";
+								$table.= $time."<br>";
 							}
 
 						}else{
 							$time = "<span class=level4>".date( "H:i",strtotime($item[2]))." deadline</span>";
+							$table.= $time."<br>";
 						}
 
-						$table.= $time."<br>";
+						
 						
    				 	}
 				}
