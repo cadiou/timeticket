@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 210905
+ * 210924
  * timeticket / HTML.class.php
  * Baptiste Cadiou
  *
@@ -935,7 +935,7 @@ class HTML {
 		$this->body .= '<form enctype="multipart/form-data" method="post">';
 		$this->body .= '<input type="hidden" name="new" value="1">';
 		$this->body .= '<td>Slug</td><td colspan=2><input SIZE="80" TYPE="text" NAME="slug" VALUE="'.$this->slug($thread).'" ></td></tr>';
-		$this->body .= '<tr><td>Deadline&nbsp;:</td><td><input SIZE="30" TYPE="text" NAME="deadline" VALUE="'.$this->deadline($thread).'" ></td></tr>';
+	#	$this->body .= '<tr><td>Deadline&nbsp;:</td><td><input SIZE="30" TYPE="text" NAME="deadline" VALUE="'.$this->deadline($thread).'" ></td></tr>';
 		$this->body .= '<input type="hidden" name="level" value="'.$level.'">';
 		$this->body .= '<input type="hidden" name="thread" value='.$thread.'>';
 		$this->body .= '<tr><td>Ticket</td><td colspan=2><textarea rows = "8" cols = "80" name = "body">'.$payload.'</textarea></td></tr><tr><td>Image</td><td><input type="hidden" name="MAX_FILE_SIZE" value="'.CONFIG::FILE_MAX_SIZE.'" /><input type="file" name="fic" size=50 /></td><td align="right">';
