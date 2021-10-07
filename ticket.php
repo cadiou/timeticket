@@ -220,7 +220,7 @@ if (($level == -1) and ($thread == 0)) {
 		$html->body.= '<SELECT NAME="only_date_start" onchange="this.form.submit()">';
 		$unixtimestart= intval( strtotime($html->deadline($thread)) );
 		if (($unixtimestart>0 ) and ($unixtimestart<mktime())){
-			$html->body.= '<OPTION VALUE="'.$unixtimestart.'" SELECTED>'.htmlentities(utf8_encode(strftime("%A %e %b %Y", $unixtimestart))).'</OPTION>';
+			$html->body.= '<OPTION VALUE="'.$unixtimestart.'" SELECTED>'.htmlentities(strftime("%A %e %b %Y", $unixtimestart)).'</OPTION>';
 		}
 		$html->body.= '<OPTION VALUE="-1" '.($html->deadline($thread)==""?'SELECTED':'').'>N/A</OPTION>';
 		for ($i = 0; $i <= 900; $i++) {
@@ -238,7 +238,7 @@ if (($level == -1) and ($thread == 0)) {
 					) ? " SELECTED":""
 				)
 				.'>'.
-				htmlentities(utf8_encode(strftime("%A %e %b %Y", $unixtime))).'</OPTION>';
+				htmlentities(strftime("%A %e %b %Y", $unixtime)).'</OPTION>';
 		} 
 		$html->body.= '</SELECT>';
 
